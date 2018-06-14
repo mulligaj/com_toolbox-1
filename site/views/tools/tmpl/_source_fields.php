@@ -33,50 +33,19 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$action = $this->action;
 $tool = $this->tool;
-$types = $this->types;
-$toolsTypeIds = $this->toolsTypeIds;
 ?>
 
-<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
+<fieldset>
+	<legend><?php echo Lang::txt('COM_TOOLBOX_NEW_SOURCE_FIELDS'); ?></legend>
 
-	<?php
-		$this->view('_name_type_fields')
-			->set('tool', $tool)
-			->set('types', $types)
-			->set('toolsTypeIds', $toolsTypeIds)
-			->display();
-	;?>
+	<div class="grid">
 
-	<?php
-		$this->view('_participant_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
+		<div class="col span12">
+			<?php echo $this->editor('tool[source]', $tool->get('source'), 50, 5); ?>
+		</div>
 
-	<?php
-		$this->view('_duration_budget_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
+	 <span class="required"><?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
 
-	<?php
-		$this->view('_source_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
-
-	<?php echo Html::input('token'); ?>
-
-	<input class="btn btn-success" type="submit"
-		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_CONTINUE'); ?>">
-
-</form>
-
-<style>
-.btn-success {
-	max-width: 15%;
-	float: right;
-}
-</style>
+	</div>
+</fieldset>

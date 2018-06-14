@@ -34,50 +34,36 @@
 defined('_HZEXEC_') or die();
 
 $tool = $this->tool;
-$isKinesthetic = $tool->get('kinesthetic');
-$toolsTypeIds = $this->toolsTypeIds;
 ?>
 
 <fieldset>
-	<legend><?php echo Lang::txt('COM_TOOLBOX_NEW_NAME_TYPE_FIELDS'); ?></legend>
+	<legend><?php echo Lang::txt('COM_TOOLBOX_NEW_PARTICIPANT_FIELDS'); ?></legend>
 	<div class="grid">
 
-		<div class="col span5">
+		<div class="col span2">
 			<label>
-					<?php echo Lang::txt('COM_TOOLBOX_NEW_NAME_FIELD'); ?> <span class="required">
+					<?php echo Lang::txt('COM_TOOLBOX_NEW_MINIMUM_FIELD'); ?> <span class="required">
 						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-					<input name="tool[name]" type="text" value="<?php echo $tool->get('name'); ?>">
+					<input name="tool[minimum_participants]" type="number" min="0"
+						value="<?php echo $tool->get('minimum_participants'); ?>">
 			</label>
 		</div>
 
 		<div class="col span2 offset1">
 			<label>
-					<?php echo Lang::txt('COM_TOOLBOX_NEW_TYPE_FIELD'); ?>
-					<select name="tool[types][]" multiple>
-						<?php	foreach ($this->types as $type): ?>
-								<option value="<?php echo $type->get('id'); ?>"
-									<?php if (in_array($type->get('id'), $toolsTypeIds)) echo 'selected'; ?>>
-									<?php echo $type->get('description'); ?>
-								</option>
-						<?php endforeach; ?>
-					</select>
+					<?php echo Lang::txt('COM_TOOLBOX_NEW_SUGGESTED_FIELD'); ?> <span class="required">
+						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+					<input name="tool[suggested_participants]" type="number" min="0"
+						value="<?php echo $tool->get('suggested_participants'); ?>">
 			</label>
 		</div>
 
 		<div class="col span2 offset1">
 			<label>
-					<?php echo Lang::txt('COM_TOOLBOX_NEW_KINESTHETIC_FIELD'); ?> <span class="required">
+					<?php echo Lang::txt('COM_TOOLBOX_NEW_MAXIMUM_FIELD'); ?> <span class="required">
 						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-			</label>
-			<label>
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
-					<input type="radio" id="kinesthetic-yes"
-						name="tool[kinesthetic]" value="1" <?php if ($isKinesthetic) echo 'checked'; ?>>
-			</label>
-			<label>
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
-					<input type="radio" id="kinesthetic-no"
-						name="tool[kinesthetic]" value="0" <?php if (!$isKinesthetic) echo 'checked'; ?>>
+					<input name="tool[maximum_participants]" type="number" min="0"
+						value="<?php echo $tool->get('maximum_participants'); ?>">
 			</label>
 		</div>
 

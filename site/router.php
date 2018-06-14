@@ -39,7 +39,7 @@ class Router extends Base
 	public function build(&$query)
 	{
 		$segments = [];
-		$queryParams = ['controller', 'task', 'id'];
+		$queryParams = ['controller', 'id', 'task'];
 
 		foreach ($queryParams as $param)
 		{
@@ -74,7 +74,7 @@ class Router extends Base
 		}
 		if (isset($segments[2]))
 		{
-			$vars['id'] = $segments[1];
+			$vars['task'] = $segments[2];
 		}
 
 		return $vars;

@@ -30,53 +30,45 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Toolbox\Models;
 
-$action = $this->action;
-$tool = $this->tool;
-$types = $this->types;
-$toolsTypeIds = $this->toolsTypeIds;
-?>
+use Hubzero\Database\Relational;
 
-<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
+class Tool extends Relational
+{
 
-	<?php
-		$this->view('_name_type_fields')
-			->set('tool', $tool)
-			->set('types', $types)
-			->set('toolsTypeIds', $toolsTypeIds)
-			->display();
-	;?>
+	/*
+	 * Records table
+	 *
+	 * @var string
+	 */
+	protected $table = '#__toolbox_tools';
 
-	<?php
-		$this->view('_participant_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
+	/*
+	 * Attributes to be populated on record creation
+	 *
+	 * @var array
+	 */
+	public $initiate = ['created'];
 
-	<?php
-		$this->view('_duration_budget_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
+	/*
+	 * Instantiates a Tool model
+	 */
+	public static function blank()
+	{
+		$tool = parent::blank();
 
-	<?php
-		$this->view('_source_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
+		$defaults = [
+			'minimum_participants' => '0',
+			'suggested_participants' => '0',
+			'maximum_participants' => '0',
+			'duration' => '0',
+			'cost' => 0
+		];
 
-	<?php echo Html::input('token'); ?>
+		$tool->set($defaults);
 
-	<input class="btn btn-success" type="submit"
-		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_CONTINUE'); ?>">
+		return $tool;
+	}
 
-</form>
-
-<style>
-.btn-success {
-	max-width: 15%;
-	float: right;
 }
-</style>

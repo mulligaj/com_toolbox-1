@@ -41,7 +41,7 @@ $breadcrumbs = [
 ];
 
 $cumulativePath = '';
-$page = 'New Tool: Basic Info';
+$page = Lang::txt('COM_TOOLBOX_NEW_HEADER_CONTENT');
 
 foreach ($breadcrumbs as $text => $url)
 {
@@ -51,8 +51,12 @@ foreach ($breadcrumbs as $text => $url)
 
 Document::setTitle($page);
 
-$formAction = Route::url('');
-
+$formAction = Route::url(
+	"index.php?option={$this->option}&controller={$this->controller}&task=create"
+);
+$tool = $this->tool;
+$types = $this->types;
+$toolsTypeIds = $this->toolsTypeIds;
 ?>
 
 <?php
@@ -64,12 +68,16 @@ $formAction = Route::url('');
 <section class="main section">
 	<div class="grid">
 		<div class="col span10 offset1">
+
 			<?php
 				$this->view('_tool_basic_info_form')
 					->set('action', $formAction)
-					->set('types', $this->types)
+					->set('tool', $tool)
+					->set('toolsTypeIds', $toolsTypeIds)
+					->set('types', $types)
 					->display();
 			?>
+
 		</div>
 	</div>
 </section>
