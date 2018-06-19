@@ -33,54 +33,23 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	'New' => '/new',
-	'Basic Info' => '/basic',
-];
-
-$cumulativePath = '';
-$page = Lang::txt('COM_TOOLBOX_NEW_HEADER_CONTENT');
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
-
-$formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=create"
-);
-$step = 'basic';
 $tool = $this->tool;
-$types = $this->types;
-$toolsTypeIds = $this->toolsTypeIds;
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
-
-<section class="main section">
+<fieldset>
+	<legend><?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC'); ?></legend>
 	<div class="grid">
-		<div class="col span10 offset1">
 
-			<?php
-				$this->view('_tool_basic_info_form')
-					->set('action', $formAction)
-					->set('step', $step)
-					->set('tool', $tool)
-					->set('toolsTypeIds', $toolsTypeIds)
-					->set('types', $types)
-					->display();
-			?>
-
+		<div class="col span5">
+			<label>
+					<input name="tool[self_awareness]" type="checkbox"
+						<?php if ($tool->get('self_awareness')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_SELF_AWARENESS'); ?>
+			</label>
 		</div>
-	</div>
-</section>
 
+		<div class="col span5 offset1">
+		</div>
+
+	</div>
+</fieldset>

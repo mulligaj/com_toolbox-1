@@ -33,15 +33,18 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$tool = $this->tool;
+$toolId = $tool->get('id');
+
 $breadcrumbs = [
 	'Toolbox' => '/toolbox',
 	'Tools' => '/tools',
-	'New' => '/new',
+	"$toolId" => "/$toolId",
 	'Basic Info' => '/basic',
 ];
 
 $cumulativePath = '';
-$page = Lang::txt('COM_TOOLBOX_NEW_HEADER_CONTENT');
+$page = Lang::txt('COM_TOOLBOX_UPDATE_BASIC_HEADER_CONTENT');
 
 foreach ($breadcrumbs as $text => $url)
 {
@@ -52,12 +55,12 @@ foreach ($breadcrumbs as $text => $url)
 Document::setTitle($page);
 
 $formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=create"
+	"index.php?option=$this->option&controller=$this->controller&task=update&id=$toolId"
 );
 $step = 'basic';
 $tool = $this->tool;
-$types = $this->types;
 $toolsTypeIds = $this->toolsTypeIds;
+$types = $this->types;
 ?>
 
 <?php

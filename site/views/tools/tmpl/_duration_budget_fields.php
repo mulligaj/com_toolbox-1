@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -46,7 +46,7 @@ $minutes = $duration - ($hours * 60);
 		<div class="col span2">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_HOURS_FIELD'); ?> <span class="required">
-						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
 					</span>
 					<input name="tool[duration_hours]" type="number" min="0"
 						value="<?php echo $hours; ?>">
@@ -56,7 +56,7 @@ $minutes = $duration - ($hours * 60);
 		<div class="col span2 offset1">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_MINUTES_FIELD'); ?> <span class="required">
-						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
 					<input name="tool[duration]" type="number" min="0"
 						value="<?php echo $minutes; ?>">
 			</label>
@@ -65,7 +65,7 @@ $minutes = $duration - ($hours * 60);
 		<div class="col span2 offset1">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_COST_FIELD'); ?> <span class="required">
-						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
 					<input name="tool[cost]" type="number" min="0"
 						value="<?php echo $tool->get('cost'); ?>">
 			</label>

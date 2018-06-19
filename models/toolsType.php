@@ -34,7 +34,7 @@ namespace Components\Toolbox\Models;
 
 use Hubzero\Database\Relational;
 
-class Tool extends Relational
+class ToolsType extends Relational
 {
 
 	/*
@@ -42,7 +42,17 @@ class Tool extends Relational
 	 *
 	 * @var string
 	 */
-	protected $table = '#__toolbox_tools';
+	protected $table = '#__toolbox_tools_types';
+
+	/*
+	 * Attribute validation
+	 *
+	 * @var array
+	 */
+	protected $rules = [
+		'tool_id' => 'positive',
+		'type_id' => 'positive'
+	];
 
 	/*
 	 * Attributes to be populated on record creation
@@ -52,75 +62,31 @@ class Tool extends Relational
 	public $initiate = ['created'];
 
 	/*
-	 * Attribute validation
+	 * Returns associated types description
 	 *
-	 * @var  array
+	 * @return   string
 	 */
-	protected $rules = [
-		'name' => 'notempty',
-		'minimum_participants' => 'positive',
-		'suggested_participants' => 'positive',
-		'maximum_participants' => 'positive',
-		'duration' => 'positive',
-		'cost' => 'positive',
-		'source' => 'notempty'
-	];
-
-	/*
-	 * Instantiates a Tool model
-	 */
-	public static function blank()
+	public function getTypeDescription()
 	{
-		$tool = parent::blank();
+		$type = $this->type()->row();
+		$typeDescription = $type->get('description');
 
-		$defaults = [
-			'minimum_participants' => '0',
-			'suggested_participants' => '0',
-			'maximum_participants' => '0',
-			'duration' => '0',
-			'cost' => 0
-		];
-
-		$tool->set($defaults);
-
-		return $tool;
+		return $typeDescription;
 	}
 
 	/*
-	 * Returns an array containing the associated types' IDs
+	 * Returns associated type
 	 *
-	 * @return   array
+	 * @return
 	 */
-	public function typeIds()
-	{
-		$types = $this->types()->rows()->toArray();
-
-		$typeIds = array_map(function($type) {
-			return $type['id'];
-		}, $types);
-
-		return $typeIds;
-	}
-
-	/*
-	 * Returns associated Type records
-	 *
-	 * @return   |
-	 */
-	public function types()
+	public function type()
 	{
 		$toolTypeModelName = 'Components\Toolbox\Models\ToolType';
-		$associativeTable = '#__toolbox_tools_types';
-		$primaryKey = 'tool_id';
 		$foreignKey = 'type_id';
 
-		$types = $this->manyToMany($toolTypeModelName,
-			$associativeTable,
-			$primaryKey,
-			$foreignKey
-		);
+		$type = $this->belongsToOne($toolTypeModelName, $foreignKey);
 
-		return $types;
+		return $type;
 	}
 
 }

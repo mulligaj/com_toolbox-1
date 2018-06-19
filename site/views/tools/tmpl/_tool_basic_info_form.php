@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -34,9 +34,10 @@
 defined('_HZEXEC_') or die();
 
 $action = $this->action;
+$step = $this->step;
 $tool = $this->tool;
 $types = $this->types;
-$toolsTypeIds = $this->toolsTypeIds;
+$toolsTypeIds = isset($this->toolsTypeIds) ? $this->toolsTypeIds : [];
 ?>
 
 <form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
@@ -66,6 +67,9 @@ $toolsTypeIds = $this->toolsTypeIds;
 			->set('tool', $tool)
 			->display();
 	;?>
+
+	<input type="hidden" name="step"
+		value="<?php echo $step; ?>" />
 
 	<?php echo Html::input('token'); ?>
 

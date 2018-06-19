@@ -33,15 +33,18 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$tool = $this->tool;
+$toolId = $tool->get('id');
+
 $breadcrumbs = [
 	'Toolbox' => '/toolbox',
 	'Tools' => '/tools',
-	'New' => '/new',
-	'Basic Info' => '/basic',
+	$toolId => "/$toolId",
+	'Theoretical Frameworks' => 'editframeworks'
 ];
 
 $cumulativePath = '';
-$page = Lang::txt('COM_TOOLBOX_NEW_HEADER_CONTENT');
+$page = Lang::txt('COM_TOOLBOX_UPDATE_FRAMEWORKS_HEADER_CONTENT');
 
 foreach ($breadcrumbs as $text => $url)
 {
@@ -52,12 +55,8 @@ foreach ($breadcrumbs as $text => $url)
 Document::setTitle($page);
 
 $formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=create"
+	"" // AF: update
 );
-$step = 'basic';
-$tool = $this->tool;
-$types = $this->types;
-$toolsTypeIds = $this->toolsTypeIds;
 ?>
 
 <?php
@@ -71,12 +70,9 @@ $toolsTypeIds = $this->toolsTypeIds;
 		<div class="col span10 offset1">
 
 			<?php
-				$this->view('_tool_basic_info_form')
+				$this->view('_tool_frameworks_form')
 					->set('action', $formAction)
-					->set('step', $step)
 					->set('tool', $tool)
-					->set('toolsTypeIds', $toolsTypeIds)
-					->set('types', $types)
 					->display();
 			?>
 

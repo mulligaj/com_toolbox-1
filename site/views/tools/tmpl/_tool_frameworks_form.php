@@ -33,54 +33,28 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	'New' => '/new',
-	'Basic Info' => '/basic',
-];
-
-$cumulativePath = '';
-$page = Lang::txt('COM_TOOLBOX_NEW_HEADER_CONTENT');
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
-
-$formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=create"
-);
-$step = 'basic';
+$action = $this->action;
 $tool = $this->tool;
-$types = $this->types;
-$toolsTypeIds = $this->toolsTypeIds;
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
+<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
 
-<section class="main section">
-	<div class="grid">
-		<div class="col span10 offset1">
+	<?php
+		$this->view('_aacu_rubric_fields')
+			->set('tool', $tool)
+			->display();
+	;?>
 
-			<?php
-				$this->view('_tool_basic_info_form')
-					->set('action', $formAction)
-					->set('step', $step)
-					->set('tool', $tool)
-					->set('toolsTypeIds', $toolsTypeIds)
-					->set('types', $types)
-					->display();
-			?>
+	<?php echo Html::input('token'); ?>
 
-		</div>
-	</div>
-</section>
+	<input class="btn btn-success" type="submit"
+		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_CONTINUE'); ?>">
 
+</form>
+
+<style>
+.btn-success {
+	max-width: 15%;
+	float: right;
+}
+</style>

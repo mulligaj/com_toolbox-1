@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -45,7 +45,7 @@ $toolsTypeIds = $this->toolsTypeIds;
 		<div class="col span5">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_NAME_FIELD'); ?> <span class="required">
-						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
 					<input name="tool[name]" type="text" value="<?php echo $tool->get('name'); ?>">
 			</label>
 		</div>
@@ -53,7 +53,7 @@ $toolsTypeIds = $this->toolsTypeIds;
 		<div class="col span2 offset1">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_TYPE_FIELD'); ?>
-					<select name="tool[types][]" multiple>
+					<select name="types[]" multiple>
 						<?php	foreach ($this->types as $type): ?>
 								<option value="<?php echo $type->get('id'); ?>"
 									<?php if (in_array($type->get('id'), $toolsTypeIds)) echo 'selected'; ?>>

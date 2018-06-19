@@ -30,97 +30,87 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Toolbox\Models;
+namespace Components\Toolbox\Helpers;
 
-use Hubzero\Database\Relational;
-
-class Tool extends Relational
+class CreateBatch
 {
 
 	/*
-	 * Records table
+	 * Models that failed to be saved
 	 *
-	 * @var string
+	 * @var   array
 	 */
-	protected $table = '#__toolbox_tools';
+	protected $_failedSaves = [];
 
 	/*
-	 * Attributes to be populated on record creation
+	 * Successfully saved models
 	 *
-	 * @var array
+	 * @var   array
 	 */
-	public $initiate = ['created'];
+	protected $_successfulSaves = [];
 
 	/*
-	 * Attribute validation
+	 * Adds model to failed saves
 	 *
-	 * @var  array
+	 * @param    object   $model   Model that failed to be saved
+	 * @return   void
 	 */
-	protected $rules = [
-		'name' => 'notempty',
-		'minimum_participants' => 'positive',
-		'suggested_participants' => 'positive',
-		'maximum_participants' => 'positive',
-		'duration' => 'positive',
-		'cost' => 'positive',
-		'source' => 'notempty'
-	];
-
-	/*
-	 * Instantiates a Tool model
-	 */
-	public static function blank()
+	public function addFailedSave($model)
 	{
-		$tool = parent::blank();
-
-		$defaults = [
-			'minimum_participants' => '0',
-			'suggested_participants' => '0',
-			'maximum_participants' => '0',
-			'duration' => '0',
-			'cost' => 0
-		];
-
-		$tool->set($defaults);
-
-		return $tool;
+		array_push($this->_failedSaves, $model);
 	}
 
 	/*
-	 * Returns an array containing the associated types' IDs
+	 * Adds model to successful saves
+	 *
+	 * @param    object   $model   Model that was saved
+	 * @return   void
+	 */
+	public function addSuccessfulSave($model)
+	{
+		array_push($this->_successfulSaves, $model);
+	}
+
+	/*
+	 * Indicates whether persistence succeeded or not
+	 *
+	 * @return   bool
+	 */
+	public function succeeded()
+	{
+		$succeeded = empty($this->_failedSaves);
+
+		return $succeeded;
+	}
+
+	/*
+	 * Getter for _failedSaves
 	 *
 	 * @return   array
 	 */
-	public function typeIds()
+	public function getFailedSaves()
 	{
-		$types = $this->types()->rows()->toArray();
-
-		$typeIds = array_map(function($type) {
-			return $type['id'];
-		}, $types);
-
-		return $typeIds;
+		return $this->_failedSaves;
 	}
 
 	/*
-	 * Returns associated Type records
+	 * Indicates that batch is a create batch
 	 *
-	 * @return   |
+	 * @return bool
 	 */
-	public function types()
+	public function isCreateBatch()
 	{
-		$toolTypeModelName = 'Components\Toolbox\Models\ToolType';
-		$associativeTable = '#__toolbox_tools_types';
-		$primaryKey = 'tool_id';
-		$foreignKey = 'type_id';
+		return true;
+	}
 
-		$types = $this->manyToMany($toolTypeModelName,
-			$associativeTable,
-			$primaryKey,
-			$foreignKey
-		);
-
-		return $types;
+	/*
+	 * Indicates that batch is not a destroy batch
+	 *
+	 * @return bool
+	 */
+	public function isDestroyBatch()
+	{
+		return false;
 	}
 
 }

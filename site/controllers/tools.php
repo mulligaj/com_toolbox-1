@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -32,17 +32,23 @@
 
 namespace Components\Toolbox\Site\Controllers;
 
-require_once Component::path('com_toolbox') . '/models/tool.php';
-require_once Component::path('com_toolbox') . '/models/toolType.php';
+$toolboxPath = Component::path('com_toolbox');
+
+require_once "$toolboxPath/models/tool.php";
+require_once "$toolboxPath/models/toolType.php";
+require_once "$toolboxPath/helpers/toolsTypesFactory.php";
+require_once "$toolboxPath/helpers/toolUpdateHelper.php";
 
 use Components\Toolbox\Models\Tool;
 use Components\Toolbox\Models\ToolType;
+use Components\Toolbox\Helpers\ToolsTypesFactory;
+use Components\Toolbox\Helpers\ToolUpdateHelper;
 use Hubzero\Component\SiteController;
 
 class Tools extends SiteController
 {
 
-	/**
+	/*
 	 * Task mapping
 	 *
 	 * @var  array
@@ -51,42 +57,27 @@ class Tools extends SiteController
 		'__default' => 'newBasic'
 	];
 
-	/**
-	 * Attribute validation
-	 *
-	 * @var  array
-	 */
-	protected $rules = [
-		'name' => 'notempty',
-		'minimum_participants' => 'positive',
-		'suggested_participants' => 'positive',
-		'maximum_participants' => 'positive',
-		'duration' => 'positive',
-		'cost' => 'positive',
-		'source' => 'notempty'
-	];
-
-	/**
+	/*
 	 * Return the basic info page of the tool creation process
 	 *
-	 * @param		Hubzero\Relational	$tool	    Tool instance
-	 * @param		array	              $typeIds	Tools type IDs
+	 * @param   Hubzero\Relational  $tool     Tool instance
+	 * @param   array               $typeIds  IDs of types to associate
 	 * @return  void
 	 */
-	public function newBasicTask($tool = null, $toolsTypeIds = [])
+	public function newBasicTask($tool = null, $typeIds = [])
 	{
 		$tool = $tool ? $tool : Tool::blank();
 		$types = ToolType::all();
 
 		$this->view
 			->set('tool', $tool)
-			->set('toolsTypeIds', $toolsTypeIds)
+			->set('toolsTypeIds', $typeIds)
 			->set('types', $types);
 
 		$this->view->display();
 	}
 
-	/**
+	/*
 	 * Create a tool record
 	 *
 	 * @return  void
@@ -98,23 +89,23 @@ class Tools extends SiteController
 		// instantiate tool
 		$tool = Tool::blank();
 
-		// get posted data
-		$data = Request::getArray('tool');
+		// get posted tool data
+		$toolData = Request::getArray('tool');
 
 		// calculate duration as minutes
-		$data['duration'] = $data['duration'] + $data['duration_hours'] * 60;
-		unset($data['duration_hours']);
+		$toolData['duration'] = $toolData['duration'] + $toolData['duration_hours'] * 60;
+		unset($toolData['duration_hours']);
 
 		// get IDs of types to associate tool with
-		$typeIds = isset($data['types']) ? $data['types'] : [];
-		unset($data['types']);
+		$typeIds = Request::getArray('types');
 
 		// set tool attributes
-		$tool->set($data);
+		$tool->set($toolData);
 
 		if ($tool->save())
 		{
-			$this->_successfulCreate($tool->get('id'));
+			$originStep = Request::getString('step');
+			$this->_successfulCreate($tool->get('id'), $typeIds, $originStep);
 		}
 		else
 		{
@@ -122,40 +113,29 @@ class Tools extends SiteController
 		}
 	}
 
-	/**
-	 * Process successful creation of a tool record
+	/*
+	 * Return the basic info page of the tool update process
 	 *
-	 * @param		integer		$toolId		ID for newly created Tool record
+	 * @param   Hubzero\Relational  $tool     Tool instance
+	 * @param   array               $typeIds  IDs of types to associate
 	 * @return  void
 	 */
-	protected function _successfulCreate($toolId)
+	public function editBasicTask($tool = null, $typeIds = null)
 	{
-		$url = Route::url(
-			"index.php?option=$this->_option&controller=$this->_controller&task=editframeworks&id=$toolId",
-			false
-		);
+		$id = Request::getInt('id');
+		$tool = $tool ? $tool : Tool::one($id);
+		$typeIds = $typeIds ? $typeIds : $tool->typeIds();
+		$types = ToolType::all();
 
-		App::redirect(
-			$url,
-			'Tool created.',
-			'passed'
-		);
+		$this->view
+			->set('tool', $tool)
+			->set('toolsTypeIds', $typeIds)
+			->set('types', $types);
+
+		$this->view->display();
 	}
 
-	/**
-	 * Process failed creation of a tool record
-	 *
-	 * @param		Hubzero\Relational	$tool	    Tool instance
-	 * @param		array	              $typeIds	Tools type IDs
-	 * @return  void
-	 */
-	protected function _failedCreate($tool, $typeIds)
-	{
-		$this->setView(null, 'newbasic');
-		$this->newBasicTask($tool, $typeIds);
-	}
-
-	/**
+	/*
 	 * Return the frameworks info page of the tool update process
 	 *
 	 * @return  void
@@ -169,6 +149,238 @@ class Tools extends SiteController
 			->set('tool', $tool);
 
 		$this->view->display();
+	}
+
+	/*
+	 * Updates tool record
+	 *
+	 * @return void
+	 */
+	public function updateTask()
+	{
+		Request::checkToken();
+
+		// fetch tool record
+		$id = Request::getInt('id');
+		$tool = Tool::one($id);
+
+		// get posted tool data
+		$toolData = Request::getArray('tool');
+
+		// update duration
+		if (isset($toolData['duration']))
+		{
+			$toolData['duration'] = $toolData['duration'] + $toolData['duration_hours'] * 60;
+			unset($toolData['duration_hours']);
+		}
+
+		// get tools type associations
+		$typeIds = Request::getArray('types');
+
+		// set tool attributes
+		$tool->set($toolData);
+
+		// get step in update process user submitted data from
+		$originStep = Request::getString('step');
+
+		if ($tool->save())
+		{
+			$this->_successfulUpdate($tool, $typeIds, $originStep);
+		}
+		else
+		{
+			$this->_failedUpdate($tool, $typeIds, $originStep);
+		}
+	}
+
+	/*
+	 * Process successful update of a tool record
+	 *
+	 * @param   object    $tool        Tool object
+	 * @param   array     $typeIds     IDs of types to associate
+	 * @param   string    $originStep  Name of the submitted step
+	 * @return  void
+	 */
+	protected function _successfulUpdate($tool, $typeIds, $originStep)
+	{
+		Notify::success('Tool updated.');
+		$associationResult = ToolsTypesFactory::updateAssociations($tool, $typeIds);
+
+		if ($associationResult->succeeded())
+		{
+			$this->_sendToNextStep($originStep, $tool);
+		}
+		else
+		{
+			$this->_failedAssociationUpdate($tool, $typeIds, $originStep, $associationResult);
+		}
+	}
+
+	/*
+	 * Process failed update of a tool record
+	 *
+	 * @param   object    $tool        Tool object
+	 * @param   array     $typeIds     IDs of types to associate
+	 * @param   string    $originStep  Name of the submitted step
+	 * @return  void
+	 */
+	protected function _failedUpdate($tool, $typeIds, $originStep)
+	{
+		$errorMessage = 'The errors below prevented the tool from being updated. <br/>';
+
+		foreach ($tool->getErrors() as $error)
+		{
+			$errorMessage .= "<br/>> $error";
+		}
+
+		Notify::error($errorMessage);
+
+		$this->_sendToOriginStep($tool, $typeIds, $originStep);
+	}
+
+	/*
+	 * Handles case in which a tool is updated but its associations are not
+	 *
+	 * @param   object    $tool               Tool object
+	 * @param   array     $typeIds            IDs of types to associate
+	 * @param   string    $originStep         Name of the submitted step
+	 * @param   object    $associationResult  Result of attempting to update tools associations
+	 * @return   void
+	 */
+	protected function _failedAssociationUpdate($tool, $typeIds, $originStep, $associationResult)
+	{
+		$errorMessage = 'The errors below prevented the tool\'s types from being updated. <br/>';
+		$errors = ToolsTypesFactory::parseUpdateErrors($associationResult);
+
+		foreach ($errors as $error)
+		{
+			$errorMessage .= "<br/>> $error";
+		}
+
+		Notify::error($errorMessage);
+
+		$this->_sendToOriginStep($tool, $typeIds, $originStep);
+	}
+
+	/*
+	 * Sends user back to current step
+	 *
+	 * @param    object    $tool        Tool object
+	 * @param    array     $typeIds     IDs of types to associate
+	 * @param    string    $originStep  Name of the submitted step
+	 * @return   void
+	 */
+	protected function _sendToOriginStep($tool, $typeIds, $originStep)
+	{
+		$originView = ToolUpdateHelper::stepToView($originStep);
+		$originTask = ToolUpdateHelper::stepToTask($originStep);
+
+		$this->setView(null, $originView);
+		$this->$originTask($tool, $typeIds);
+	}
+
+	/*
+	 * Redirects user to next step in tool editing process
+	 *
+	 * @param   string    $originStep  Name of the submitted step
+	 * @param   integer   $tool        Newly created Tool record
+	 * @return  void
+	 */
+	protected function _sendToNextStep($originStep, $tool)
+	{
+		$toolId = $tool->get('id');
+		$nextStepUrl = ToolUpdateHelper::nextStepUrl($originStep, $toolId);
+
+		App::redirect($nextStepUrl);
+	}
+
+
+	/*
+	 * Process successful creation of a tool record
+	 *
+	 * @param   integer   $toolId      ID for newly created Tool record
+	 * @param   array     $typeIds     IDs of types to associate
+	 * @param   string    $originStep  Name of the submitted step
+	 * @return  void
+	 */
+	protected function _successfulCreate($toolId, $typeIds, $originStep)
+	{
+		$associationResult = ToolsTypesFactory::associate($toolId, $typeIds);
+
+		if ($associationResult->succeeded())
+		{
+			$this->_sendToFrameworksStep($toolId, $originStep);
+		}
+		else
+		{
+			$errors = ToolsTypesFactory::parseCreateErrors($associationResult);
+			$this->_sendToEditBasic($toolId, $errors, 'Tool created.');
+		}
+	}
+
+	/*
+	 * Redirects user to framework editing page
+	 *
+	 * @param   integer    $toolId      ID for newly created Tool record
+	 * @param   string     $originStep  Name of the submitted step
+	 * @return  void
+	 */
+	protected function _sendToFrameworksStep($toolId, $originStep)
+	{
+		$nextStepUrl = ToolUpdateHelper::nextStepUrl($originStep, $toolId);
+
+		App::redirect(
+			$nextStepUrl,
+			'Tool created.',
+			'passed'
+		);
+	}
+
+	/*
+	 * Redirects user to basic information editing page
+	 *
+	 * @param   integer   $toolId   ID for newly created Tool record
+	 * @param   array     $errors   Errors to notify user of
+	 * @param   string    $message     Message to display to user
+	 * @return  void
+	 */
+	protected function _sendToEditBasic($toolId, $errors, $message)
+	{
+		$url = Route::url(
+			"index.php?option=$this->_option&controller=$this->_controller&task=editbasic&id=$toolId",
+			false
+		);
+		$errorMessage = implode($errors, '<br><br>');
+
+		Notify::error($errorMessage);
+
+		App::redirect(
+			$url,
+			$message,
+			'passed'
+		);
+	}
+
+	/*
+	 * Process failed creation of a tool record
+	 *
+	 * @param   Hubzero\Relational  $tool     Tool instance
+	 * @param   array               $typeIds  IDs of types to associate
+	 * @return  void
+	 */
+	protected function _failedCreate($tool, $typeIds)
+	{
+		$errorMessage = 'The errors below prevented the tool from being created. <br/>';
+
+		foreach ($tool->getErrors() as $error)
+		{
+			$errorMessage .= "<br/>> $error";
+		}
+
+		Notify::error($errorMessage);
+
+		$this->setView(null, 'newbasic');
+		$this->newBasicTask($tool, $typeIds);
 	}
 
 }

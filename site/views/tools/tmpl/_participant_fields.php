@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -37,22 +37,25 @@ $tool = $this->tool;
 ?>
 
 <fieldset>
-	<legend><?php echo Lang::txt('COM_TOOLBOX_NEW_PARTICIPANT_FIELDS'); ?></legend>
 	<div class="grid">
+
+		<legend>
+			<?php echo Lang::txt('COM_TOOLBOX_NEW_PARTICIPANT_FIELDS'); ?>
+		</legend>
 
 		<div class="col span2">
 			<label>
-					<?php echo Lang::txt('COM_TOOLBOX_NEW_MINIMUM_FIELD'); ?> <span class="required">
-						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-					<input name="tool[minimum_participants]" type="number" min="0"
-						value="<?php echo $tool->get('minimum_participants'); ?>">
+				<?php echo Lang::txt('COM_TOOLBOX_NEW_MINIMUM_FIELD'); ?> <span class="required">
+					<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
+				<input name="tool[minimum_participants]" type="number" min="0"
+					value="<?php echo $tool->get('minimum_participants'); ?>">
 			</label>
 		</div>
 
 		<div class="col span2 offset1">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_SUGGESTED_FIELD'); ?> <span class="required">
-						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
 					<input name="tool[suggested_participants]" type="number" min="0"
 						value="<?php echo $tool->get('suggested_participants'); ?>">
 			</label>
@@ -61,7 +64,7 @@ $tool = $this->tool;
 		<div class="col span2 offset1">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_MAXIMUM_FIELD'); ?> <span class="required">
-						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
 					<input name="tool[maximum_participants]" type="number" min="0"
 						value="<?php echo $tool->get('maximum_participants'); ?>">
 			</label>

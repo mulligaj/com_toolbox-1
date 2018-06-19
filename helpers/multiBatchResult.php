@@ -30,97 +30,87 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Toolbox\Models;
+namespace Components\Toolbox\Helpers;
 
-use Hubzero\Database\Relational;
-
-class Tool extends Relational
+class MultiBatchResult
 {
-
 	/*
-	 * Records table
+	 * Set of create and/ or delete batches
 	 *
-	 * @var string
+	 * @var   array
 	 */
-	protected $table = '#__toolbox_tools';
+	protected $batches = null;
 
 	/*
-	 * Attributes to be populated on record creation
+	 * Constructor function
 	 *
-	 * @var array
+	 * @param    array   $batches   Set of create and/ or delete batches
+	 * @return   void
 	 */
-	public $initiate = ['created'];
-
-	/*
-	 * Attribute validation
-	 *
-	 * @var  array
-	 */
-	protected $rules = [
-		'name' => 'notempty',
-		'minimum_participants' => 'positive',
-		'suggested_participants' => 'positive',
-		'maximum_participants' => 'positive',
-		'duration' => 'positive',
-		'cost' => 'positive',
-		'source' => 'notempty'
-	];
-
-	/*
-	 * Instantiates a Tool model
-	 */
-	public static function blank()
+	public function __construct($batches)
 	{
-		$tool = parent::blank();
-
-		$defaults = [
-			'minimum_participants' => '0',
-			'suggested_participants' => '0',
-			'maximum_participants' => '0',
-			'duration' => '0',
-			'cost' => 0
-		];
-
-		$tool->set($defaults);
-
-		return $tool;
+		$this->batches = $batches;
 	}
 
 	/*
-	 * Returns an array containing the associated types' IDs
+	 * Indicates whether all batches succeeded
+	 *
+	 * @return   bool
+	 */
+	public function succeeded()
+	{
+		foreach ($this->batches as $batch)
+		{
+			if (!$batch->succeeded())
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/*
+	 * Getter for failed saves
 	 *
 	 * @return   array
 	 */
-	public function typeIds()
+	public function getFailedSaves()
 	{
-		$types = $this->types()->rows()->toArray();
+		$failedSaves = [];
 
-		$typeIds = array_map(function($type) {
-			return $type['id'];
-		}, $types);
+		foreach ($this->batches as $batch)
+		{
+			if ($batch->isCreateBatch() && !$batch->succeeded())
+			{
+				$failedSaves = array_merge($failedSaves, $batch->getFailedSaves());
+			}
+		}
 
-		return $typeIds;
+		return $failedSaves;
 	}
 
 	/*
-	 * Returns associated Type records
+	 * Getter for failed destroys
 	 *
-	 * @return   |
+	 * @return   array
 	 */
-	public function types()
+	public function getFailedDestroys()
 	{
-		$toolTypeModelName = 'Components\Toolbox\Models\ToolType';
-		$associativeTable = '#__toolbox_tools_types';
-		$primaryKey = 'tool_id';
-		$foreignKey = 'type_id';
+		$failedDestroys = [];
 
-		$types = $this->manyToMany($toolTypeModelName,
-			$associativeTable,
-			$primaryKey,
-			$foreignKey
-		);
+		foreach ($this->batches as $batch)
+		{
+			if ($batch->isDestroyBatch() && !$batch->succeeded())
+			{
+				$failedDestroys = array_merge(
+					$failedDestroys,
+					$batch->getFailedDestroys()
+				);
+			}
+		}
 
-		return $types;
+		return $failedDestroys;
 	}
 
 }
