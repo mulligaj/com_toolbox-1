@@ -34,6 +34,12 @@
 defined('_HZEXEC_') or die();
 
 $tool = $this->tool;
+$subgroupSizes = [
+	'none' => Lang::txt('COM_TOOLBOX_SUBGROUP_NONE'),
+	'pairs' => Lang::txt('COM_TOOLBOX_SUBGROUP_PAIRS'),
+	'small' => Lang::txt('COM_TOOLBOX_SUBGROUP_SMALL'),
+	'large' => Lang::txt('COM_TOOLBOX_SUBGROUP_LARGE')
+];
 ?>
 
 <fieldset>
@@ -67,6 +73,20 @@ $tool = $this->tool;
 						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
 					<input name="tool[maximum_participants]" type="number" min="0"
 						value="<?php echo $tool->get('maximum_participants'); ?>">
+			</label>
+		</div>
+
+		<div class="col span2 offset1">
+			<label>
+					<?php echo Lang::txt('COM_TOOLBOX_NEW_SUBGROUP_FIELD'); ?> <span class="required">
+						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
+					<select name="tool[subgroup_size]">
+						<?php foreach ($subgroupSizes as $value => $display): ?>
+							<option value="<?php echo $value; ?>">
+								<?php echo $display; ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
 			</label>
 		</div>
 

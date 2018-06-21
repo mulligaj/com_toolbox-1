@@ -195,7 +195,7 @@ class ToolsTypesFactory extends Factory
 	protected static function _generateCreateErrorMessage($model)
 	{
 		$typeDescription = $model->getTypeDescription();
-		$error = "Unable to associate tool with $typeDescription type because: ";
+		$error = Lang::txt('COM_TOOLBOX_TOOLS_TYPES_CREATE_ERROR', $typeDescription);
 		$errors = $model->getErrors();
 
 		foreach ($errors as $modelError)
@@ -235,7 +235,7 @@ class ToolsTypesFactory extends Factory
 	protected static function _generateDestroyErrorMessage($model)
 	{
 		$typeDescription = $model->getTypeDescription();
-		$error = "Unable to disassociate tool from $typeDescription type because: ";
+		$error = Lang::txt('COM_TOOLBOX_TOOLS_TYPES_DESTROY_ERROR', $typeDescription);
 		$errors = $model->getErrors();
 
 		foreach ($errors as $modelError)

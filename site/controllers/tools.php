@@ -226,7 +226,7 @@ class Tools extends SiteController
 	 */
 	protected function _failedUpdate($tool, $typeIds, $originStep)
 	{
-		$errorMessage = 'The errors below prevented the tool from being updated. <br/>';
+		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_TOOL_UPDATE_ERROR') . '<br/>';
 
 		foreach ($tool->getErrors() as $error)
 		{
@@ -249,7 +249,7 @@ class Tools extends SiteController
 	 */
 	protected function _failedAssociationUpdate($tool, $typeIds, $originStep, $associationResult)
 	{
-		$errorMessage = 'The errors below prevented the tool\'s types from being updated. <br/>';
+		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_TYPES_UPDATE_ERROR') . '<br/>';
 		$errors = ToolsTypesFactory::parseUpdateErrors($associationResult);
 
 		foreach ($errors as $error)
@@ -370,7 +370,7 @@ class Tools extends SiteController
 	 */
 	protected function _failedCreate($tool, $typeIds)
 	{
-		$errorMessage = 'The errors below prevented the tool from being created. <br/>';
+		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_TOOL_CREATE_ERROR') . '<br/>';
 
 		foreach ($tool->getErrors() as $error)
 		{

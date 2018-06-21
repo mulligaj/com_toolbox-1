@@ -63,7 +63,8 @@ class Tool extends Relational
 		'maximum_participants' => 'positive',
 		'duration' => 'positive',
 		'cost' => 'positive',
-		'source' => 'notempty'
+		'source' => 'notempty',
+		'subgroup_size' => 'notempty'
 	];
 
 	/*

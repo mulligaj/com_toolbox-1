@@ -9,12 +9,14 @@ class MigrationHelper
 	{
 		if ($multipleRecords)
 		{
-			return self::_generateMultiRecordValuesString($data);
+			$sql = self::_generateMultiRecordValuesString($data);
 		}
 		else
 		{
-			return self::_generateSingleRecordValuesString($data);
+			$sql = self::_generateSingleRecordValuesString($data);
 		}
+
+		return $sql;
 	}
 
 	protected static function _generateMultiRecordValuesString($entities)

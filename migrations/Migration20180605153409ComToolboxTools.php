@@ -28,6 +28,7 @@ class Migration20180605153409ComToolboxTools extends Base
 			`learning_objectives` text NULL DEFAULT NULL,
 			`links` text NULL DEFAULT NULL,
 			`kinesthetic` tinyint(1) NULL DEFAULT NULL,
+			`subgroup_size` varchar(75) NULL DEFAULT NULL,
 			`published` tinyint(1) NULL DEFAULT NULL,
 			`archived` tinyint(1) NULL DEFAULT NULL,
 			`self_awareness` tinyint(1) NULL DEFAULT NULL,
