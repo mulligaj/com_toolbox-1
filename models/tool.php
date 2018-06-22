@@ -123,5 +123,5 @@ class Tool extends Relational
 
 		return $types;
 	}
-
+public function save() { return false; }
 }

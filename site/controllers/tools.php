@@ -156,11 +156,27 @@ class Tools extends SiteController
 	/*
 	 * Renders the objectives page of the tool update process
 	 *
+	 * @param   Hubzero\Relational  $tool     Tool instance
 	 * @return void
 	 */
-	public function editObjectivesTask()
+	public function editObjectivesTask($tool = null)
 	{
+		$id = Request::getInt('id');
+		$tool = $tool ? $tool : Tool::one($id);
 
+		$this->view
+			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
+	/*
+	 * Renders the objectives page of the tool update process
+	 *
+	 * @return void
+	 */
+	public function editDownloadsTask()
+	{
 	}
 
 	/*
