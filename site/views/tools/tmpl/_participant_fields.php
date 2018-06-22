@@ -34,6 +34,7 @@
 defined('_HZEXEC_') or die();
 
 $tool = $this->tool;
+$subgroupSize = $tool->get('subgroup_size');
 $subgroupSizes = [
 	'none' => Lang::txt('COM_TOOLBOX_SUBGROUP_NONE'),
 	'pairs' => Lang::txt('COM_TOOLBOX_SUBGROUP_PAIRS'),
@@ -82,7 +83,8 @@ $subgroupSizes = [
 						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
 					<select name="tool[subgroup_size]">
 						<?php foreach ($subgroupSizes as $value => $display): ?>
-							<option value="<?php echo $value; ?>">
+							<option value="<?php echo $value; ?>"
+								<?php if ($value === $subgroupSize) echo 'selected'; ?>>
 								<?php echo $display; ?>
 							</option>
 						<?php endforeach; ?>

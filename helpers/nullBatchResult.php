@@ -30,56 +30,49 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Toolbox\Helpers;
 
-$action = $this->action;
-$step = $this->step;
-$tool = $this->tool;
-$types = $this->types;
-$toolsTypeIds = isset($this->toolsTypeIds) ? $this->toolsTypeIds : [];
-?>
+class NullBatchResult
+{
 
-<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
+	/*
+	 * Returns true
+	 *
+	 * @return   bool
+	 */
+	public function succeeded()
+	{
+		return true;
+	}
 
-	<?php
-		$this->view('_name_type_fields')
-			->set('tool', $tool)
-			->set('types', $types)
-			->set('toolsTypeIds', $toolsTypeIds)
-			->display();
-	;?>
+	/*
+	 * Getter for _failedSaves
+	 *
+	 * @return   array
+	 */
+	public function getFailedSaves()
+	{
+		return [];
+	}
 
-	<?php
-		$this->view('_participant_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
+	/*
+	 * Indicates that batch is not a create batch
+	 *
+	 * @return bool
+	 */
+	public function isCreateBatch()
+	{
+		return false;
+	}
 
-	<?php
-		$this->view('_duration_budget_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
+	/*
+	 * Indicates that batch is not a destroy batch
+	 *
+	 * @return bool
+	 */
+	public function isDestroyBatch()
+	{
+		return false;
+	}
 
-	<?php
-		$this->view('_source_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
-
-	<input type="hidden" name="step" value="<?php echo $step; ?>" />
-
-	<?php echo Html::input('token'); ?>
-
-	<input class="btn btn-success" type="submit"
-		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_CONTINUE'); ?>">
-
-</form>
-
-<style>
-.btn-success {
-	max-width: 15%;
-	float: right;
 }
-</style>

@@ -58,7 +58,6 @@ $formAction = Route::url(
 	"index.php?option=$this->option&controller=$this->controller&task=update&id=$toolId"
 );
 $step = 'basic';
-$tool = $this->tool;
 $toolsTypeIds = $this->toolsTypeIds;
 $types = $this->types;
 ?>

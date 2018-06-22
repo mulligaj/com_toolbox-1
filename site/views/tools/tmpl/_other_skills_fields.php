@@ -37,52 +37,45 @@ $tool = $this->tool;
 ?>
 
 <fieldset>
-	<legend><?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC'); ?></legend>
+	<legend><?php echo Lang::txt('COM_TOOLBOX_OTHER_SKILLS'); ?></legend>
 	<div class="grid">
 
 		<div class="col span5">
 			<label>
-					<input name="tool[self_awareness]" type="hidden" value="0">
-					<input name="tool[self_awareness]" type="checkbox" value="1"
-						<?php if ($tool->get('self_awareness')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_SELF_AWARENESS'); ?>
+					<input name="tool[friendship]" type="hidden" value="0">
+					<input name="tool[friendship]" type="checkbox" value="1"
+						<?php if ($tool->get('friendship')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_OTHER_SKILLS_FRIENDSHIP'); ?>
 			</label>
 
 			<label>
-					<input name="tool[openness]" type="hidden" value="0">
-					<input name="tool[openness]" type="checkbox" value="1"
-						<?php if ($tool->get('openness')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_OPENNESS'); ?>
+					<input name="tool[teamwork]" type="hidden" value="0">
+					<input name="tool[teamwork]" type="checkbox" value="1"
+						<?php if ($tool->get('teamwork')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_OTHER_SKILLS_TEAMWORK'); ?>
 			</label>
 
 			<label>
-					<input name="tool[communication]" type="hidden" value="0">
-					<input name="tool[communication]" type="checkbox" value="1"
-						<?php if ($tool->get('communication')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_COMMUNICATION'); ?>
+					<input name="tool[mentorship]" type="hidden" value="0">
+					<input name="tool[mentorship]" type="checkbox" value="1"
+						<?php if ($tool->get('mentorship')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_OTHER_SKILLS_MENTORSHIP'); ?>
 			</label>
 		</div>
 
 		<div class="col span5 offset1">
 			<label>
-					<input name="tool[empathy]" type="hidden" value="0">
-					<input name="tool[empathy]" type="checkbox" value="1"
-						<?php if ($tool->get('empathy')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_EMPATHY'); ?>
+					<input name="tool[diversity_inclusion]" type="hidden" value="0">
+					<input name="tool[diversity_inclusion]" type="checkbox" value="1"
+						<?php if ($tool->get('diversity_inclusion')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_OTHER_SKILLS_DIVERSITY_INCLUSION'); ?>
 			</label>
 
 			<label>
-					<input name="tool[curiousity]" type="hidden" value="0">
-					<input name="tool[curiousity]" type="checkbox" value="1"
-						<?php if ($tool->get('curiousity')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_CURIOUSITY'); ?>
-			</label>
-
-			<label>
-					<input name="tool[worldview]" type="hidden" value="0">
-					<input name="tool[worldview]" type="checkbox" value="1"
-						<?php if ($tool->get('worldview')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_WORLDVIEW'); ?>
+					<input name="tool[leadership]" type="hidden" value="0">
+					<input name="tool[leadership]" type="checkbox" value="1"
+						<?php if ($tool->get('leadership')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_OTHER_SKILLS_LEADERSHIP'); ?>
 			</label>
 		</div>
 

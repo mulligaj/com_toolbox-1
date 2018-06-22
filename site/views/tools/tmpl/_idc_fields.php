@@ -37,52 +37,38 @@ $tool = $this->tool;
 ?>
 
 <fieldset>
-	<legend><?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC'); ?></legend>
+	<legend><?php echo Lang::txt('COM_TOOLBOX_IDC'); ?></legend>
 	<div class="grid">
 
 		<div class="col span5">
 			<label>
-					<input name="tool[self_awareness]" type="hidden" value="0">
-					<input name="tool[self_awareness]" type="checkbox" value="1"
-						<?php if ($tool->get('self_awareness')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_SELF_AWARENESS'); ?>
+					<input name="tool[denial]" type="hidden" value="0">
+					<input name="tool[denial]" type="checkbox" value="1"
+						<?php if ($tool->get('denial')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_IDC_DENIAL'); ?>
 			</label>
 
 			<label>
-					<input name="tool[openness]" type="hidden" value="0">
-					<input name="tool[openness]" type="checkbox" value="1"
-						<?php if ($tool->get('openness')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_OPENNESS'); ?>
+					<input name="tool[polarization]" type="hidden" value="0">
+					<input name="tool[polarization]" type="checkbox" value="1"
+						<?php if ($tool->get('polarization')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_IDC_POLARIZATION'); ?>
 			</label>
 
 			<label>
-					<input name="tool[communication]" type="hidden" value="0">
-					<input name="tool[communication]" type="checkbox" value="1"
-						<?php if ($tool->get('communication')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_COMMUNICATION'); ?>
+					<input name="tool[minimization]" type="hidden" value="0">
+					<input name="tool[minimization]" type="checkbox" value="1"
+						<?php if ($tool->get('minimization')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_IDC_MINIMIZATION'); ?>
 			</label>
 		</div>
 
 		<div class="col span5 offset1">
 			<label>
-					<input name="tool[empathy]" type="hidden" value="0">
-					<input name="tool[empathy]" type="checkbox" value="1"
-						<?php if ($tool->get('empathy')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_EMPATHY'); ?>
-			</label>
-
-			<label>
-					<input name="tool[curiousity]" type="hidden" value="0">
-					<input name="tool[curiousity]" type="checkbox" value="1"
-						<?php if ($tool->get('curiousity')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_CURIOUSITY'); ?>
-			</label>
-
-			<label>
-					<input name="tool[worldview]" type="hidden" value="0">
-					<input name="tool[worldview]" type="checkbox" value="1"
-						<?php if ($tool->get('worldview')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_WORLDVIEW'); ?>
+					<input name="tool[acceptance]" type="hidden" value="0">
+					<input name="tool[acceptance]" type="checkbox" value="1"
+						<?php if ($tool->get('acceptance')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_IDC_ACCEPTANCE'); ?>
 			</label>
 		</div>
 

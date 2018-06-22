@@ -55,8 +55,9 @@ foreach ($breadcrumbs as $text => $url)
 Document::setTitle($page);
 
 $formAction = Route::url(
-	"" // AF: update
+	"index.php?option=$this->option&controller=$this->controller&task=update&id=$toolId"
 );
+$step = 'frameworks';
 ?>
 
 <?php
@@ -72,6 +73,7 @@ $formAction = Route::url(
 			<?php
 				$this->view('_tool_frameworks_form')
 					->set('action', $formAction)
+					->set('step', $step)
 					->set('tool', $tool)
 					->display();
 			?>

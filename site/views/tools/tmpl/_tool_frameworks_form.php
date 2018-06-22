@@ -34,6 +34,7 @@
 defined('_HZEXEC_') or die();
 
 $action = $this->action;
+$step = $this->step;
 $tool = $this->tool;
 ?>
 
@@ -44,6 +45,26 @@ $tool = $this->tool;
 			->set('tool', $tool)
 			->display();
 	;?>
+
+	<?php
+		$this->view('_idc_fields')
+			->set('tool', $tool)
+			->display();
+	;?>
+
+	<?php
+		$this->view('_bergs_fields')
+			->set('tool', $tool)
+			->display();
+	;?>
+
+	<?php
+		$this->view('_other_skills_fields')
+			->set('tool', $tool)
+			->display();
+	;?>
+
+	<input type="hidden" name="step" value="<?php echo $step; ?>" />
 
 	<?php echo Html::input('token'); ?>
 

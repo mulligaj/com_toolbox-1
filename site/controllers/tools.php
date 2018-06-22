@@ -54,7 +54,8 @@ class Tools extends SiteController
 	 * @var  array
 	 */
 	protected $_taskMap = [
-		'__default' => 'newBasic'
+		'__default' => 'newBasic',
+		'editObjectivesTask' => 'editObjectives'
 	];
 
 	/*
@@ -114,7 +115,7 @@ class Tools extends SiteController
 	}
 
 	/*
-	 * Return the basic info page of the tool update process
+	 * Renders the basic info page of the tool update process
 	 *
 	 * @param   Hubzero\Relational  $tool     Tool instance
 	 * @param   array               $typeIds  IDs of types to associate
@@ -136,19 +137,30 @@ class Tools extends SiteController
 	}
 
 	/*
-	 * Return the frameworks info page of the tool update process
+	 * Renders the frameworks info page of the tool update process
 	 *
+	 * @param   Hubzero\Relational  $tool     Tool instance
 	 * @return  void
 	 */
-	public function editFrameworksTask()
+	public function editFrameworksTask($tool = null)
 	{
 		$id = Request::getInt('id');
-		$tool = Tool::one($id);
+		$tool = $tool ? $tool : Tool::one($id);
 
 		$this->view
 			->set('tool', $tool);
 
 		$this->view->display();
+	}
+
+	/*
+	 * Renders the objectives page of the tool update process
+	 *
+	 * @return void
+	 */
+	public function editObjectivesTask()
+	{
+
 	}
 
 	/*
@@ -175,7 +187,7 @@ class Tools extends SiteController
 		}
 
 		// get tools type associations
-		$typeIds = Request::getArray('types');
+		$typeIds = Request::has('types') ? Request::getArray('types') : null;
 
 		// set tool attributes
 		$tool->set($toolData);
@@ -185,11 +197,11 @@ class Tools extends SiteController
 
 		if ($tool->save())
 		{
-			$this->_successfulUpdate($tool, $typeIds, $originStep);
+			$this->_successfulUpdate($tool, $originStep, $typeIds);
 		}
 		else
 		{
-			$this->_failedUpdate($tool, $typeIds, $originStep);
+			$this->_failedUpdate($tool, $originStep, $typeIds);
 		}
 	}
 
@@ -197,11 +209,11 @@ class Tools extends SiteController
 	 * Process successful update of a tool record
 	 *
 	 * @param   object    $tool        Tool object
-	 * @param   array     $typeIds     IDs of types to associate
 	 * @param   string    $originStep  Name of the submitted step
+	 * @param   array     $typeIds     IDs of types to associate
 	 * @return  void
 	 */
-	protected function _successfulUpdate($tool, $typeIds, $originStep)
+	protected function _successfulUpdate($tool, $originStep, $typeIds)
 	{
 		Notify::success('Tool updated.');
 		$associationResult = ToolsTypesFactory::updateAssociations($tool, $typeIds);
@@ -220,11 +232,11 @@ class Tools extends SiteController
 	 * Process failed update of a tool record
 	 *
 	 * @param   object    $tool        Tool object
-	 * @param   array     $typeIds     IDs of types to associate
 	 * @param   string    $originStep  Name of the submitted step
+	 * @param   array     $typeIds     IDs of types to associate
 	 * @return  void
 	 */
-	protected function _failedUpdate($tool, $typeIds, $originStep)
+	protected function _failedUpdate($tool, $originStep, $typeIds)
 	{
 		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_TOOL_UPDATE_ERROR') . '<br/>';
 

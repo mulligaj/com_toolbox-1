@@ -55,7 +55,8 @@ class ToolUpdateHelper
 	 * @var array
 	 */
 	protected static $nextStepMap = [
-		'basic' => 'frameworks'
+		'basic' => 'frameworks',
+		'frameworks' => 'objectives'
 	];
 
 	/*
@@ -64,8 +65,9 @@ class ToolUpdateHelper
 	 * @var array
 	 */
 	protected static $stepToTaskMap = [
-		'basic' => 'editBasicTask',
-		'frameworks' => 'editFrameworksTask'
+		'basic' => 'editbasic',
+		'frameworks' => 'editframeworks',
+		'objectives' => 'editobjectives'
 	];
 
 	/*
@@ -74,7 +76,8 @@ class ToolUpdateHelper
 	 * @var array
 	 */
 	protected static $stepToViewMap = [
-		'basic' => 'editbasic'
+		'basic' => 'editbasic',
+		'frameworks' => 'editframeworks'
 	];
 
 	/*
@@ -91,7 +94,7 @@ class ToolUpdateHelper
 		$controller = self::$_controller;
 
 		$nextStepUrl = Route::url(
-			"index.php?option=$component&controller=$controller&task=editframeworks&id=$toolId",
+			"index.php?option=$component&controller=$controller&task=$nextStepTask&id=$toolId",
 			false
 		);
 
@@ -107,7 +110,7 @@ class ToolUpdateHelper
 	public static function _nextStepTask($originStep)
 	{
 		$nextStep = self::_getNextStep($originStep);
-		$nextTask = self::stepToTask($nextStep);
+		$nextTask = self::stepToTask($nextStep, false);
 
 		return $nextTask;
 	}
@@ -128,12 +131,18 @@ class ToolUpdateHelper
 	/*
 	 * Determines task name for the given step
 	 *
-	 * @param    string   $step   Name of a step
+	 * @param    string   $step         Name of a step
+	 * @param    bool     $appendTask   Indicates whether to append 'Task'
 	 * @return   string
 	 */
-	public static function stepToTask($step)
+	public static function stepToTask($step, $appendTask = true)
 	{
 		$task = self::$stepToTaskMap[$step];
+
+		if ($appendTask)
+		{
+			$task .= 'Task';
+		}
 
 		return $task;
 	}

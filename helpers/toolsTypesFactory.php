@@ -36,10 +36,12 @@ $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/helpers/factory.php";
 require_once "$toolboxPath/helpers/multiBatchResult.php";
+require_once "$toolboxPath/helpers/nullBatchResult.php";
 require_once "$toolboxPath/models/toolsType.php";
 
 use Components\Toolbox\Helpers\Factory;
 use Components\Toolbox\Helpers\MultiBatchResult;
+use Components\Toolbox\Helpers\NullBatchResult;
 use Components\Toolbox\Models\ToolsType;
 
 class ToolsTypesFactory extends Factory
@@ -88,11 +90,15 @@ class ToolsTypesFactory extends Factory
 	 * Updates a tool's types associations
 	 *
 	 * @param   object    $tool               Tool record
-	 * @param   array     $updatedTypeIds     Set of updated types' IDs
+	 * @param   mixed     $updatedTypeIds     Set of updated types' IDs
 	 * @return  array
 	 */
 	public static function updateAssociations($tool, $updatedTypeIds)
 	{
+		if (!$updatedTypeIds)
+		{
+			return new NullBatchResult();
+		}
 		$toolId = $tool->get('id');
 		$difference = self::_getDifference($tool->typeIds(), $updatedTypeIds);
 
