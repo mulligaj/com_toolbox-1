@@ -171,4 +171,35 @@ class Factory
 		}
 	}
 
+	/*
+	 * Destroys records based on given IDs
+	 *
+	 * @param    array    $recordIds   Record IDs
+	 * @return   object
+	 */
+	public static function destroyById($recordIds)
+	{
+		$records = static::getRecordsById($recordIds);
+
+		$result = static::destroyMany($records);
+
+		return $result;
+	}
+
+	/*
+	 * Retrieves records based on ID
+	 *
+	 * @param    array    $recordIds   Record IDs
+	 * @return   object
+	 */
+	public static function getRecordsById($recordIds)
+	{
+		$class = static::$modelName;
+		$records = $class::all()
+			->whereIn('id', $recordIds)
+			->rows();
+
+		return $records;
+	}
+
 }

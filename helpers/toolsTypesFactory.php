@@ -175,9 +175,9 @@ class ToolsTypesFactory extends Factory
 	}
 
 	/*
-	 * Translates instances' errors into final error message
+	 * Translates instances' errors into error message for user
 	 *
-	 * @param   object   $result   Result of attempting to persist records
+	 * @param   object   $result   Result of attempting to save records
 	 * @return  array
 	 */
 	public static function parseCreateErrors($result)

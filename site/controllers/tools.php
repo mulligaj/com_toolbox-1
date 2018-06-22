@@ -177,6 +177,13 @@ class Tools extends SiteController
 	 */
 	public function editDownloadsTask()
 	{
+		$id = Request::getInt('id');
+		$tool = Tool::one($id);
+
+		$this->view
+			->set('tool', $tool);
+
+		$this->view->display();
 	}
 
 	/*

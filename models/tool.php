@@ -32,6 +32,10 @@
 
 namespace Components\Toolbox\Models;
 
+$toolboxPath = Component::path('com_toolbox');
+
+require_once "$toolboxPath/models/download.php";
+
 use Hubzero\Database\Relational;
 
 class Tool extends Relational
@@ -106,7 +110,7 @@ class Tool extends Relational
 	/*
 	 * Returns associated Type records
 	 *
-	 * @return   |
+	 * @return   object
 	 */
 	public function types()
 	{
@@ -115,7 +119,8 @@ class Tool extends Relational
 		$primaryKey = 'tool_id';
 		$foreignKey = 'type_id';
 
-		$types = $this->manyToMany($toolTypeModelName,
+		$types = $this->manyToMany(
+			$toolTypeModelName,
 			$associativeTable,
 			$primaryKey,
 			$foreignKey
@@ -123,5 +128,19 @@ class Tool extends Relational
 
 		return $types;
 	}
-public function save() { return false; }
+
+	/*
+	 * Returns associated Download records
+	 *
+	 * @return   object
+	 */
+	public function downloads()
+	{
+		$downloadModelName = 'Components\Toolbox\Models\Download';
+
+		$downloads = $this->oneToMany($downloadModelName, 'tool_id')->rows();
+
+		return $downloads;
+	}
+
 }
