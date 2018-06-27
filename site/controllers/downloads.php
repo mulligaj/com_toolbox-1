@@ -45,7 +45,7 @@ class Downloads extends SiteController
 {
 
 	/*
-	 * Create download records
+	 * Updates download records
 	 *
 	 * @return  void
 	 */
@@ -135,6 +135,7 @@ class Downloads extends SiteController
 		}
 		else
 		{
+			$errors = DownloadsFactory::parseSaveErrors($saveResult);
 			$this->_failedDestroy($destroyResult);
 		}
 	}

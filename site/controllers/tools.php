@@ -187,6 +187,35 @@ class Tools extends SiteController
 	}
 
 	/*
+	 * Renders the related tools page of the tool update process
+	 *
+	 * @return void
+	 */
+	public function editRelatedTask()
+	{
+		$id = Request::getInt('id');
+		$tool = Tool::one($id);
+		$otherTools = Tool::otherTools([$tool])
+			->sort('name');
+
+		if (Request::has('selectedToolsIds'))
+		{
+			$selectedToolsIds = Request::getArray('selectedToolsIds');
+		}
+		else
+		{
+			$selectedToolsIds = $tool->relatedToolsIds();
+		}
+
+		$this->view
+			->set('otherTools', $otherTools)
+			->set('selectedToolsIds', $selectedToolsIds)
+			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
+	/*
 	 * Updates tool record
 	 *
 	 * @return void
@@ -239,7 +268,7 @@ class Tools extends SiteController
 	protected function _successfulUpdate($tool, $originStep, $typeIds)
 	{
 		Notify::success('Tool updated.');
-		$associationResult = ToolsTypesFactory::updateAssociations($tool, $typeIds);
+		$associationResult = ToolsTypesFactory::update($tool, $typeIds);
 
 		if ($associationResult->succeeded())
 		{
@@ -340,7 +369,7 @@ class Tools extends SiteController
 	 */
 	protected function _successfulCreate($toolId, $typeIds, $originStep)
 	{
-		$associationResult = ToolsTypesFactory::associate($toolId, $typeIds);
+		$associationResult = ToolsTypesFactory::associateManyToMany($toolId, $typeIds);
 
 		if ($associationResult->succeeded())
 		{

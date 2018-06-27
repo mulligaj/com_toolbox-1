@@ -202,4 +202,89 @@ class Factory
 		return $records;
 	}
 
+	/*
+	 * Associates singular records with the many
+	 *
+	 * @param   integer   $singularId   Singular record's ID
+	 * @param   array     $manyIds      Many records' IDs
+	 * @return  array
+	 */
+	public static function associateManyToMany($singularId, $manyIds)
+	{
+		$modelsData = static::_collateJoinData($singularId, $manyIds);
+
+		$result = self::createMany($modelsData);
+
+		return $result;
+	}
+
+	/*
+	 * Disassociates singular records from the many
+	 *
+	 * @param   integer   $singularId   Singular record's ID
+	 * @param   array     $manyIds      Many records' IDs
+	 * @return  array
+	 */
+	public static function disassociateManyToMany($singularId, $manyIds)
+	{
+		$joinRecords = static::_retrieveRecords($singularId, $manyIds);
+
+		$result = self::destroyMany($joinRecords);
+
+		return $result;
+	}
+
+	/*
+	 * Translates instances' update errors into consolidated set of errors
+	 *
+	 * @param   object   $result   Result of attempting to update records
+	 * @return  array
+	 */
+	public static function parseUpdateErrors($result)
+	{
+		$createErrors = self::parseCreateErrors($result);
+		$destroyErrors = self::parseDestroyErrors($result);
+
+		$errors = array_merge($createErrors, $destroyErrors);
+
+		return $errors;
+	}
+
+	/*
+	 * Translates instances' create errors into error messages for user
+	 *
+	 * @param   object   $result   Result of attempting to save records
+	 * @return  array
+	 */
+	public static function parseCreateErrors($result)
+	{
+		$failedSaves = $result->getFailedSaves();
+
+		$errors = array_map(function($model) {
+			$error = static::_generateCreateErrorMessage($model);
+			return $error;
+		}, $failedSaves);
+
+		return $errors;
+	}
+
+	/*
+	 * Translates instances' destroy errors into error messages for user
+	 *
+	 * @param   object   $result   Result of attempting to destroy records
+	 * @return  array
+	 */
+	public static function parseDestroyErrors($result)
+	{
+		$failedDestroys = $result->getFailedDestroys();
+
+		$errors = array_map(function($model) {
+			$error = static::_generateDestroyErrorMessage($model);
+			return $error;
+		}, $failedDestroys);
+
+		return $errors;
+	}
+
+
 }

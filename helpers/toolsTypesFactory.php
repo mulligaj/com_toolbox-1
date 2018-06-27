@@ -35,11 +35,13 @@ namespace Components\Toolbox\Helpers;
 $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/helpers/factory.php";
+require_once "$toolboxPath/helpers/associationHelper.php";
 require_once "$toolboxPath/helpers/multiBatchResult.php";
 require_once "$toolboxPath/helpers/nullBatchResult.php";
 require_once "$toolboxPath/models/toolsType.php";
 
 use Components\Toolbox\Helpers\Factory;
+use Components\Toolbox\Helpers\AssociationHelper;
 use Components\Toolbox\Helpers\MultiBatchResult;
 use Components\Toolbox\Helpers\NullBatchResult;
 use Components\Toolbox\Models\ToolsType;
@@ -55,90 +57,26 @@ class ToolsTypesFactory extends Factory
 	protected static $modelName = 'Components\Toolbox\Models\ToolsType';
 
 	/*
-	 * Creates association records to link tool with given types
-	 *
-	 * @param   integer   $toolId    Given tool's ID
-	 * @param   array     $typeIds   Given types' IDs
-	 * @return  array
-	 */
-	public static function associate($toolId, $typeIds)
-	{
-		$modelsData = self::_collateModelData($toolId, $typeIds);
-
-		$result = self::createMany($modelsData);
-
-		return $result;
-	}
-
-	/*
-	 * Deletes association records
-	 *
-	 * @param   integer   $toolId    Given tool's ID
-	 * @param   array     $typeIds   Given types' IDs
-	 * @return  array
-	 */
-	public static function disassociate($toolId, $typeIds)
-	{
-		$toolsTypes = self::_retrieveRecords($toolId, $typeIds);
-
-		$result = self::destroyMany($toolsTypes);
-
-		return $result;
-	}
-
-	/*
 	 * Updates a tool's types associations
 	 *
 	 * @param   object    $tool               Tool record
 	 * @param   mixed     $updatedTypeIds     Set of updated types' IDs
 	 * @return  array
 	 */
-	public static function updateAssociations($tool, $updatedTypeIds)
+	public static function update($tool, $updatedTypeIds)
 	{
 		if (!$updatedTypeIds)
 		{
 			return new NullBatchResult();
 		}
 		$toolId = $tool->get('id');
-		$difference = self::_getDifference($tool->typeIds(), $updatedTypeIds);
+		$difference = AssociationHelper::updateDelta($tool->typeIds(), $updatedTypeIds);
 
-		$createResult = self::associate($toolId, $difference['create']);
-		$deleteResult = self::disassociate($toolId, $difference['delete']);
+		$createResult = self::associateManyToMany($toolId, $difference['create']);
+		$deleteResult = self::disassociateManyToMany($toolId, $difference['delete']);
 		$combinedResult = new MultiBatchResult([$createResult, $deleteResult]);
 
 		return $combinedResult;
-	}
-
-	/*
-	 * Determines the sets of IDs to create and delete
-	 *
-	 * @param    array   $currentTypeIds   Tools currently associated types' IDs
-	 * @param    array   $updatedTypeIds   Set of updated types' IDs
-	 * @return   array
-	 */
-	protected static function _getDifference($currentTypeIds, $updatedTypeIds)
-	{
-		$delete = [];
-
-		foreach ($currentTypeIds as $currentTypeId)
-		{
-			// If ID of current assoc. is not in updated set, delete it
-			if (!in_array($currentTypeId, $updatedTypeIds))
-			{
-				$delete[] = $currentTypeId;
-			}
-			// If ID of current assoc. is in updated set, remove from updated
-			elseif (in_array($currentTypeId, $updatedTypeIds))
-			{
-				$idIndex = array_search($currentTypeId, $updatedTypeIds);
-				unset($updatedTypeIds[$idIndex]);
-			}
-		}
-
-		return [
-			'create' => $updatedTypeIds,
-			'delete' => $delete
-		];
 	}
 
 	/*
@@ -148,7 +86,7 @@ class ToolsTypesFactory extends Factory
 	 * @param   array     $typeIds   Given types' ID
 	 * @return  array
 	 */
-	protected static function _collateModelData($toolId, $typeIds)
+	protected static function _collateJoinData($toolId, $typeIds)
 	{
 		$modelsData = array_map(function($typeId) use ($toolId) {
 			$modelData = ['tool_id' => $toolId, 'type_id' => $typeId];
@@ -159,50 +97,16 @@ class ToolsTypesFactory extends Factory
 	}
 
 	/*
-	 * Translates instances' errors into final error message
+	 * Generates an error message for a Type that was not saved
 	 *
-	 * @param   object   $result   Result of attempting to update records
-	 * @return  array
-	 */
-	public static function parseUpdateErrors($result)
-	{
-		$saveErrors = self::parseCreateErrors($result);
-		$destroyErrors = self::parseDestroyErrors($result);
-
-		$errors = array_merge($saveErrors, $destroyErrors);
-
-		return $errors;
-	}
-
-	/*
-	 * Translates instances' errors into error message for user
-	 *
-	 * @param   object   $result   Result of attempting to save records
-	 * @return  array
-	 */
-	public static function parseCreateErrors($result)
-	{
-		$failedSaves = $result->getFailedSaves();
-
-		$errors = array_map(function($model) {
-			$error = self::_generateCreateErrorMessage($model);
-			return $error;
-		}, $failedSaves);
-
-		return $errors;
-	}
-
-	/*
-	 * Generates an error message for a model that was not saved
-	 *
-	 * @param    object   $model   Given ToolsType model
+	 * @param    object   $type   Given ToolsType type
 	 * @return   string
 	 */
-	protected static function _generateCreateErrorMessage($model)
+	protected static function _generateCreateErrorMessage($type)
 	{
-		$typeDescription = $model->getTypeDescription();
+		$typeDescription = $type->getTypeDescription();
 		$error = Lang::txt('COM_TOOLBOX_TOOLS_TYPES_CREATE_ERROR', $typeDescription);
-		$errors = $model->getErrors();
+		$errors = $type->getErrors();
 
 		foreach ($errors as $modelError)
 		{
@@ -212,24 +116,6 @@ class ToolsTypesFactory extends Factory
 		$error = rtrim($error, ', ') . '.';
 
 		return $error;
-	}
-
-	/*
-	 * Translates instances' errors into final error message
-	 *
-	 * @param   object   $result   Result of attempting to destroy records
-	 * @return  array
-	 */
-	public static function parseDestroyErrors($result)
-	{
-		$failedDestroys = $result->getFailedDestroys();
-
-		$errors = array_map(function($model) {
-			$error = self::_generateDestroyErrorMessage($model);
-			return $error;
-		}, $failedDestroys);
-
-		return $errors;
 	}
 
 	/*
@@ -259,7 +145,7 @@ class ToolsTypesFactory extends Factory
 	 *
 	 * @param    integer   $toolId    Given tool's ID
 	 * @param    array     $typeIds   Given types' ID
-	 * @return   string
+	 * @return   object
 	 */
 	protected static function _retrieveRecords($toolId, $typeIds)
 	{

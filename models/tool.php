@@ -73,6 +73,8 @@ class Tool extends Relational
 
 	/*
 	 * Instantiates a Tool model
+	 *
+	 * @return   object
 	 */
 	public static function blank()
 	{
@@ -89,6 +91,25 @@ class Tool extends Relational
 		$tool->set($defaults);
 
 		return $tool;
+	}
+
+	/*
+	 * Get tools with IDs other than the provided tool(s)
+	 *
+	 *  @param    array    $tools   The tools to exclude from query
+	 *  @return   object
+	 */
+	public static function otherTools($tools)
+	{
+		$toolIds = array_map(function($tool) {
+			return $tool->get('id');
+		}, $tools);
+
+		$otherTools = self::all()
+			->whereNotIn('id', $toolIds)
+			->rows();
+
+		return $otherTools;
 	}
 
 	/*
@@ -130,6 +151,28 @@ class Tool extends Relational
 	}
 
 	/*
+	 * Returns associated Tool records
+	 *
+	 * @return   object
+	 */
+	public function relatedTools()
+	{
+		$toolModelName = 'Components\Toolbox\Models\Tool';
+		$associativeTable = '#__toolbox_tools_relationships';
+		$primaryKey = 'origin_id';
+		$foreignKey = 'related_id';
+
+		$relatedTools = $this->manyToMany(
+			$toolModelName,
+			$associativeTable,
+			$primaryKey,
+			$foreignKey
+		);
+
+		return $relatedTools;
+	}
+
+	/*
 	 * Returns associated Download records
 	 *
 	 * @return   object
@@ -141,6 +184,24 @@ class Tool extends Relational
 		$downloads = $this->oneToMany($downloadModelName, 'tool_id')->rows();
 
 		return $downloads;
+	}
+
+	/*
+	 * Returns the IDs of related tool records
+	 *
+	 * @return   array
+	 */
+	public function relatedToolsIds()
+	{
+		$relatedTools = $this->relatedTools()->rows();
+		$relatedToolsIds = [];
+
+		foreach ($relatedTools as $relatedTool)
+		{
+			$relatedToolsIds[] = $relatedTool->get('id');
+		}
+
+		return $relatedToolsIds;
 	}
 
 }

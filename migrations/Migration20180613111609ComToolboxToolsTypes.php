@@ -19,7 +19,8 @@ class Migration20180613111609ComToolboxToolsTypes extends Base
 			`tool_id` int(11) unsigned NOT NULL,
 			`type_id` int(11) unsigned NOT NULL,
 			`created` timestamp NULL DEFAULT NULL,
-			PRIMARY KEY (`id`)
+			PRIMARY KEY (`id`),
+			UNIQUE KEY `unique_relationship` (`tool_id`,`type_id`)
 		) ENGINE=MYISAM DEFAULT CHARSET=utf8;";
 
 		if (!$this->db->tableExists($tableName))
