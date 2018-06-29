@@ -34,20 +34,18 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
-require_once "$toolboxPath/helpers/toolsRelationshipsFactory.php";
-require_once "$toolboxPath/models/toolsRelationship.php";
+require_once "$toolboxPath/helpers/toolsTagsFactory.php";
 require_once "$toolboxPath/models/tool.php";
 
-use Components\Toolbox\Helpers\ToolsRelationshipsFactory;
-use Components\Toolbox\Models\ToolsRelationship;
+use Components\Toolbox\Helpers\ToolsTagsFactory;
 use Components\Toolbox\Models\Tool;
 use Hubzero\Component\SiteController;
 
-class ToolsRelationships extends SiteController
+class ToolsTags extends SiteController
 {
 
 	/*
-	 * Updates a tools relationships
+	 * Updates a tools tags
 	 *
 	 * @return   void
 	 */
@@ -55,21 +53,15 @@ class ToolsRelationships extends SiteController
 	{
 		Request::checkToken();
 
-		// get tool record to relate other tools to
+		// get tool record to associate tags with
 		$toolId = Request::getInt('id');
 		$tool = Tool::one($toolId);
 
-		// get IDs of related tools
-		$relatedToolIds = Request::getArray('toolIds');
+		// get Tags IDs
+		$selectedTagsIds = Request::getArray('tagsIds');
 
-		if (count($relatedToolIds) > ToolsRelationship::maximum())
-		{
-			$errors = [Lang::txt('COM_TOOLBOX_RELATED_LIMIT_ERROR')];
-			$this->_failedUpdate($errors, $relatedToolIds);
-		}
-
-		// attempt to create tools relationship records
-		$updateResult = ToolsRelationshipsFactory::update($tool, $relatedToolIds);
+		// attempt to associate tool with tags
+		$updateResult = ToolsTagsFactory::update($tool, $selectedTagsIds);
 
 		if ($updateResult->succeeded())
 		{
@@ -77,13 +69,13 @@ class ToolsRelationships extends SiteController
 		}
 		else
 		{
-			$errors = ToolsRelationshipsFactory::parseUpdateErrors($updateResult);
-			$this->_failedUpdate($errors, $relatedToolIds);
+			$errors = ToolsTagsFactory::parseUpdateErrors($updateResult);
+			$this->_failedUpdate($errors, $selectedTagsIds);
 		}
 	}
 
 	/*
-	 * Process successful update of tool's relationships
+	 * Process successful update of tool's tags
 	 *
 	 * @return   void
 	 */
@@ -93,22 +85,22 @@ class ToolsRelationships extends SiteController
 
 		App::redirect(
 			$forwardingUrl,
-			Lang::txt('COM_TOOLBOX_RELATED_UPDATES_SUCCESSFUL'),
+			Lang::txt('COM_TOOLBOX_TAGS_UPDATES_SUCCESSFUL'),
 			'passed'
 		);
 	}
 
 	/*
-	 * Process failed update of tool's relationships
+	 * Process failed update of tool's tags
 	 *
-	 * @param    array   $errors           Errors that occurred during update
-	 * @param    array   $relatedToolIds   IDs of Tools that were to be associated
+	 * @param    array   $errors            Errors that occurred during update
+	 * @param    array   $selectedTagsIds   IDs of Tags that were to be associated
 	 * @return   void
 	 */
-	protected function _failedUpdate($errors, $relatedToolIds)
+	protected function _failedUpdate($errors, $selectedTagsIds)
 	{
 		$originUrl = Request::getString('origin');
-		$originUrl .= '?' . http_build_query(['selectedToolsIds' => $relatedToolIds]);
+		$originUrl .= '?' . http_build_query(['selectedTagsIds' => $selectedTagsIds]);
 		$errorsMessage = implode($errors, '<br><br>');
 
 		Notify::error($errorsMessage);

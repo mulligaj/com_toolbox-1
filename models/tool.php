@@ -33,8 +33,10 @@
 namespace Components\Toolbox\Models;
 
 $toolboxPath = Component::path('com_toolbox');
+$tagsPath = Component::path('com_tags');
 
 require_once "$toolboxPath/models/download.php";
+require_once "$tagsPath/models/tag.php";
 
 use Hubzero\Database\Relational;
 
@@ -151,6 +153,24 @@ class Tool extends Relational
 	}
 
 	/*
+	 * Returns the IDs of related tool records
+	 *
+	 * @return   array
+	 */
+	public function relatedToolsIds()
+	{
+		$relatedTools = $this->relatedTools()->rows();
+		$relatedToolsIds = [];
+
+		foreach ($relatedTools as $relatedTool)
+		{
+			$relatedToolsIds[] = $relatedTool->get('id');
+		}
+
+		return $relatedToolsIds;
+	}
+
+	/*
 	 * Returns associated Tool records
 	 *
 	 * @return   object
@@ -173,6 +193,46 @@ class Tool extends Relational
 	}
 
 	/*
+	 * Returns the IDs of associated Tag records
+	 *
+	 * @return   array
+	 */
+	public function tagsIds()
+	{
+		$tags = $this->tags()->rows();
+		$tagsIds = [];
+
+		foreach ($tags as $tag)
+		{
+			$tagsIds[] = $tag->get('id');
+		}
+
+		return $tagsIds;
+	}
+
+	/*
+	 * Returns associated Tag records
+	 *
+	 * @return   object
+	 */
+	public function tags()
+	{
+		$tagModelName = 'Components\Tags\Models\Tag';
+		$associativeTable = '#__tags_object';
+		$primaryKey = 'objectid';
+		$foreignKey = 'tagid';
+
+		$tags = $this->manyToMany(
+			$tagModelName,
+			$associativeTable,
+			$primaryKey,
+			$foreignKey
+		);
+
+		return $tags;
+	}
+
+	/*
 	 * Returns associated Download records
 	 *
 	 * @return   object
@@ -184,24 +244,6 @@ class Tool extends Relational
 		$downloads = $this->oneToMany($downloadModelName, 'tool_id')->rows();
 
 		return $downloads;
-	}
-
-	/*
-	 * Returns the IDs of related tool records
-	 *
-	 * @return   array
-	 */
-	public function relatedToolsIds()
-	{
-		$relatedTools = $this->relatedTools()->rows();
-		$relatedToolsIds = [];
-
-		foreach ($relatedTools as $relatedTool)
-		{
-			$relatedToolsIds[] = $relatedTool->get('id');
-		}
-
-		return $relatedToolsIds;
 	}
 
 }

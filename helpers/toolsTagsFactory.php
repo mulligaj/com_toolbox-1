@@ -33,18 +33,19 @@
 namespace Components\Toolbox\Helpers;
 
 $toolboxPath = Component::path('com_toolbox');
+$tagsPath = Component::path('com_tags');
 
 require_once "$toolboxPath/helpers/associationHelper.php";
-require_once "$toolboxPath/models/toolsRelationship.php";
 require_once "$toolboxPath/helpers/multiBatchResult.php";
 require_once "$toolboxPath/helpers/factory.php";
+require_once "$tagsPath/models/object.php";
 
 use Components\Toolbox\Helpers\AssociationHelper;
-use Components\Toolbox\Models\ToolsRelationship;
 use Components\Toolbox\Helpers\MultiBatchResult;
 use Components\Toolbox\Helpers\Factory;
+use Components\Tags\Models\Object;
 
-class ToolsRelationshipsFactory extends Factory
+class ToolsTagsFactory extends Factory
 {
 
 	/*
@@ -52,19 +53,26 @@ class ToolsRelationshipsFactory extends Factory
 	 *
 	 * @var string
 	 */
-	protected static $modelName = 'Components\Toolbox\Models\ToolsRelationship';
+	protected static $modelName = 'Components\Tags\Models\Object';
 
 	/*
-	 * Updates given tools relation join records
+	 * Unprefixed Tool table
 	 *
-	 * @param    object   $tool             Tool record
-	 * @param    array    $relatedToolIds   IDs of tools to relate to given tool
+	 * @var string
+	 */
+	protected static $toolTable = 'toolbox_tools';
+
+	/*
+	 * Updates given tools associated Tags
+	 *
+	 * @param    object   $tool      Tool record
+	 * @param    array    $tagsIds   IDs of tags to associate with given tool
 	 * @return   object
 	 */
-	public static function update($tool, $updateRelatedToolIds)
+	public static function update($tool, $updateTagsIds)
 	{
 		$toolId = $tool->get('id');
-		$difference = AssociationHelper::updateDelta($tool->relatedToolsIds(), $updateRelatedToolIds);
+		$difference = AssociationHelper::updateDelta($tool->tagsIds(), $updateTagsIds);
 
 		$createResult = self::associateManyToMany($toolId, $difference['create']);
 		$deleteResult = self::disassociateManyToMany($toolId, $difference['delete']);
@@ -74,52 +82,58 @@ class ToolsRelationshipsFactory extends Factory
 	}
 
 	/*
+	 * Collates data to create tags Object records
+	 *
+	 * @param    int     $toolId    Tool to associate tags with
+	 * @param    array   $tagsIds   IDs of tags to associate with given tool
+	 * @return   array
+	 */
+	protected static function _collateJoinData($toolId, $tagsIds)
+	{
+		$currentUserId = User::get('id');
+		$currentDate = Date::toSql();
+
+		$tagsObjects = array_map(function($tagId) use ($toolId, $currentUserId, $currentDate) {
+			return [
+				'objectid' => $toolId,
+				'tagid' => $tagId,
+				'taggerid' => $currentUserId,
+				'taggedon' => $currentDate,
+				'tbl' => static::$toolTable
+			];
+		}, $tagsIds);
+
+		return $tagsObjects;
+	}
+
+	/*
 	 * Retrieves association records
 	 *
-	 * @param    integer   $toolId           Given tool's ID
-	 * @param    array     $relatedToolIds   Related tools' IDs
+	 * @param    integer   $toolId    Given tool's ID
+	 * @param    array     $tagsIds   Associated tags' IDs
 	 * @return   object
 	 */
-	protected static function _retrieveRecords($toolId, $relatedToolIds)
+	protected static function _retrieveRecords($toolId, $tagsIds)
 	{
-		$joinRecords = ToolsRelationship::all()
-			->whereEquals('origin_id', $toolId)
-			->whereIn('related_id', $relatedToolIds)
+		$joinRecords = Object::all()
+			->whereEquals('objectid', $toolId)
+			->whereIn('tagid', $tagsIds)
 			->rows();
 
 		return $joinRecords;
 	}
 
 	/*
-	 * Collates data to create a ToolsRelationship record
+	 * Generates an error message for a Tag association that was not saved
 	 *
-	 * @param    int     $toolId           Tool to relate other tools to
-	 * @param    array   $relatedToolIds   IDs of tools to relate to given tool
-	 * @return   array
-	 */
-	protected static function _collateJoinData($toolId, $relatedToolIds)
-	{
-		$relationshipsData = array_map(function($relatedId) use ($toolId) {
-			return [
-				'origin_id' => $toolId,
-				'related_id' => $relatedId,
-			];
-		}, $relatedToolIds);
-
-		return $relationshipsData;
-	}
-
-	/*
-	 * Generates an error message for a ToolsRelationship that was not saved
-	 *
-	 * @param    object   $relationship   Given relationship model
+	 * @param    object   $tagsObject   Given tags object model
 	 * @return   string
 	 */
-	protected static function _generateCreateErrorMessage($relationship)
+	protected static function _generateCreateErrorMessage($tagsObject)
 	{
-		$relatedToolName = $relationship->relatedToolName();
-		$error = Lang::txt('COM_TOOLBOX_RELATED_CREATE_ERROR', $relatedToolName);
-		$errors = $relationship->getErrors();
+		$tagName = $tagsObject->tag()->rows()->get('tag');
+		$error = Lang::txt('COM_TOOLBOX_TAGS_CREATE_ERROR', $tagName);
+		$errors = $tagsObject->getErrors();
 
 		foreach ($errors as $modelError)
 		{
@@ -132,16 +146,16 @@ class ToolsRelationshipsFactory extends Factory
 	}
 
 	/*
-	 * Generates an error message for a relationship that was not destroyed
+	 * Generates an error message for a Tag association that was not destroyed
 	 *
-	 * @param    object   $relationship   Given relationship model
+	 * @param    object   $tagsObject   Given tags object model
 	 * @return   string
 	 */
-	protected static function _generateDestroyErrorMessage($relationship)
+	protected static function _generateDestroyErrorMessage($tagsObject)
 	{
-		$relatedToolName = $relationship->relatedToolName();
-		$error = Lang::txt('COM_TOOLBOX_RELATED_DESTROY_ERROR', $relatedToolName);
-		$errors = $relationship->getErrors();
+		$tagName = $tagsObject->tag()->rows()->get('tag');
+		$error = Lang::txt('COM_TOOLBOX_TAGS_DESTROY_ERROR', $tagName);
+		$errors = $tagsObject->getErrors();
 
 		foreach ($errors as $modelError)
 		{
@@ -152,5 +166,6 @@ class ToolsRelationshipsFactory extends Factory
 
 		return $error;
 	}
+
 
 }

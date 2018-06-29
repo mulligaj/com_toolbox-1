@@ -33,16 +33,19 @@
 namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
+$tagsPath = PATH_CORE . '/components/com_tags';
 
 require_once "$toolboxPath/models/tool.php";
 require_once "$toolboxPath/models/toolType.php";
 require_once "$toolboxPath/helpers/toolsTypesFactory.php";
 require_once "$toolboxPath/helpers/toolUpdateHelper.php";
+require_once "$tagsPath/models/tag.php";
 
 use Components\Toolbox\Models\Tool;
 use Components\Toolbox\Models\ToolType;
 use Components\Toolbox\Helpers\ToolsTypesFactory;
 use Components\Toolbox\Helpers\ToolUpdateHelper;
+use Components\Tags\Models\Tag;
 use Hubzero\Component\SiteController;
 
 class Tools extends SiteController
@@ -210,6 +213,34 @@ class Tools extends SiteController
 		$this->view
 			->set('otherTools', $otherTools)
 			->set('selectedToolsIds', $selectedToolsIds)
+			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
+	/*
+	 * Renders the tags page of the tool update process
+	 *
+	 * @return void
+	 */
+	public function editTagsTask()
+	{
+		$id = Request::getInt('id');
+		$tags = Tag::all();
+		$tool = Tool::one($id);
+
+		if (Request::has('selectedTagsIds'))
+		{
+			$selectedTagsIds = Request::getArray('selectedTagsIds');
+		}
+		else
+		{
+			$selectedTagsIds = $tool->tagsIds();
+		}
+
+		$this->view
+			->set('selectedTagsIds', $selectedTagsIds)
+			->set('tags', $tags)
 			->set('tool', $tool);
 
 		$this->view->display();
