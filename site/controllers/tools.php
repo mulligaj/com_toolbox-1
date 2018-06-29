@@ -52,6 +52,22 @@ class Tools extends SiteController
 {
 
 	/*
+	 * Parameter whitelist
+	 *
+	 * @var   array
+	 */
+	protected static $paramWhitelist = [
+		'name', 'source', 'cost',
+		'minimum_participants', 'suggested_participants', 'maximum_participants',
+		'duration', 'materials', 'notes', 'learning_objectives', 'links',
+		'kinesthetic', 'subgroup_size', 'published', 'archived',
+		'self_awareness', 'openness', 'communication', 'empathy', 'curiousity', 'worldview',
+		'denial', 'polarization', 'minimization', 'acceptance',
+		'self', 'other', 'emotions', 'bridging',
+		'friendship', 'teamwork', 'mentorship', 'diversity_inclusion', 'leadership'
+	];
+
+	/*
 	 * Task mapping
 	 *
 	 * @var  array
@@ -260,7 +276,7 @@ class Tools extends SiteController
 		$tool = Tool::one($id);
 
 		// get posted tool data
-		$toolData = Request::getArray('tool');
+		$toolData = $this->_getSanitizedToolParams();
 
 		// update duration
 		if (isset($toolData['duration']))
@@ -476,6 +492,27 @@ class Tools extends SiteController
 
 		$this->setView(null, 'newbasic');
 		$this->newBasicTask($tool, $typeIds);
+	}
+
+	/*
+	 * Compares posted tool data to whitelist
+	 *
+	 * @return   array
+	 */
+	protected static function _getSanitizedToolParams()
+	{
+		$postedData = Request::getArray('tool');
+		$paramWhitelist = self::$paramWhitelist;
+
+		foreach ($postedData as $attribute => $value)
+		{
+			if (!in_array($attribute, $paramWhitelist))
+			{
+				unset($postedData[$attribute]);
+			}
+		}
+
+		return $postedData;
 	}
 
 }
