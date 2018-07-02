@@ -59,7 +59,7 @@ class Tools extends SiteController
 	protected static $paramWhitelist = [
 		'name', 'source', 'cost',
 		'minimum_participants', 'suggested_participants', 'maximum_participants',
-		'duration', 'materials', 'notes', 'learning_objectives', 'links',
+		'duration', 'duration_hours', 'materials', 'notes', 'learning_objectives', 'links',
 		'kinesthetic', 'subgroup_size', 'published', 'archived',
 		'self_awareness', 'openness', 'communication', 'empathy', 'curiousity', 'worldview',
 		'denial', 'polarization', 'minimization', 'acceptance',

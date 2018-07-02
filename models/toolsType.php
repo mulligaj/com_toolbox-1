@@ -62,6 +62,47 @@ class ToolsType extends Relational
 	public $initiate = ['created'];
 
 	/*
+	 * Run at the end of instantiation
+	 *
+	 * @return   void
+	 */
+	public function setup()
+	{
+		$this->addRule('unique association', function() {
+			$toolId = $this->get('tool_id');
+			$typeId = $this->get('type_id');
+			$typeDescription = $this->getTypeDescription();
+
+			$matchingCount = ToolsType::all()
+				->whereEquals('tool_id', $toolId)
+				->whereEquals('type_id', $typeId)
+				->rows()
+				->count();
+
+			if (($this->isNew() && $matchingCount > 0) || (!$this->isNew() && $matchingCount > 1))
+			{
+				return "the tool is already associated with $typeDescription type";
+			}
+
+			return false;
+		});
+	}
+
+	/*
+	 * Performs model validation
+	 *
+	 * @return   bool
+	 */
+	public function validate()
+	{
+		$this->set('unique association', 1);
+
+		$isValid = parent::validate();
+
+		return $isValid;
+	}
+
+	/*
 	 * Returns associated types description
 	 *
 	 * @return   string

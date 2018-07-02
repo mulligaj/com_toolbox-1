@@ -61,6 +61,46 @@ class ToolsRelationship extends Relational
 	 */
 	public $initiate = ['created'];
 
+	/*
+	 * Run at the end of instantiation
+	 *
+	 * @return   void
+	 */
+	public function setup()
+	{
+		$this->addRule('unique association', function() {
+			$originId = $this->get('origin_id');
+			$relatedId = $this->get('related_id');
+			$relatedToolName = $this->relatedToolName();
+
+			$matchingCount = ToolsRelationship::all()
+				->whereEquals('origin_id', $originId)
+				->whereEquals('related_id', $relatedId)
+				->rows()
+				->count();
+
+			if (($this->isNew() && $matchingCount > 0) || (!$this->isNew() && $matchingCount > 1))
+			{
+				return "the tool is already related to $relatedToolName";
+			}
+
+			return false;
+		});
+	}
+
+	/*
+	 * Performs model validation
+	 *
+	 * @return   bool
+	 */
+	public function validate()
+	{
+		$this->set('unique association', 1);
+
+		$isValid = parent::validate();
+
+		return $isValid;
+	}
 
 	/*
 	 * Returns the upper limit of relationships a tool is allowed to have
