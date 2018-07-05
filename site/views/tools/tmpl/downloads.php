@@ -71,11 +71,24 @@ Document::setTitle($page);
 			->display();
 	?>
 
+	<div id="downloads-list-wrapper" class="col span12">
+		<?php
+			$this->view('_tool_info_downloads_list')
+				->set('downloads', $tool->downloads())
+				->display();
+		?>
+	</div>
+
 	</div>
 </section>
 
 <style>
 #info-tabs-wrapper {
 	margin-top: 3em;
+}
+
+#downloads-list-wrapper {
+	font-size: 1.5em;
+	padding: .75em 0 0 0;
 }
 </style>

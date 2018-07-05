@@ -33,22 +33,32 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$tool = $this->tool;
+$downloads = $this->downloads;
 ?>
 
-<div class="col span12">
-	<?php
-		$this->view('_tool_info_header')
-			->set('tool', $tool)
-			->display();
-	?>
+<div>
+	<ul id="downloads-list">
+		<?php foreach ($downloads as $download): ?>
+			<li>
+			<a href="<?php echo $download->url(); ?>" download>
+				<?php echo $download->get('name'); ?>
+			</a>
+			</li>
+		<?php endforeach; ?>
+	</ul>
 </div>
 
-<div id="info-tabs-wrapper" class="col span12">
-	<?php
-		$this->view('_tool_info_tabs')
-			->set('current', 'Downloads')
-			->set('tool', $tool)
-			->display();
-	?>
-</div>
+<style>
+#downloads-list {
+	list-style: none;
+	margin: 0;
+}
+
+#downloads-list li:first-child {
+	margin-top: 1.25em;
+}
+
+#downloads-list li {
+	margin: 0 0 1.25em 0;
+}
+</style>
