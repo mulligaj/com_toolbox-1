@@ -42,7 +42,7 @@ $tool = $this->tool;
 $toolId = $tool->get('id');
 $selectedTagsIds = $this->selectedTagsIds;
 $forwardUrl = Route::url(
-	"index.php?option=$option&controller=$controller&task=review&id=$toolId"
+	"index.php?option=$option&controller=$controller&task=downloads&id=$toolId"
 );
 $originUrl = Route::url(
 	"index.php?option=$option&controller=$controller&task=edittags&id=$toolId"

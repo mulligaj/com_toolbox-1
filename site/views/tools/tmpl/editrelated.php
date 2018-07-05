@@ -70,8 +70,15 @@ $step = 'related';
 
 <section class="main section">
 	<div class="grid">
-		<div class="col span10 offset1">
 
+		<?php
+			$this->view('_steps_nav')
+				->set('current', 'Related Tools')
+				->set('toolId', $toolId)
+				->display();
+		?>
+
+		<div class="col span10 offset1">
 			<?php
 				$this->view('_tool_related_form')
 					->set('action', $formAction)
@@ -81,8 +88,8 @@ $step = 'related';
 					->set('tool', $tool)
 					->display();
 			?>
-
 		</div>
+
 	</div>
 </section>
 

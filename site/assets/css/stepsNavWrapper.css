@@ -1,0 +1,45 @@
+
+#steps-nav-wrapper {
+	display: flex;
+	justify-content:center;
+	padding: 1em 0 1em 0;
+}
+
+#steps-nav {
+	border: 2px solid black;
+	list-style: none;
+}
+
+#steps-nav li {
+	border-right: 2px solid black;
+	display: inline-block;
+	height: 100%;
+	margin: 0 0 0 0;
+}
+
+#steps-nav li:last-child {
+	border-right: 0;
+}
+
+#steps-nav a {
+	color: inherit;
+	padding: .75em;
+	text-decoration: none;
+}
+
+#steps-nav a:hover {
+	text-decoration: none;
+	border: 0;
+}
+
+#steps-nav .current {
+	background-color: #59a0cd;
+	color: white;
+	pointer-events: none;
+	margin-left: -3.25px;
+}
+
+#steps-nav li:first-child {
+	margin-left: 0;
+}
+

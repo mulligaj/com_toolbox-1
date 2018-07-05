@@ -68,8 +68,15 @@ $step = 'objectives';
 
 <section class="main section">
 	<div class="grid">
-		<div class="col span10 offset1">
 
+		<?php
+			$this->view('_steps_nav')
+				->set('current', 'Objectives, Materials, Links, & Notes')
+				->set('toolId', $toolId)
+				->display();
+		?>
+
+		<div class="col span10 offset1">
 			<?php
 				$this->view('_tool_objectives_form')
 					->set('action', $formAction)
@@ -77,8 +84,8 @@ $step = 'objectives';
 					->set('tool', $tool)
 					->display();
 			?>
-
 		</div>
+
 	</div>
 </section>
 

@@ -36,8 +36,7 @@ defined('_HZEXEC_') or die();
 $breadcrumbs = [
 	'Toolbox' => '/toolbox',
 	'Tools' => '/tools',
-	'New' => '/new',
-	'Basic Info' => '/basic',
+	'New' => '/new'
 ];
 
 $cumulativePath = '';

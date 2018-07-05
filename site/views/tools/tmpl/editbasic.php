@@ -70,8 +70,15 @@ $types = $this->types;
 
 <section class="main section">
 	<div class="grid">
-		<div class="col span10 offset1">
 
+		<?php
+			$this->view('_steps_nav')
+				->set('current', 'Basic Info')
+				->set('toolId', $toolId)
+				->display();
+		?>
+
+		<div class="col span10 offset1">
 			<?php
 				$this->view('_tool_basic_info_form')
 					->set('action', $formAction)
@@ -81,8 +88,8 @@ $types = $this->types;
 					->set('types', $types)
 					->display();
 			?>
-
 		</div>
+
 	</div>
 </section>
 

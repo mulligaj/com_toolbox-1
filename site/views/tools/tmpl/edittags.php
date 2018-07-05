@@ -70,8 +70,15 @@ $step = 'tags';
 
 <section class="main section">
 	<div class="grid">
-		<div class="col span10 offset1">
 
+		<?php
+			$this->view('_steps_nav')
+				->set('current', 'Tags')
+				->set('toolId', $toolId)
+				->display();
+		?>
+
+		<div class="col span10 offset1">
 			<?php
 				$this->view('_tool_tags_form')
 					->set('action', $formAction)
@@ -81,8 +88,8 @@ $step = 'tags';
 					->set('tool', $tool)
 					->display();
 			?>
-
 		</div>
+
 	</div>
 </section>
 

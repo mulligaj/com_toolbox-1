@@ -33,66 +33,30 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$tool = $this->tool;
-$toolId = $tool->get('id');
+$this->css('stepsNavWrapper');
 
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	"$toolId" => "/$toolId",
-	'Downloads' => '/editdownloads',
+$current = $this->current;
+$toolId = $this->toolId;
+
+$steps = [
+	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
+	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
+	'Objectives, Materials, Links, & Notes' => "/toolbox/tools/$toolId/editobjectives",
+	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
+	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
+	'Tags' => "/toolbox/tools/$toolId/edittags"
 ];
-
-$cumulativePath = '';
-$page = Lang::txt('COM_TOOLBOX_UPDATE_DOWNLOADS_HEADER_CONTENT');
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
-
-$formAction = Route::url(
-	"index.php?option=$this->option&controller=downloads&task=update&id=$toolId"
-);
-$step = 'downloads';
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
-		<?php
-			$this->view('_steps_nav')
-				->set('current', 'Downloads')
-				->set('toolId', $toolId)
-				->display();
-		?>
-
-		<div class="col span10 offset1">
-			<?php
-				$this->view('_tool_downloads_form')
-					->set('action', $formAction)
-					->set('step', $step)
-					->set('tool', $tool)
-					->display();
-			?>
-
-			<?php
-				$this->view('_tool_downloads_delete_form')
-					->set('downloads', $tool->downloads())
-					->set('toolId', $toolId)
-					->display();
-			?>
-		</div>
-
-	</div>
-</section>
+<div id="steps-nav-wrapper" class="col span12">
+	<ul id="steps-nav">
+		<?php foreach ($steps as $text => $url): ?>
+			<li <?php if ($current == $text) echo 'class="current"'; ?>>
+				<a href="<?php echo $url; ?>">
+					<?php echo $text; ?>
+				</a>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+</div>
 

@@ -37,7 +37,9 @@ $tagsPath = Component::path('com_tags');
 
 require_once "$toolboxPath/models/download.php";
 require_once "$tagsPath/models/tag.php";
+require_once "$tagsPath/models/cloud.php";
 
+use Components\Tags\Models\Cloud;
 use Hubzero\Database\Relational;
 
 class Tool extends Relational
@@ -244,6 +246,147 @@ class Tool extends Relational
 		$downloads = $this->oneToMany($downloadModelName, 'tool_id')->rows();
 
 		return $downloads;
+	}
+
+	/*
+	 * Returns tool's participant minimum
+	 *
+	 * @return   mixed
+	 */
+	public function minimum()
+	{
+		$minimum = $this->get('minimum_participants');
+
+		$minimum = $this->_translateLimit($minimum);
+
+		return $minimum;
+	}
+
+	/*
+	 * Returns tool's suggested participant number
+	 *
+	 * @return   mixed
+	 */
+	public function suggested()
+	{
+		$suggested = $this->get('suggested_participants');
+
+		$suggested = $this->_translateLimit($suggested);
+
+		return $suggested;
+	}
+
+	/*
+	 * Returns tool's participant maximum
+	 *
+	 * @return   mixed
+	 */
+	public function maximum()
+	{
+		$maximum = $this->get('maximum_participants');
+
+		$maximum = $this->_translateLimit($maximum);
+
+		return $maximum;
+	}
+
+	/*
+	 * Translates participant limits for display
+	 *
+	 * @param    int     $limit   Participant limit
+	 * @return   mixed
+	 */
+	public function _translateLimit($limit)
+	{
+		$limit = ($limit == 0) ? 'Any' : $limit;
+
+		return $limit;
+	}
+
+	/*
+	 * Indicates whether or not the tool has a maximum
+	 *
+	 * @return   bool
+	 */
+	public function hasMaximum()
+	{
+		$hasMaximum = !!$this->get('maximum_participants');
+
+		return $hasMaximum;
+	}
+
+	/*
+	 * Indicates whether or not the tool has a minimum
+	 *
+	 * @return   bool
+	 */
+	public function hasMinimum()
+	{
+		$hasMinimum = !!$this->get('minimum_participants');
+
+		return $hasMinimum;
+	}
+
+	/*
+	 * Translates duration into descriptive phrase
+	 *
+	 * @return   string
+	 */
+	public function durationDescription()
+	{
+		$minutes = $this->get('duration');
+		$hours = round($minutes / 60);
+		$remainingMinutes = $minutes - ($hours * 60);
+		$durationDescription = "";
+
+		if ($hours > 0)
+		{
+			$durationDescription .= "$hours hour";
+
+			if ($hours > 1)
+			{
+				$durationDescription .= "s";
+			}
+		}
+
+		if ($remainingMinutes > 0)
+		{
+			if ($hours > 0)
+			{
+				$durationDescription .= " and ";
+			}
+
+			$durationDescription .= "$remainingMinutes minute";
+
+			if ($remainingMinutes > 1)
+			{
+				$durationDescription .= "s";
+			}
+		}
+
+		if ($durationDescription == '')
+		{
+			$durationDescription = "No duration provided";
+		}
+
+		return $durationDescription;
+	}
+
+	/*
+	 * Constructs a tag cloud using the tool's tags
+	 *
+	 * @return   string   HTML
+	 */
+	public function tagsCloud()
+	{
+		$id = $this->get('id');
+		$table = $this->table;
+		$scope = ltrim($table, '#__');
+
+		$cloud = new Cloud($id, $scope);
+		$tagCloud = $cloud->render();
+
+		return $tagCloud;
 	}
 
 }

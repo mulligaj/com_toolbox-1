@@ -68,8 +68,15 @@ $step = 'frameworks';
 
 <section class="main section">
 	<div class="grid">
-		<div class="col span10 offset1">
 
+		<?php
+			$this->view('_steps_nav')
+				->set('current', 'Frameworks')
+				->set('toolId', $toolId)
+				->display();
+		?>
+
+		<div class="col span10 offset1">
 			<?php
 				$this->view('_tool_frameworks_form')
 					->set('action', $formAction)
@@ -77,8 +84,8 @@ $step = 'frameworks';
 					->set('tool', $tool)
 					->display();
 			?>
-
 		</div>
+
 	</div>
 </section>
 
