@@ -34,48 +34,21 @@
 defined('_HZEXEC_') or die();
 
 $tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Downloads' => '/downloads'
-];
-
-$cumulativePath = '';
-$page = $toolName;
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
+<div class="col span12"></div>
 	<?php
-		$this->view('_tool_info_combined_header')
+		$this->view('_tool_info_header')
 			->set('tool', $tool)
 			->display();
 	?>
+</div>
 
-	</div>
-</section>
-
-<style>
-#info-tabs-wrapper {
-	margin-top: 3em;
-}
-</style>
+<div id="info-tabs-wrapper" class="col span12">
+	<?php
+		$this->view('_tool_info_tabs')
+			->set('current', 'Downloads')
+			->set('tool', $tool)
+			->display();
+	?>
+</div>
