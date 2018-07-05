@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('infoTabs');
+
 $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');
@@ -67,6 +69,7 @@ Document::setTitle($page);
 
 	<?php
 		$this->view('_tool_info_combined_header')
+			->set('current', 'Downloads')
 			->set('tool', $tool)
 			->display();
 	?>
@@ -83,10 +86,6 @@ Document::setTitle($page);
 </section>
 
 <style>
-#info-tabs-wrapper {
-	margin-top: 3em;
-}
-
 #downloads-list-wrapper {
 	font-size: 1.5em;
 	padding: .75em 0 0 0;
