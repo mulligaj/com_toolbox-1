@@ -33,60 +33,35 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('toolInfoTabs');
+
+$current = $this->current;
 $tool = $this->tool;
 $toolId = $tool->get('id');
-$toolName = $tool->get('name');
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Downloads' => '/downloads'
+$pages = [
+	'Downloads' => "/toolbox/tools/$toolId/downloads",
+	'Links' => "/toolbox/tools/$toolId/links",
+	'Materials' => "/toolbox/tools/$toolId/materials",
+	'Notes' => "/toolbox/tools/$toolId/notes",
+	'Learning Objectives' => "/toolbox/tools/$toolId/objectives",
+	'Related Tools' => "/toolbox/tools/$toolId/related",
+	'Reviews' => "/toolbox/tools/$toolId/reviews",
+	'Theoretical Frameworks' => "/toolbox/tools/$toolId/frameworks"
 ];
-
-$cumulativePath = '';
-$page = $toolName;
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
+<div>
 
-<section class="main section">
-	<div class="grid">
+	<nav id="info-tabs">
+		<ul>
+			<?php foreach ($pages as $text => $url): ?>
+				<li <?php if ($current == $text) echo 'id="current"'; ?>>
+					<a href="<?php echo $url; ?>">
+						<?php echo $text; ?>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	</nav>
 
-		<div class="col span12"></div>
-			<?php
-				$this->view('_tool_info_header')
-					->set('tool', $tool)
-					->display();
-			?>
-		</div>
-
-		<div id="info-tabs-wrapper" class="col span12">
-			<?php
-				$this->view('_tool_info_tabs')
-					->set('current', 'Downloads')
-					->set('tool', $tool)
-					->display();
-			?>
-		</div>
-
-	</div>
-</section>
-
-<style>
-#info-tabs-wrapper {
-	margin-top: 3em;
-}
-</style>
+</div>

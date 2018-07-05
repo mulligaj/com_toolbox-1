@@ -36,7 +36,7 @@ defined('_HZEXEC_') or die();
 $tool = $this->tool;
 ?>
 
-<div id="tool-info-header" class="col span12">
+<div>
 	<div class="grid">
 
 		<div class="col span5">
