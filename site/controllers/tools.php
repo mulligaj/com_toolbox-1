@@ -583,4 +583,21 @@ class Tools extends SiteController
 		$this->view->display();
 	}
 
+	/*
+	 * Lists the given tools learning objectives
+	 *
+	 * @return   void
+	 */
+	public function objectivesTask()
+	{
+		// retrieve given tool record
+		$toolId = Request::getInt('id');
+		$tool = Tool::oneOrFail($toolId);
+
+		$this->view
+			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
 }
