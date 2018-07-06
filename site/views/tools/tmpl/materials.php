@@ -33,59 +33,57 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('infoTabs');
+
 $tool = $this->tool;
-?>
+$toolId = $tool->get('id');
+$toolName = $tool->get('name');
 
-<div>
-	<div class="grid">
+$breadcrumbs = [
+	'Toolbox' => '/toolbox',
+	'Tools' => '/tools',
+	$toolName => "/$toolId",
+	'Materials' => '/materials'
+];
 
-		<div class="col span5">
-			<div class="grid">
-				<div class="col span4">
-					<h3>Group Size</h3>
-					<?php
-						$this->view('_tool_info_header_participant_limits')
-							->set('tool', $tool)
-							->display();
-					?>
-				</div>
-				<div class="col span4">
-					<h3>Duration</h3>
-					<div>
-						<?php echo $tool->durationDescription(); ?>
-					</div>
-				</div>
-				<div class="col span3">
-					<h3>Cost</h3>
-					$<?php echo $tool->get('cost'); ?>
-				</div>
-			</div>
-		</div>
+$cumulativePath = '';
+$page = $toolName;
 
-		<div class="col span5 offset1">
-			<h3>Source</h3>
-			<div id="source-wrapper">
-				<?php echo $tool->get('source'); ?>
-			</div>
-		</div>
-
-	</div>
-
-	<div class="grid">
-
-		<div class="col span12">
-			Tags: <span id="tag-list"><?php echo $tool->tagsCloud(); ?></span>
-		</div>
-
-	</div>
-</div>
-
-<style>
-#source-wrapper p {
-	margin: 0;
+foreach ($breadcrumbs as $text => $url)
+{
+	$cumulativePath .= $url;
+	Pathway::append($text, $cumulativePath);
 }
 
-#tag-list > ol {
-	display: inline;
+Document::setTitle($page);
+?>
+
+<?php
+	$this->view('_header')
+		->set('text', $page)
+		->display();
+?>
+
+<section class="main section">
+	<div class="grid">
+
+	<?php
+		$this->view('_tool_info_combined_header')
+			->set('current', 'Materials')
+			->set('tool', $tool)
+			->display();
+	?>
+
+	<div id="materials-list-wrapper" class="col span12">
+		<?php echo $tool->get('materials'); ?>
+	</div>
+
+	</div>
+</section>
+
+<style>
+#materials-list-wrapper {
+	font-size: 1.5em;
+	padding: .75em 0 0 0;
 }
 </style>
