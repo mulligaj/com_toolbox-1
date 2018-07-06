@@ -600,4 +600,21 @@ class Tools extends SiteController
 		$this->view->display();
 	}
 
+	/*
+	 * Lists the given tools theoretical frameworks
+	 *
+	 * @return   void
+	 */
+	public function frameworksTask()
+	{
+		// retrieve given tool record
+		$toolId = Request::getInt('id');
+		$tool = Tool::oneOrFail($toolId);
+
+		$this->view
+			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
 }
