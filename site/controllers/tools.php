@@ -566,4 +566,21 @@ class Tools extends SiteController
 		$this->view->display();
 	}
 
+	/*
+	 * Lists the given tools notes
+	 *
+	 * @return   void
+	 */
+	public function notesTask()
+	{
+		// retrieve given tool record
+		$toolId = Request::getInt('id');
+		$tool = Tool::oneOrFail($toolId);
+
+		$this->view
+			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
 }
