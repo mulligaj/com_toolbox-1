@@ -65,12 +65,10 @@ class Tool extends Relational
 	 * @var  array
 	 */
 	protected $rules = [
-		'name' => 'notempty',
-		'minimum_participants' => 'positive',
-		'suggested_participants' => 'positive',
-		'maximum_participants' => 'positive',
 		'duration' => 'positive',
-		'cost' => 'positive',
+		'external_cost' => 'positive',
+		'kinesthetic' => 'positive',
+		'name' => 'notempty',
 		'source' => 'notempty',
 		'subgroup_size' => 'notempty'
 	];
@@ -406,6 +404,35 @@ class Tool extends Relational
 		}
 
 		return $costDescription;
+	}
+
+	/*
+	 * Translates subgroup size into descriptive phrase
+	 *
+	 * @return   array
+	 */
+	public function subgroupSizeDescription()
+	{
+		$subgroupSize = $this->get('subgroup_size');
+		$subgroupSizeKey = $this->getSubgroupSizes();
+		$subgroupSizeDescription = $subgroupSizeKey[$subgroupSize];
+
+		return $subgroupSizeDescription;
+	}
+
+	/*
+	 * Returns the set of possible subgroup sizes
+	 *
+	 * @return   array
+	 */
+	public function getSubgroupSizes()
+	{
+		return [
+				'pairs' => Lang::txt('COM_TOOLBOX_SUBGROUP_PAIRS'),
+				'small' => Lang::txt('COM_TOOLBOX_SUBGROUP_SMALL'),
+				'large' => Lang::txt('COM_TOOLBOX_SUBGROUP_LARGE'),
+				'whole' => Lang::txt('COM_TOOLBOX_SUBGROUP_WHOLE')
+			];
 	}
 
 }

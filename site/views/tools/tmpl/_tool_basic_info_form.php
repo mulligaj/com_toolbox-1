@@ -51,12 +51,6 @@ $toolsTypeIds = isset($this->toolsTypeIds) ? $this->toolsTypeIds : [];
 	;?>
 
 	<?php
-		$this->view('_participant_fields')
-			->set('tool', $tool)
-			->display();
-	;?>
-
-	<?php
 		$this->view('_duration_budget_fields')
 			->set('tool', $tool)
 			->display();

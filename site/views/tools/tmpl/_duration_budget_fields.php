@@ -35,12 +35,15 @@ defined('_HZEXEC_') or die();
 
 $tool = $this->tool;
 $duration = $tool->get('duration');
+$hasExternalCost = $tool->get('external_cost');
 $hours = floor($duration / 60);
 $minutes = $duration - ($hours * 60);
+$subgroupSize = $tool->get('subgroup_size');
+$subgroupSizes = $tool->getSubgroupSizes();
 ?>
 
 <fieldset>
-	<legend><?php echo Lang::txt('COM_TOOLBOX_NEW_DURATION_BUDGET_FIELDS'); ?></legend>
+	<legend><?php echo Lang::txt('COM_TOOLBOX_NEW_DURATION_BUDGET_PARTICIPANT_FIELDS'); ?></legend>
 	<div class="grid">
 
 		<div class="col span2">
@@ -64,10 +67,33 @@ $minutes = $duration - ($hours * 60);
 
 		<div class="col span2 offset1">
 			<label>
-					<?php echo Lang::txt('COM_TOOLBOX_NEW_COST_FIELD'); ?> <span class="required">
+					<?php echo Lang::txt('COM_TOOLBOX_EXTERNAL_COST_FIELD'); ?> <span class="required">
 						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
-					<input name="tool[cost]" type="number" min="0"
-						value="<?php echo $tool->get('cost'); ?>">
+			</label>
+			<label>
+				<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
+					<input type="radio" id="external-cost-yes"
+						name="tool[external_cost]" value="1" <?php if ($hasExternalCost) echo 'checked'; ?>>
+			</label>
+			<label>
+				<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
+					<input type="radio" id="external-cost-no"
+						name="tool[external_cost]" value="0" <?php if (!$hasExternalCost) echo 'checked'; ?>>
+			</label>
+		</div>
+
+		<div class="col span2 offset1">
+			<label>
+					<?php echo Lang::txt('COM_TOOLBOX_NEW_SUBGROUP_FIELD'); ?> <span class="required">
+						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
+					<select name="tool[subgroup_size]">
+						<?php foreach ($subgroupSizes as $value => $display): ?>
+							<option value="<?php echo $value; ?>"
+								<?php if ($value === $subgroupSize) echo 'selected'; ?>>
+								<?php echo $display; ?>
+							</option>
+						<?php endforeach; ?>
+					</select>
 			</label>
 		</div>
 

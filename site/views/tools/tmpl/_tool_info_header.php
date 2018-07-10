@@ -43,13 +43,11 @@ $tool = $this->tool;
 			<div class="grid">
 				<div class="col span4">
 					<h3>
-						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_GROUP_SIZE'); ?>
+						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_SUBGROUP_SIZE'); ?>
 					</h3>
-					<?php
-						$this->view('_tool_info_header_participant_limits')
-							->set('tool', $tool)
-							->display();
-					?>
+					<div>
+						<?php echo $tool->subgroupSizeDescription(); ?>
+					</div>
 				</div>
 				<div class="col span4">
 					<h3>
@@ -61,9 +59,13 @@ $tool = $this->tool;
 				</div>
 				<div class="col span3">
 					<h3>
-						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_COST'); ?>
+						<?php echo Lang::txt('COM_TOOLBOX_TOOL_EXTERNAL_COST'); ?>
 					</h3>
-					$<?php echo $tool->get('cost'); ?>
+					<?php if ($tool->get('external_cost')): ?>
+						Yes
+					<?php else: ?>
+						No
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
