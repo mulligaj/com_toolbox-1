@@ -33,70 +33,65 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('infoTabs');
+
+$relatedTools = $this->relatedTools;
 $tool = $this->tool;
+$toolId = $tool->get('id');
+$toolName = $tool->get('name');
+
+$breadcrumbs = [
+	'Toolbox' => '/toolbox',
+	'Tools' => '/tools',
+	$toolName => "/$toolId",
+	'Related Tools' => '/related'
+];
+
+$cumulativePath = '';
+$page = $toolName;
+
+foreach ($breadcrumbs as $text => $url)
+{
+	$cumulativePath .= $url;
+	Pathway::append($text, $cumulativePath);
+}
+
+Document::setTitle($page);
 ?>
 
-<div>
+<?php
+	$this->view('_header')
+		->set('text', $page)
+		->display();
+?>
+
+<section class="main section">
 	<div class="grid">
 
-		<div class="col span5">
-			<div class="grid">
-				<div class="col span4">
-					<h3>
-						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_GROUP_SIZE'); ?>
-					</h3>
-					<?php
-						$this->view('_tool_info_header_participant_limits')
-							->set('tool', $tool)
-							->display();
-					?>
-				</div>
-				<div class="col span4">
-					<h3>
-						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_DURATION'); ?>
-					</h3>
-					<div>
-						<?php echo $tool->durationDescription(); ?>
-					</div>
-				</div>
-				<div class="col span3">
-					<h3>
-						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_COST'); ?>
-					</h3>
-					$<?php echo $tool->get('cost'); ?>
-				</div>
-			</div>
-		</div>
+	<?php
+		$this->view('_tool_info_combined_header')
+			->set('current', 'Related Tools')
+			->set('tool', $tool)
+			->display();
+	?>
 
-		<div class="col span5 offset1">
-			<h3>
-				<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_SOURCE'); ?>
-			</h3>
-			<div id="source-wrapper">
-				<?php echo $tool->get('source'); ?>
-			</div>
-		</div>
-
+	<div id="related-wrapper" class="col span12">
+		<?php
+			foreach ($relatedTools as $relatedTool)
+			{
+				$this->view('_tool_info_related_tool')
+					->set('tool', $relatedTool)
+					->display();
+			}
+		?>
 	</div>
 
-	<div class="grid">
-
-		<div class="col span12">
-			Tags: <span id="tag-list"><?php echo $tool->tagsCloud(); ?></span>
-		</div>
-
 	</div>
-</div>
+</section>
 
 <style>
-h3 {
-	text-decoration: underline;
-}
-#source-wrapper p {
-	margin: 0;
-}
-
-#tag-list > ol {
-	display: inline;
+#related-wrapper {
+	font-size: 1.5em;
+	padding: .75em 0 0 0;
 }
 </style>

@@ -389,4 +389,23 @@ class Tool extends Relational
 		return $tagCloud;
 	}
 
+	/*
+	 * Translates external cost boolean into descriptive phrase
+	 *
+	 * @return   string
+	 */
+	public function costDescription()
+	{
+		if ($this->get('external_cost'))
+		{
+			$costDescription = Lang::txt('COM_TOOLBOX_TOOL_EXTERNAL_COST');
+		}
+		else
+		{
+			$costDescription = Lang::txt('COM_TOOLBOX_TOOL_NO_EXTERNAL_COST');
+		}
+
+		return $costDescription;
+	}
+
 }

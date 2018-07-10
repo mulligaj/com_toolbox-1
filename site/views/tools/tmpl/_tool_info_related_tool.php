@@ -34,69 +34,30 @@
 defined('_HZEXEC_') or die();
 
 $tool = $this->tool;
+$toolId = $tool->get('id');
+$toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 ?>
 
-<div>
-	<div class="grid">
-
-		<div class="col span5">
-			<div class="grid">
-				<div class="col span4">
-					<h3>
-						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_GROUP_SIZE'); ?>
-					</h3>
-					<?php
-						$this->view('_tool_info_header_participant_limits')
-							->set('tool', $tool)
-							->display();
-					?>
-				</div>
-				<div class="col span4">
-					<h3>
-						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_DURATION'); ?>
-					</h3>
-					<div>
-						<?php echo $tool->durationDescription(); ?>
-					</div>
-				</div>
-				<div class="col span3">
-					<h3>
-						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_COST'); ?>
-					</h3>
-					$<?php echo $tool->get('cost'); ?>
-				</div>
-			</div>
-		</div>
-
-		<div class="col span5 offset1">
-			<h3>
-				<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_SOURCE'); ?>
-			</h3>
-			<div id="source-wrapper">
-				<?php echo $tool->get('source'); ?>
-			</div>
-		</div>
-
+<div class="tool-summary-block grid">
+	<div class="col span3">
+		<a href="<?php echo $toolUrl; ?>">
+			<?php echo $tool->get('name'); ?>
+		</a>
 	</div>
-
-	<div class="grid">
-
-		<div class="col span12">
-			Tags: <span id="tag-list"><?php echo $tool->tagsCloud(); ?></span>
-		</div>
-
+	<div class="col span3">
+		<?php echo $tool->get('subgroup_size'); ?>
+	</div>
+	<div class="col span2">
+		<?php echo $tool->durationDescription(); ?>
+	</div>
+	<div class="col span2">
+		<?php echo $tool->costDescription(); ?>
 	</div>
 </div>
 
 <style>
-h3 {
-	text-decoration: underline;
-}
-#source-wrapper p {
-	margin: 0;
-}
-
-#tag-list > ol {
-	display: inline;
+.tool-summary-block {
+	border-bottom: 1px solid black;
+	padding: 1.5em 0 1.5em 0;
 }
 </style>

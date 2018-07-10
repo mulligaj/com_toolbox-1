@@ -43,7 +43,7 @@ $breadcrumbs = [
 	'Toolbox' => '/toolbox',
 	'Tools' => '/tools',
 	$toolName => "/$toolId",
-	'Notes' => '/notes'
+	'Theoretical Frameworks' => '/frameworks'
 ];
 
 $cumulativePath = '';

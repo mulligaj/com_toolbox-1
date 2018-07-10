@@ -617,4 +617,23 @@ class Tools extends SiteController
 		$this->view->display();
 	}
 
+	/*
+	 * Lists the given tools related tools
+	 *
+	 * @return   void
+	 */
+	public function relatedTask()
+	{
+		// retrieve given tool record
+		$toolId = Request::getInt('id');
+		$tool = Tool::oneOrFail($toolId);
+		$relatedTools = $tool->relatedTools()->rows();
+
+		$this->view
+			->set('relatedTools', $relatedTools)
+			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
 }
