@@ -364,7 +364,7 @@ class Tool extends Relational
 
 		if ($durationDescription == '')
 		{
-			$durationDescription = Lang::txt('COM_TOOLBOX_TOOL_NO_EXTERNAL_COST');
+			$durationDescription = Lang::txt('COM_TOOLBOX_TOOL_NO_DURATION');
 		}
 
 		return $durationDescription;
@@ -414,8 +414,16 @@ class Tool extends Relational
 	public function subgroupSizeDescription()
 	{
 		$subgroupSize = $this->get('subgroup_size');
-		$subgroupSizeKey = $this->getSubgroupSizes();
-		$subgroupSizeDescription = $subgroupSizeKey[$subgroupSize];
+
+		if (!!$subgroupSize)
+		{
+			$subgroupSizeKey = $this->getSubgroupSizes();
+			$subgroupSizeDescription = $subgroupSizeKey[$subgroupSize];
+		}
+		else
+		{
+			$subgroupSizeDescription = Lang::txt('COM_TOOLBOX_TOOL_NO_SUBGROUP_SIZE');
+		}
 
 		return $subgroupSizeDescription;
 	}

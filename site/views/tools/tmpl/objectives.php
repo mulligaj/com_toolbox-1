@@ -33,17 +33,20 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('emptyInfo');
+$this->css('infoWrapper');
 $this->css('infoTabs');
 
 $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');
+$objectives = $tool->get('learning_objectives');
 
 $breadcrumbs = [
 	'Toolbox' => '/toolbox',
 	'Tools' => '/tools',
 	$toolName => "/$toolId",
-	'Notes' => '/notes'
+	'Learning Objectives' => '/objectives'
 ];
 
 $cumulativePath = '';
@@ -74,16 +77,15 @@ Document::setTitle($page);
 			->display();
 	?>
 
-	<div id="notes-wrapper" class="col span12">
-		<?php echo $tool->get('learning_objectives'); ?>
+	<div class="col span12 info-wrapper">
+		<?php if (!empty($objectives)): ?>
+			<?php echo $objectives; ?>
+		<?php else: ?>
+			<div class="empty-info">
+				<?php echo Lang::txt('COM_TOOLBOX_OBJECTIVES_NO_OBJECTIVES'); ?>
+			</div>
+		<?php endif; ?>
 	</div>
 
 	</div>
 </section>
-
-<style>
-#notes-wrapper {
-	font-size: 1.5em;
-	padding: .75em 0 0 0;
-}
-</style>

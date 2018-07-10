@@ -33,6 +33,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('downloads');
 $this->css('infoTabs');
 
 $tool = $this->tool;
@@ -84,10 +85,3 @@ Document::setTitle($page);
 
 	</div>
 </section>
-
-<style>
-#downloads-list-wrapper {
-	font-size: 1.5em;
-	padding: .75em 0 0 0;
-}
-</style>

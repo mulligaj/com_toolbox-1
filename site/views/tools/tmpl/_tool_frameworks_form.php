@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('toolFrameworksForm');
+
 $action = $this->action;
 $step = $this->step;
 $tool = $this->tool;
@@ -72,10 +74,3 @@ $tool = $this->tool;
 		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_CONTINUE'); ?>">
 
 </form>
-
-<style>
-.btn-success {
-	max-width: 15%;
-	float: right;
-}
-</style>

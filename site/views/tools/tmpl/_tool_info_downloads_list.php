@@ -33,32 +33,25 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('toolInfoDownloadsList');
+
 $downloads = $this->downloads;
 ?>
 
-<div>
-	<ul id="downloads-list">
-		<?php foreach ($downloads as $download): ?>
-			<li>
-			<a href="<?php echo $download->url(); ?>" download>
-				<?php echo $download->get('name'); ?>
-			</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
-
-<style>
-#downloads-list {
-	list-style: none;
-	margin: 0;
-}
-
-#downloads-list li:first-child {
-	margin-top: 1.25em;
-}
-
-#downloads-list li {
-	margin: 0 0 1.25em 0;
-}
-</style>
+<?php if ($downloads->count() > 0): ?>
+	<div>
+		<ul id="downloads-list">
+			<?php foreach ($downloads as $download): ?>
+				<li>
+				<a href="<?php echo $download->url(); ?>" download>
+					<?php echo $download->get('name'); ?>
+				</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	</div>
+<?php else: ?>
+	<div id="no-downloads">
+		<?php echo Lang::txt('COM_TOOLBOX_DOWNLOAD_NO_DOWNLOADS'); ?>
+	</div>
+<?php endif; ?>

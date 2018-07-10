@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('toolRelatedForm');
+
 $action = $this->action;
 $controller = $this->controller;
 $option = $this->option;
@@ -83,13 +85,3 @@ $originUrl = Route::url(
 		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_CONTINUE'); ?>">
 
 </form>
-
-<style>
-#related-field-wrapper {
-	padding: 1.5em 0 0 0;
-}
-.btn-success {
-	max-width: 15%;
-	float: right;
-}
-</style>

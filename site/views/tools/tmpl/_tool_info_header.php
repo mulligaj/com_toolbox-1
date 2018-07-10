@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('toolInfoHeader');
+
 $tool = $this->tool;
 ?>
 
@@ -89,16 +91,3 @@ $tool = $this->tool;
 
 	</div>
 </div>
-
-<style>
-h3 {
-	text-decoration: underline;
-}
-#source-wrapper p {
-	margin: 0;
-}
-
-#tag-list > ol {
-	display: inline;
-}
-</style>

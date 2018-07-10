@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('downloadDeleteForm');
+
 $controller = $this->controller;
 $downloads = $this->downloads;
 $formAction = Route::url(
@@ -67,10 +69,3 @@ $editDownloadsUrl = Route::url(
 		<input type="submit" value="Delete" class="btn btn-danger">
 	</form>
 </div>
-
-<style>
-#downloads {
-	list-style: none;
-	margin: 0 0 0 .5em;
-}
-</style>

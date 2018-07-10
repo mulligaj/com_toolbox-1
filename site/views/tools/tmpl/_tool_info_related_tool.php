@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('relatedTool');
+
 $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
@@ -45,7 +47,7 @@ $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 		</a>
 	</div>
 	<div class="col span3">
-		<?php echo $tool->get('subgroup_size'); ?>
+		<?php echo $tool->subgroupSizeDescription(); ?>
 	</div>
 	<div class="col span2">
 		<?php echo $tool->durationDescription(); ?>
@@ -54,10 +56,3 @@ $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 		<?php echo $tool->costDescription(); ?>
 	</div>
 </div>
-
-<style>
-.tool-summary-block {
-	border-bottom: 1px solid black;
-	padding: 1.5em 0 1.5em 0;
-}
-</style>

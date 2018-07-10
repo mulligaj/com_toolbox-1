@@ -33,7 +33,9 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('frameworks');
 $this->css('infoTabs');
+$this->css('infoWrapper');
 
 $tool = $this->tool;
 $toolId = $tool->get('id');
@@ -74,7 +76,7 @@ Document::setTitle($page);
 				->display();
 		?>
 
-		<div id="frameworks-wrapper" class="col span12">
+		<div class="col span12 info-wrapper">
 			<div class="grid">
 				<div class="col span12">
 					<?php
@@ -110,20 +112,3 @@ Document::setTitle($page);
 
 	</div>
 </section>
-
-<style>
-#frameworks-wrapper {
-	font-size: 1.5em;
-	padding: .75em 0 0 0;
-}
-
-.checkbox-wrapper {
-	display: block;
-	margin: 0 0 10px 0;
-}
-
-h4 {
-	font-weight: bold;
-	text-decoration: underline;
-}
-</style>

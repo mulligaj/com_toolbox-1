@@ -33,11 +33,14 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('emptyInfo');
+$this->css('infoWrapper');
 $this->css('infoTabs');
 
 $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');
+$materials = $tool->get('materials');
 
 $breadcrumbs = [
 	'Toolbox' => '/toolbox',
@@ -74,16 +77,15 @@ Document::setTitle($page);
 			->display();
 	?>
 
-	<div id="materials-list-wrapper" class="col span12">
-		<?php echo $tool->get('materials'); ?>
+	<div class="col span12 info-wrapper">
+		<?php if (!empty($materials)): ?>
+			<?php echo $materials; ?>
+		<?php else: ?>
+			<div class="empty-info">
+				<?php echo Lang::txt('COM_TOOLBOX_MATERIALS_NO_MATERIALS'); ?>
+			</div>
+		<?php endif; ?>
 	</div>
 
 	</div>
 </section>
-
-<style>
-#materials-list-wrapper {
-	font-size: 1.5em;
-	padding: .75em 0 0 0;
-}
-</style>

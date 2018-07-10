@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('emptyInfo');
+$this->css('infoWrapper');
 $this->css('infoTabs');
 
 $relatedTools = $this->relatedTools;
@@ -75,23 +77,21 @@ Document::setTitle($page);
 			->display();
 	?>
 
-	<div id="related-wrapper" class="col span12">
+	<div class="col span12 info-wrapper">
 		<?php
-			foreach ($relatedTools as $relatedTool)
-			{
-				$this->view('_tool_info_related_tool')
-					->set('tool', $relatedTool)
-					->display();
-			}
-		?>
+			if ($relatedTools->count() > 0):
+				foreach ($relatedTools as $relatedTool)
+				{
+					$this->view('_tool_info_related_tool')
+						->set('tool', $relatedTool)
+						->display();
+				}
+			else: ?>
+				<div class="empty-info">
+					<?php echo Lang::txt('COM_TOOLBOX_RELATED_NO_RELATED', $toolName); ?>
+				</div>
+			<?php endif; ?>
 	</div>
 
 	</div>
 </section>
-
-<style>
-#related-wrapper {
-	font-size: 1.5em;
-	padding: .75em 0 0 0;
-}
-</style>
