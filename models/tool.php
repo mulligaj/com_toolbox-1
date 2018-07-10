@@ -341,7 +341,7 @@ class Tool extends Relational
 
 		if ($hours > 0)
 		{
-			$durationDescription .= "$hours hour";
+			$durationDescription .= "$hours " . Lang::txt('COM_TOOLBOX_COMMON_HOUR');
 
 			if ($hours > 1)
 			{
@@ -353,10 +353,10 @@ class Tool extends Relational
 		{
 			if ($hours > 0)
 			{
-				$durationDescription .= " and ";
+				$durationDescription .= " " . Lang::txt('COM_TOOLBOX_COMMON_AND') . " ";
 			}
 
-			$durationDescription .= "$remainingMinutes minute";
+			$durationDescription .= "$remainingMinutes " . Lang::txt('COM_TOOLBOX_COMMON_MINUTE');
 
 			if ($remainingMinutes > 1)
 			{
@@ -366,7 +366,7 @@ class Tool extends Relational
 
 		if ($durationDescription == '')
 		{
-			$durationDescription = "No duration provided";
+			$durationDescription = Lang::txt('COM_TOOLBOX_TOOL_NO_EXTERNAL_COST');
 		}
 
 		return $durationDescription;
