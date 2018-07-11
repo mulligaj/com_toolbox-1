@@ -39,33 +39,31 @@ $action = $this->action;
 $controller = $this->controller;
 $option = $this->option;
 $step = $this->step;
-$tags = $this->tags;
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$selectedTagsIds = $this->selectedTagsIds;
+$types = $this->types;
+$selectedTypesIds = $this->selectedTypesIds;
 $forwardUrl = Route::url(
-	"index.php?option=$option&controller=$controller&task=downloads&id=$toolId"
+	"index.php?option=$option&controller=$controller&task=frameworks"
 );
 $originUrl = Route::url(
-	"index.php?option=$option&controller=$controller&task=edittags&id=$toolId"
+	"index.php?option=$option&controller=$controller&task=type"
 );
 ?>
 
 <form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
 
 	<fieldset>
-		<legend><?php echo Lang::txt('COM_TOOLBOX_TAGS_TOOLS_LEGEND'); ?></legend>
+		<legend><?php echo Lang::txt('COM_TOOLBOX_GUIDED_TOOL_TYPE'); ?></legend>
 		<div class="grid">
 			<div class="col span12 select-field-wrapper">
 
-				<select name="tagsIds[]" size="20" multiple="multiple">
+				<select name="typesIds[]" size="5">
 					<?php
-					foreach ($tags as $tag):
-					$tagId = $tag->get('id')
+					foreach ($types as $type):
+					$typeId = $type->get('id')
 					?>
-					<option value="<?php echo $tagId; ?>"
-						<?php if (in_array($tagId, $selectedTagsIds)) echo 'selected'; ?>>
-						<?php echo $tag->get('tag'); ?>
+					<option value="<?php echo $typeId; ?>"
+						<?php if (in_array($typeId, $selectedTypesIds)) echo 'selected'; ?>>
+						<?php echo $type->get('description'); ?>
 					</option>
 					<?php endforeach; ?>
 				</select>
@@ -74,7 +72,6 @@ $originUrl = Route::url(
 		</div>
 	</fieldset>
 
-
 	<input type="hidden" name="step" value="<?php echo $step; ?>" />
 
 	<?php echo Html::input('token'); ?>
@@ -82,6 +79,6 @@ $originUrl = Route::url(
 	<input type="hidden" name="forward" value="<?php echo $forwardUrl; ?>">
 
 	<input class="btn btn-success" type="submit"
-		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_REVIEW'); ?>">
+		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_NEXT'); ?>">
 
 </form>

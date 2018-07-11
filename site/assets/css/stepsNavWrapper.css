@@ -3,10 +3,12 @@
 	display: flex;
 	justify-content:center;
 	padding: 1em 0 1em 0;
+
 }
 
 #steps-nav {
 	border: 2px solid black;
+	box-shadow: 2px 2px 2px black;
 	list-style: none;
 }
 

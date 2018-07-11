@@ -33,55 +33,58 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('selectForm');
+$breadcrumbs = [
+	'Toolbox' => '/toolbox',
+	'Tools' => '/tools',
+	'Guided Search' => '/guidedsearch',
+	'Tool Type' => '/type'
+];
 
-$action = $this->action;
-$controller = $this->controller;
-$option = $this->option;
-$step = $this->step;
-$tags = $this->tags;
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$selectedTagsIds = $this->selectedTagsIds;
-$forwardUrl = Route::url(
-	"index.php?option=$option&controller=$controller&task=downloads&id=$toolId"
+$cumulativePath = '';
+$page = Lang::txt('COM_TOOLBOX_GUIDED_SEARCH');
+
+foreach ($breadcrumbs as $text => $url)
+{
+	$cumulativePath .= $url;
+	Pathway::append($text, $cumulativePath);
+}
+
+Document::setTitle($page);
+
+$formAction = Route::url(
+	"index.php?option=$this->option&controller=$this->controller&task=update"
 );
-$originUrl = Route::url(
-	"index.php?option=$option&controller=$controller&task=edittags&id=$toolId"
-);
+$selectedTypesIds = $this->selectedTypesIds;
+$step = 'type';
+$types = $this->types;
 ?>
 
-<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
+<?php
+	$this->view('_header', 'tools')
+		->set('text', $page)
+		->display();
+?>
 
-	<fieldset>
-		<legend><?php echo Lang::txt('COM_TOOLBOX_TAGS_TOOLS_LEGEND'); ?></legend>
-		<div class="grid">
-			<div class="col span12 select-field-wrapper">
+<section class="main section">
+	<div class="grid">
 
-				<select name="tagsIds[]" size="20" multiple="multiple">
-					<?php
-					foreach ($tags as $tag):
-					$tagId = $tag->get('id')
-					?>
-					<option value="<?php echo $tagId; ?>"
-						<?php if (in_array($tagId, $selectedTagsIds)) echo 'selected'; ?>>
-						<?php echo $tag->get('tag'); ?>
-					</option>
-					<?php endforeach; ?>
-				</select>
+		<?php
+			$this->view('_steps_nav')
+				->set('current', 'Tool Type')
+				->display();
+		?>
 
-			</div>
+		<div class="col span10 offset1">
+			<?php
+				$this->view('_tool_type_form')
+					->set('action', $formAction)
+					->set('selectedTypesIds', $selectedTypesIds)
+					->set('step', $step)
+					->set('types', $types)
+					->display();
+			?>
 		</div>
-	</fieldset>
 
+	</div>
+</section>
 
-	<input type="hidden" name="step" value="<?php echo $step; ?>" />
-
-	<?php echo Html::input('token'); ?>
-	<input type="hidden" name="origin" value="<?php echo $originUrl; ?>">
-	<input type="hidden" name="forward" value="<?php echo $forwardUrl; ?>">
-
-	<input class="btn btn-success" type="submit"
-		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_REVIEW'); ?>">
-
-</form>

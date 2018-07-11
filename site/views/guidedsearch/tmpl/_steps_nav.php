@@ -33,55 +33,26 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('selectForm');
+$this->css('stepsNavWrapper');
 
-$action = $this->action;
-$controller = $this->controller;
-$option = $this->option;
-$step = $this->step;
-$tags = $this->tags;
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$selectedTagsIds = $this->selectedTagsIds;
-$forwardUrl = Route::url(
-	"index.php?option=$option&controller=$controller&task=downloads&id=$toolId"
-);
-$originUrl = Route::url(
-	"index.php?option=$option&controller=$controller&task=edittags&id=$toolId"
-);
+$current = $this->current;
+
+$steps = [
+	'Tool Type' => Route::url('/toolbox/guidedsearch/type'),
+	'Theoretical Frameworks' => Route::url('/toolbox/guidedsearch/frameworks'),
+	'Context' => Route::url('/toolbox/guidedsearch/context')
+];
 ?>
 
-<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
+<div id="steps-nav-wrapper" class="col span12">
+	<ul id="steps-nav">
+		<?php foreach ($steps as $text => $url): ?>
+			<li <?php if ($current == $text) echo 'class="current"'; ?>>
+				<a href="<?php echo $url; ?>">
+					<?php echo $text; ?>
+				</a>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+</div>
 
-	<fieldset>
-		<legend><?php echo Lang::txt('COM_TOOLBOX_TAGS_TOOLS_LEGEND'); ?></legend>
-		<div class="grid">
-			<div class="col span12 select-field-wrapper">
-
-				<select name="tagsIds[]" size="20" multiple="multiple">
-					<?php
-					foreach ($tags as $tag):
-					$tagId = $tag->get('id')
-					?>
-					<option value="<?php echo $tagId; ?>"
-						<?php if (in_array($tagId, $selectedTagsIds)) echo 'selected'; ?>>
-						<?php echo $tag->get('tag'); ?>
-					</option>
-					<?php endforeach; ?>
-				</select>
-
-			</div>
-		</div>
-	</fieldset>
-
-
-	<input type="hidden" name="step" value="<?php echo $step; ?>" />
-
-	<?php echo Html::input('token'); ?>
-	<input type="hidden" name="origin" value="<?php echo $originUrl; ?>">
-	<input type="hidden" name="forward" value="<?php echo $forwardUrl; ?>">
-
-	<input class="btn btn-success" type="submit"
-		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_REVIEW'); ?>">
-
-</form>
