@@ -635,4 +635,26 @@ class Tools extends SiteController
 		$this->view->display();
 	}
 
+	/*
+	 * Lists the given tools reviews
+	 *
+	 * @return   void
+	 */
+	public function reviewsTask()
+	{
+		// retrieve given tool record
+		$toolId = Request::getInt('id');
+		$tool = Tool::oneOrFail($toolId);
+		$reviews = $tool->reviews()
+			->whereEquals('approved', 1)
+			->paginated('limitstart', 'limit')
+			->rows();
+
+		$this->view
+			->set('reviews', $reviews)
+			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
 }

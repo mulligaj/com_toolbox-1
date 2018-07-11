@@ -36,6 +36,7 @@ $toolboxPath = Component::path('com_toolbox');
 $tagsPath = Component::path('com_tags');
 
 require_once "$toolboxPath/models/download.php";
+require_once "$toolboxPath/models/review.php";
 require_once "$tagsPath/models/tag.php";
 require_once "$tagsPath/models/cloud.php";
 
@@ -247,82 +248,22 @@ class Tool extends Relational
 	}
 
 	/*
-	 * Returns tool's participant minimum
+	 * Returns associated Review records
 	 *
-	 * @return   mixed
+	 * @return   object
 	 */
-	public function minimum()
+	public function reviews()
 	{
-		$minimum = $this->get('minimum_participants');
+		$reviewModelName = 'Components\Toolbox\Models\Review';
+		$shifter = 'scope';
 
-		$minimum = $this->_translateLimit($minimum);
+		$reviews = $this->oneShiftsToMany(
+			$reviewModelName,
+			'scope_id',
+			$shifter
+		);
 
-		return $minimum;
-	}
-
-	/*
-	 * Returns tool's suggested participant number
-	 *
-	 * @return   mixed
-	 */
-	public function suggested()
-	{
-		$suggested = $this->get('suggested_participants');
-
-		$suggested = $this->_translateLimit($suggested);
-
-		return $suggested;
-	}
-
-	/*
-	 * Returns tool's participant maximum
-	 *
-	 * @return   mixed
-	 */
-	public function maximum()
-	{
-		$maximum = $this->get('maximum_participants');
-
-		$maximum = $this->_translateLimit($maximum);
-
-		return $maximum;
-	}
-
-	/*
-	 * Translates participant limits for display
-	 *
-	 * @param    int     $limit   Participant limit
-	 * @return   mixed
-	 */
-	public function _translateLimit($limit)
-	{
-		$limit = ($limit == 0) ? 'Any' : $limit;
-
-		return $limit;
-	}
-
-	/*
-	 * Indicates whether or not the tool has a maximum
-	 *
-	 * @return   bool
-	 */
-	public function hasMaximum()
-	{
-		$hasMaximum = !!$this->get('maximum_participants');
-
-		return $hasMaximum;
-	}
-
-	/*
-	 * Indicates whether or not the tool has a minimum
-	 *
-	 * @return   bool
-	 */
-	public function hasMinimum()
-	{
-		$hasMinimum = !!$this->get('minimum_participants');
-
-		return $hasMinimum;
+		return $reviews;
 	}
 
 	/*
@@ -441,6 +382,19 @@ class Tool extends Relational
 				'large' => Lang::txt('COM_TOOLBOX_SUBGROUP_LARGE'),
 				'whole' => Lang::txt('COM_TOOLBOX_SUBGROUP_WHOLE')
 			];
+	}
+
+	/*
+	 * Returns Tool model scope
+	 *
+	 * @return   string
+	 */
+	public function getScope()
+	{
+		$modelName = $this->getModelName();
+		$scope = strtolower($modelName);
+
+		return $scope;
 	}
 
 }

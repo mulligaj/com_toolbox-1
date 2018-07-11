@@ -1,0 +1,20 @@
+
+.review {
+	display: flex;
+	margin: 0 0 2em 0;
+}
+
+.review img {
+	border-radius: .25em;
+}
+
+.review-content {
+	display: flex;
+	flex-wrap: wrap;
+	font-size: .85em;
+	padding: 0 0 0 1em;
+}
+
+.review-header {
+	width: 100%;
+}
