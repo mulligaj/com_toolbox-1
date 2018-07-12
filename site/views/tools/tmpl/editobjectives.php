@@ -71,7 +71,7 @@ $step = 'objectives';
 
 		<?php
 			$this->view('_steps_nav')
-				->set('current', 'Objectives, Materials, Links, & Notes')
+				->set('current', 'Objectives, Materials, & Notes')
 				->set('toolId', $toolId)
 				->display();
 		?>

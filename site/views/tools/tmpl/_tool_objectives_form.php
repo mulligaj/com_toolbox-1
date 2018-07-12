@@ -70,19 +70,6 @@ $tool = $this->tool;
 
 	<fieldset>
 		<legend>
-			<?php echo Lang::txt('COM_TOOLBOX_TOOLS_LINKS'); ?>
-		</legend>
-		<div class="grid">
-			<div class="col span12">
-				<?php
-					echo $this->editor('tool[links]', $tool->get('links'), 50, 5);
-				?>
-			</div>
-		</div>
-	</fieldset>
-
-	<fieldset>
-		<legend>
 			<?php echo Lang::txt('COM_TOOLBOX_TOOLS_NOTES'); ?>
 		</legend>
 		<div class="grid">
