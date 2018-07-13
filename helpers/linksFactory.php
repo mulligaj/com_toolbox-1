@@ -30,34 +30,58 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Toolbox\Helpers;
 
-$this->css('stepsNavWrapper');
+$toolboxPath = Component::path('com_toolbox');
 
-$current = $this->current;
-$toolId = $this->toolId;
+require_once "$toolboxPath/helpers/factory.php";
+require_once "$toolboxPath/models/link.php";
 
-$steps = [
-	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
-	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
-	'Objectives, Materials, & Notes' => "/toolbox/tools/$toolId/editobjectives",
-	'Links' => "/toolbox/tools/$toolId/editlinks",
-	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
-	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
-	'Tags' => "/toolbox/tools/$toolId/edittags"
-];
-?>
+use Components\Toolbox\Helpers\Factory;
+use Components\Toolbox\Models\Link;
 
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
+class LinksFactory extends Factory
+{
 
+	/*
+	 * Model name
+	 *
+	 * @var string
+	 */
+	protected static $modelName = 'Components\Toolbox\Models\Link';
+
+	/*
+	 * Updates preexisting records, creates records for new data
+	 *
+	 * @param    array    $linksData   Links' data
+	 * @return   object
+	 */
+	public static function createOrUpdateMany($linksData)
+	{
+		$links = self::instantiateModels($linksData);
+
+		$saveResult = self::save($links);
+
+		return $saveResult;
+	}
+
+	/*
+	 * Instantiates Link models using given data
+	 *
+	 * @param    array   $linksData   Links' data
+	 * @return   array
+	 */
+	protected static function instantiateModels($linksData)
+	{
+		$records = array_map(function($attributes) {
+			$id = $attributes['id'];
+			$record = Link::oneOrNew($id);
+			$record->set($attributes);
+
+			return $record;
+		}, $linksData);
+
+		return $records;
+	}
+
+}

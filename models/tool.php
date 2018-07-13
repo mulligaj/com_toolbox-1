@@ -36,6 +36,7 @@ $toolboxPath = Component::path('com_toolbox');
 $tagsPath = Component::path('com_tags');
 
 require_once "$toolboxPath/models/download.php";
+require_once "$toolboxPath/models/link.php";
 require_once "$toolboxPath/models/review.php";
 require_once "$tagsPath/models/tag.php";
 require_once "$tagsPath/models/cloud.php";
@@ -245,6 +246,20 @@ class Tool extends Relational
 		$downloads = $this->oneToMany($downloadModelName, 'tool_id')->rows();
 
 		return $downloads;
+	}
+
+	/*
+	 * Returns associated Link records
+	 *
+	 * @return   object
+	 */
+	public function links()
+	{
+		$linkModelName = 'Components\Toolbox\Models\Link';
+
+		$links = $this->oneToMany($linkModelName, 'tool_id')->rows();
+
+		return $links;
 	}
 
 	/*

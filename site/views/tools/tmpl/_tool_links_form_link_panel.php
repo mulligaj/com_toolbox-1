@@ -33,31 +33,36 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('stepsNavWrapper');
+$this->css('linkPanel');
 
-$current = $this->current;
-$toolId = $this->toolId;
+use Hubzero\Date;
 
-$steps = [
-	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
-	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
-	'Objectives, Materials, & Notes' => "/toolbox/tools/$toolId/editobjectives",
-	'Links' => "/toolbox/tools/$toolId/editlinks",
-	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
-	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
-	'Tags' => "/toolbox/tools/$toolId/edittags"
-];
+$link = $this->link;
+$linkId = $link->get('id');
+$panelNumber = $this->panelNumber;
 ?>
 
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
+<div class="col span11 grid link"
+	<?php if (!$link->isNew()) echo "data-id=\"$linkId\""; ?>>
 
+	<div class="col span5">
+		<label>Text
+			<input type="text" name="links[<?php echo $panelNumber; ?>][text]"
+				value="<?php echo $link->get('text'); ?>">
+		</label>
+	</div>
+
+	<div class="col span5">
+		<label>URL
+			<input type="text" name="links[<?php echo $panelNumber; ?>][url]"
+				value="<?php echo $link->get('url'); ?>">
+		</label>
+	</div>
+
+	<div class="col span1 delete-wrapper">
+	</div>
+
+	<input type="hidden" name="links[<?php echo $panelNumber; ?>][id]"
+		value="<?php echo $linkId; ?>">
+
+</div>

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -25,39 +25,37 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
+ * @author    Anthony Fuentes <zooley@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Toolbox\Api\Controllers;
 
-$this->css('stepsNavWrapper');
+use Hubzero\Component\ApiController;
+use Request;
 
-$current = $this->current;
-$toolId = $this->toolId;
+class Linksv1_0 extends ApiController
+{
+	/**
+	 * Deletes link(s) based on provided IDs
+	 *
+	 * @apiMethod DELETE
+	 * @apiUri    /api/v1.0/toolbox/links/delete
+	 * @apiParameter {
+	 * 		"name":          ids,
+	 * 		"description":   set of Link record IDs,
+	 * 		"type":          array,
+	 * 		"required":      true
+	 * }
+	 * @return   object
+	 */
+	function deleteTask()
+	{
+		// AF: implement
 
-$steps = [
-	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
-	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
-	'Objectives, Materials, & Notes' => "/toolbox/tools/$toolId/editobjectives",
-	'Links' => "/toolbox/tools/$toolId/editlinks",
-	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
-	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
-	'Tags' => "/toolbox/tools/$toolId/edittags"
-];
-?>
+		// send result
+		$this->send($result);
+	}
 
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
-
+}

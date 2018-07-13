@@ -33,31 +33,55 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('stepsNavWrapper');
+$this->css('toolLinksForm');
+$this->js('api');
+$this->js('link');
+$this->js('toolLinksForm');
+$this->js('toolLinksPanel');
 
-$current = $this->current;
-$toolId = $this->toolId;
-
-$steps = [
-	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
-	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
-	'Objectives, Materials, & Notes' => "/toolbox/tools/$toolId/editobjectives",
-	'Links' => "/toolbox/tools/$toolId/editlinks",
-	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
-	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
-	'Tags' => "/toolbox/tools/$toolId/edittags"
-];
+$action = $this->action;
+$blankLink = $this->blankLink;
+$controller = $this->controller;
+$option = $this->option;
+$tool = $this->tool;
+$toolId = $tool->get('id');
+$links = $tool->links();
+$forwardUrl = Route::url(
+	"index.php?option=$option&controller=$controller&task=editdownloads&id=$toolId"
+);
+$originUrl = Route::url(
+	"index.php?option=$option&controller=$controller&task=editlinks&id=$toolId"
+);
 ?>
 
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
+<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>"
+	enctype="multipart/form-data">
 
+	<fieldset id="link-fieldset">
+		<legend>
+			<?php echo Lang::txt('COM_TOOLBOX_LINKS_LEGEND'); ?>
+		</legend>
+
+		<div id="links-wrapper" class="grid">
+			<?php
+				$this->view('_tool_links_form_space')
+					->set('blankLink', $blankLink)
+					->set('links', $links)
+					->display();
+			?>
+		</div>
+
+		<div class="grid">
+			<div id="add-link-button-wrapper" class="col span1 offset11"></div>
+		</div>
+	</fieldset>
+
+	<?php echo Html::input('token'); ?>
+	<input type="hidden" name="forward" value="<?php echo $forwardUrl; ?>">
+	<input type="hidden" name="origin" value="<?php echo $originUrl; ?>">
+	<input type="hidden" name="id" value="<?php echo $toolId; ?>">
+
+	<input class="btn btn-success" type="submit"
+		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_CONTINUE'); ?>">
+
+</form>

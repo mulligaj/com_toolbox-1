@@ -33,31 +33,19 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('stepsNavWrapper');
+$blankLink = $this->blankLink;
+$links = $this->links;
 
-$current = $this->current;
-$toolId = $this->toolId;
-
-$steps = [
-	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
-	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
-	'Objectives, Materials, & Notes' => "/toolbox/tools/$toolId/editobjectives",
-	'Links' => "/toolbox/tools/$toolId/editlinks",
-	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
-	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
-	'Tags' => "/toolbox/tools/$toolId/edittags"
-];
-?>
-
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
-
+if (count($links) > 0)
+{
+	$this->view('_tool_links_form_list')
+		->set('links', $links)
+		->display();
+}
+else
+{
+	$this->view('_tool_links_form_link_panel')
+		->set('link', $blankLink)
+		->set('panelNumber', 1)
+		->display();
+}

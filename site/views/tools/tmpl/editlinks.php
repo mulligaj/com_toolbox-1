@@ -33,31 +33,61 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('stepsNavWrapper');
+$tool = $this->tool;
+$toolId = $tool->get('id');
 
-$current = $this->current;
-$toolId = $this->toolId;
-
-$steps = [
-	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
-	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
-	'Objectives, Materials, & Notes' => "/toolbox/tools/$toolId/editobjectives",
-	'Links' => "/toolbox/tools/$toolId/editlinks",
-	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
-	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
-	'Tags' => "/toolbox/tools/$toolId/edittags"
+$breadcrumbs = [
+	'Toolbox' => '/toolbox',
+	'Tools' => '/tools',
+	"$toolId" => "/$toolId",
+	'Links' => '/editlinks',
 ];
+
+$cumulativePath = '';
+$page = Lang::txt('COM_TOOLBOX_UPDATE_LINKS_HEADER_CONTENT');
+
+foreach ($breadcrumbs as $text => $url)
+{
+	$cumulativePath .= $url;
+	Pathway::append($text, $cumulativePath);
+}
+
+Document::setTitle($page);
+
+$blankLink = $this->blankLink;
+$formAction = Route::url(
+	"index.php?option=$this->option&controller=links&task=update&id=$toolId"
+);
+$step = 'links';
 ?>
 
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
+<?php
+	$this->view('_header')
+		->set('text', $page)
+		->display();
+?>
+
+<section class="main section">
+	<div class="grid">
+
+		<?php
+			$this->view('_steps_nav')
+				->set('current', 'Links')
+				->set('toolId', $toolId)
+				->display();
+		?>
+
+		<div class="col span10 offset1">
+			<?php
+				$this->view('_tool_links_form')
+					->set('action', $formAction)
+					->set('blankLink', $blankLink)
+					->set('step', $step)
+					->set('tool', $tool)
+					->display();
+			?>
+		</div>
+
+	</div>
+</section>
 
