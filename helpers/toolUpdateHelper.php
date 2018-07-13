@@ -57,7 +57,7 @@ class ToolUpdateHelper
 	protected static $nextStepMap = [
 		'basic' => 'frameworks',
 		'frameworks' => 'objectives',
-		'objectives' => 'downloads'
+		'objectives' => 'links'
 	];
 
 	/*
@@ -67,9 +67,10 @@ class ToolUpdateHelper
 	 */
 	protected static $stepToTaskMap = [
 		'basic' => 'editbasic',
+		'downloads' => 'editdownloads',
 		'frameworks' => 'editframeworks',
-		'objectives' => 'editobjectives',
-		'downloads' => 'editdownloads'
+		'links' => 'editlinks',
+		'objectives' => 'editobjectives'
 	];
 
 	/*

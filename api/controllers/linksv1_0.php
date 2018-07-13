@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * HUBzero CMS
  *
  * Copyright 2005-2015 HUBzero Foundation, LLC.
@@ -25,39 +25,67 @@
  * HUBzero is a registered trademark of Purdue University.
  *
  * @package   hubzero-cms
- * @author    Anthony Fuentes <fuentesa@purdue.edu>
+ * @author    Anthony Fuentes <zooley@purdue.edu>
  * @copyright Copyright 2005-2015 HUBzero Foundation, LLC.
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Toolbox\Api\Controllers;
 
-$this->css('stepsNavWrapper');
+$toolboxPath = Component::path('com_toolbox');
 
-$current = $this->current;
-$toolId = $this->toolId;
+require_once "$toolboxPath/models/link.php";
 
-$steps = [
-	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
-	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
-	'Objectives, Materials, & Notes' => "/toolbox/tools/$toolId/editobjectives",
-	'Links' => "/toolbox/tools/$toolId/editlinks",
-	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
-	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
-	'Tags' => "/toolbox/tools/$toolId/edittags"
-];
-?>
+use Components\Toolbox\Models\Link;
+use Hubzero\Component\ApiController;
+use Request;
 
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
+class Linksv1_0 extends ApiController
+{
 
+	/**
+	 * Controller version
+	 *
+	 * @var   string
+	 */
+	protected static $version = '1.0';
+
+	/**
+	 * Destroy link based on provided ID
+	 *
+	 * @apiMethod DELETE
+	 * @apiUri    /api/v1.0/toolbox/links/destroy
+	 * @apiParameter {
+	 * 		"name":          id,
+	 * 		"description":   Link record ID,
+	 * 		"type":          int,
+	 * 		"required":      true
+	 * }
+	 * @return   object
+	 */
+	function destroyTask()
+	{
+		//$this->requiresAuthentication();
+
+		$linkId = Request::getInt('id');
+		$link = Link::oneOrFail($linkId);
+
+		$response = [
+			'link' => $link,
+			'version' => self::$version
+		];
+
+		if ($link->destroy())
+		{
+			$response['status'] = 'success';
+		}
+		else
+		{
+			$response['status'] = 'error';
+			$response['errors'] = $link->getErrors();
+		}
+
+		$this->send($response);
+	}
+
+}

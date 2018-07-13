@@ -35,12 +35,14 @@ namespace Components\Toolbox\Site\Controllers;
 $toolboxPath = Component::path('com_toolbox');
 $tagsPath = PATH_CORE . '/components/com_tags';
 
+require_once "$toolboxPath/models/link.php";
 require_once "$toolboxPath/models/tool.php";
 require_once "$toolboxPath/models/toolType.php";
 require_once "$toolboxPath/helpers/toolsTypesFactory.php";
 require_once "$toolboxPath/helpers/toolUpdateHelper.php";
 require_once "$tagsPath/models/tag.php";
 
+use Components\Toolbox\Models\Link;
 use Components\Toolbox\Models\Tool;
 use Components\Toolbox\Models\ToolType;
 use Components\Toolbox\Helpers\ToolsTypesFactory;
@@ -189,7 +191,26 @@ class Tools extends SiteController
 	}
 
 	/*
-	 * Renders the objectives page of the tool update process
+	 * Renders the links page of the tool update process
+	 *
+	 * @return void
+	 */
+	public function editLinksTask()
+	{
+		$id = Request::getInt('id');
+		$tool = Tool::one($id);
+
+		$blankLink = Link::blank();
+
+		$this->view
+			->set('blankLink', $blankLink)
+			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
+	/*
+	 * Renders the downloads page of the tool update process
 	 *
 	 * @return void
 	 */

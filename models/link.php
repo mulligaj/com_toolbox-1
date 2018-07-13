@@ -30,34 +30,53 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Toolbox\Models;
 
-$this->css('stepsNavWrapper');
+$toolboxPath = Component::path('com_toolbox');
 
-$current = $this->current;
-$toolId = $this->toolId;
+require_once "$toolboxPath/models/tool.php";
 
-$steps = [
-	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
-	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
-	'Objectives, Materials, & Notes' => "/toolbox/tools/$toolId/editobjectives",
-	'Links' => "/toolbox/tools/$toolId/editlinks",
-	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
-	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
-	'Tags' => "/toolbox/tools/$toolId/edittags"
-];
-?>
+use Hubzero\Database\Relational;
 
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
+class Link extends Relational
+{
 
+	/*
+	 * Records table
+	 *
+	 * @var string
+	 */
+	protected $table = '#__toolbox_links';
+
+	/*
+	 * Attributes to be populated on record creation
+	 *
+	 * @var array
+	 */
+	public $initiate = ['created'];
+
+	/*
+	 * Attribute validation
+	 *
+	 * @var  array
+	 */
+	protected $rules = [
+		'text' => 'notempty',
+		'url' => 'notempty'
+	];
+
+	/*
+	 * Returns associated tool model
+	 *
+	 * @return   object
+	 */
+	public function tool()
+	{
+		$tool = $this->belongsToOne(
+			'Components\Toolbox\Models\Tool', 'tool_id', 'id'
+		)->rows();
+
+		return $this->tool;
+	}
+
+}

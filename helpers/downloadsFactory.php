@@ -194,6 +194,13 @@ class DownloadsFactory extends Factory
 		return $error;
 	}
 
+	/*
+	 * Adds a Download model's specific errors to the user error message
+	 *
+	 * @param    string   $errorSummary   Base error message
+	 * @param    object   $model          Given Download model
+	 * @return   string
+	 */
 	protected static function _generateCombinedErrorMessage($errorSummary, $model)
 	{
 		$error = $errorSummary;
