@@ -33,62 +33,25 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('emptyInfo');
-$this->css('infoWrapper');
-$this->css('infoTabs');
+$this->css('toolInfoLinksList');
 
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
-$links = $tool->links();
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Links' => '/links'
-];
-
-$cumulativePath = '';
-$page = $toolName;
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
+$links = $this->links;
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
-	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Links')
-			->set('tool', $tool)
-			->display();
-	?>
-
-	<div class="col span12 info-wrapper">
-		<?php if (!empty($links)): ?>
-			<?php
-				$this->view('_tool_info_links_list')
-					->set('links', $links)
-					->display(); ?>
-		<?php else: ?>
-			<div class="empty-info">
-				<?php echo Lang::txt('COM_TOOLBOX_LINKS_NO_LINKS'); ?>
-			</div>
-		<?php endif; ?>
+<?php if ($links->count() > 0): ?>
+	<div>
+		<ul id="links-list">
+			<?php foreach ($links as $link): ?>
+				<li>
+					<a href="<?php echo $link->get('url'); ?>">
+						<?php echo $link->get('text'); ?>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
 	</div>
-
+<?php else: ?>
+	<div id="no-links">
+		<?php echo Lang::txt('COM_TOOLBOX_DOWNLOAD_NO_DOWNLOADS'); ?>
 	</div>
-</section>
+<?php endif; ?>
