@@ -66,6 +66,30 @@ class Link extends Relational
 	];
 
 	/*
+	 * Performs any instance-specific setup
+	 *
+	 * @return   void
+	 */
+	public function setup()
+	{
+		$this->addRule('url', function($attributes) {
+			$url = $attributes['url'];
+			$filteredUrl = filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED);
+
+			if (!preg_match('/^https?:\/\//', $url))
+			{
+				return Lang::txt('COM_TOOLBOX_LINK_URL_VALIDATION_SCHEME_FAIL');
+			}
+			elseif (!$filteredUrl || ($url != $filteredUrl))
+			{
+				return Lang::txt('COM_TOOLBOX_LINK_URL_VALIDATION_FAIL');
+			}
+
+			return  false;
+			});
+	}
+
+	/*
 	 * Returns associated tool model
 	 *
 	 * @return   object
