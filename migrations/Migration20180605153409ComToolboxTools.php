@@ -31,7 +31,7 @@ class Migration20180605153409ComToolboxTools extends Base
 			`openness` tinyint(1) NULL DEFAULT NULL,
 			`communication` tinyint(1) NULL DEFAULT NULL,
 			`empathy` tinyint(1) NULL DEFAULT NULL,
-			`curiousity` tinyint(1) NULL DEFAULT NULL,
+			`curiosity` tinyint(1) NULL DEFAULT NULL,
 			`worldview` tinyint(1) NULL DEFAULT NULL,
 			`denial` tinyint(1) NULL DEFAULT NULL,
 			`polarization` tinyint(1) NULL DEFAULT NULL,

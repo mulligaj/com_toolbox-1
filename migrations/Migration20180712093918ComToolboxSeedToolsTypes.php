@@ -5,6 +5,9 @@ use Hubzero\Content\Migration\Base;
 // no direct access
 defined('_HZEXEC_') or die();
 
+use Components\Toolbox\Helpers\CsvHelper;
+use Components\Toolbox\Helpers\SqlHelper;
+
 class Migration20180712093918ComToolboxSeedToolsTypes extends Base
 {
 
@@ -12,33 +15,34 @@ class Migration20180712093918ComToolboxSeedToolsTypes extends Base
 
 	public function up()
 	{
-		$seedFilePath = Component::path('com_toolbox') . '/seed_data/tools_types.csv';
-		$tableName = self::$tableName;
+		$toolboxPath = Component::path('com_toolbox');
+		require_once "$toolboxPath/helpers/csvHelper.php";
+		require_once "$toolboxPath/helpers/sqlHelper.php";
 
-		$seedTable = "LOAD DATA LOCAL INFILE"
-			. " '$seedFilePath'"
-			. " INTO TABLE $tableName"
-			. " COLUMNS TERMINATED BY ','"
-			. " ENCLOSED BY '\"'"
-			. " LINES TERMINATED BY '\n'"
-			. " IGNORE 1 LINES"
+		$tableName = self::$tableName;
+		$seedFilePath =  "$toolboxPath/seed_data/tools_types.csv";
+
+		$columnHeaders = CsvHelper::columnTitles($seedFilePath);
+		$columnHeaders[] = 'created';
+		$columnHeaders = array_map(function($attribute) {
+			return "`$attribute`";
+		}, $columnHeaders);
+		$attributesString = '(' . implode($columnHeaders, ',') .  ')';
+
+		$toolsTypes = CsvHelper::rowsToArrays($seedFilePath);
+		$toolsTypes = SqlHelper::updateRecords($toolsTypes, ['created' => \Date::toSql()]);
+		$valuesString = SqlHelper::generateValuesString($toolsTypes);
+
+		$seedTable = "INSERT INTO $tableName "
+			. $attributesString
+			. ' VALUES'
+			. $valuesString
 			. ";";
 
 		if ($this->db->tableExists($tableName))
 		{
 			$this->db->setQuery($seedTable);
-
-			if ($this->db->query())
-			{
-				$date = Date::toSql();
-
-				$addCreatedDate = "UPDATE $tableName"
-					. " set created='$date'"
-					. ";";
-
-				$this->db->setQuery($addCreatedDate);
-				$this->db->query();
-			}
+			$this->db->query();
 		}
 	}
 
