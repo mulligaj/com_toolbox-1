@@ -33,13 +33,13 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('guidedType');
+$this->css('guidedFrameworks');
 
 $breadcrumbs = [
 	'Toolbox' => '/toolbox',
 	'Tools' => '/tools',
 	'Guided Search' => '/guidedsearch',
-	'Tool Type' => '/type'
+	'Theoretical Frameworks' => '/frameworks'
 ];
 
 $cumulativePath = '';
@@ -54,11 +54,10 @@ foreach ($breadcrumbs as $text => $url)
 Document::setTitle($page);
 
 $formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=updateType"
+	"index.php?option=$this->option&controller=$this->controller&task=updateFrameworks"
 );
 $query = $this->query;
-$step = 'Tool Type';
-$types = $this->types;
+$step = 'Theoretical Frameworks';
 ?>
 
 <?php
@@ -78,10 +77,9 @@ $types = $this->types;
 
 		<div class="col span10 offset1">
 			<?php
-				$this->view('_tool_type_form')
+				$this->view('_tool_frameworks_form')
 					->set('action', $formAction)
 					->set('query', $query)
-					->set('types', $types)
 					->display();
 			?>
 		</div>

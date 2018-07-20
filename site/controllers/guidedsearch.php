@@ -36,9 +36,11 @@ $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/models/toolType.php";
 require_once "$toolboxPath/helpers/query.php";
+require_once "$toolboxPath/helpers/urlHelper.php";
 
 use Components\Toolbox\Models\ToolType;
 use Components\Toolbox\Helpers\Query;
+use Components\Toolbox\Helpers\UrlHelper;
 use Hubzero\Component\SiteController;
 
 class Guidedsearch extends SiteController
@@ -51,22 +53,208 @@ class Guidedsearch extends SiteController
 	 */
 	public function typeTask()
 	{
-		$query = Query::getCurrent();
-		$types = ToolType::all();
-
-		if (Request::has('selectedTypesIds'))
+		if (Request::has('query'))
 		{
-			$selectedTypesIds = Request::getArray('selectedTypesIds');
+			$queryData = Request::getArray('query');
+			$query = new Query($queryData);
 		}
 		else
 		{
-			$selectedTypesIds = $query->typesIds();
+			$query = Query::getCurrent();
+		}
+		$types = ToolType::all();
+
+		$this->view
+			->set('query', $query)
+			->set('types', $types)
+			->display();
+	}
+
+	/*
+	 * Returns the frameworks page of the guided search process
+	 *
+	 * @return   void
+	 */
+	public function frameworksTask()
+	{
+		if (Request::has('query'))
+		{
+			$queryData = Request::getArray('query');
+			$query = new Query($queryData);
+		}
+		else
+		{
+			$query = Query::getCurrent();
 		}
 
 		$this->view
-			->set('selectedTypesIds', $selectedTypesIds)
-			->set('types', $types)
+			->set('query', $query)
 			->display();
+	}
+
+	/*
+	 * Returns the context page of the guided search process
+	 *
+	 * @return   void
+	 */
+	public function contextTask()
+	{
+		if (Request::has('query'))
+		{
+			$queryData = Request::getArray('query');
+			$query = new Query($queryData);
+		}
+		else
+		{
+			$query = Query::getCurrent();
+		}
+
+		$this->view
+			->set('query', $query)
+			->display();
+	}
+
+	/*
+	 * Updates current users tool search query
+	 *
+	 * @return   void
+	 */
+	public function updateTypeTask()
+	{
+		Request::checkToken();
+
+		// get posted query data
+		$queryData = Request::getArray('query');
+
+		// get current query
+		$query = Query::getCurrent();
+
+		// update query
+		$query->setType($queryData);
+		$query->setKinesthetic($queryData);
+
+		if ($query->save())
+		{
+			$this->_successfulUpdate();
+		}
+		else
+		{
+			$this->_failedUpdate($query);
+		}
+	}
+
+	/*
+	 * Updates current users tool search query frameworks attributes
+	 *
+	 * @return   void
+	 */
+	public function updateFrameworksTask()
+	{
+		Request::checkToken();
+
+		// get posted query data
+		$queryData = Request::getArray('query');
+
+		// get current query
+		$query = Query::getCurrent();
+
+		// apply frameworks validation & defaults
+		$query->setAacu($queryData);
+		$query->setIdc($queryData);
+		$query->setBergs($queryData);
+		$query->setOtherSkills($queryData);
+
+		if ($query->save())
+		{
+			$this->_successfulUpdate();
+		}
+		else
+		{
+			$this->_failedUpdate($query);
+		}
+	}
+
+	/*
+	 * Updates current users tool search query context attributes
+	 *
+	 * @return   void
+	 */
+	public function updateContextTask()
+	{
+		Request::checkToken();
+
+		// get posted query data
+		$queryData = Request::getArray('query');
+
+		// get current query
+		$query = Query::getCurrent();
+
+		// apply context validation
+		$query->setSubgroupSize($queryData);
+		$query->setExternalCost($queryData);
+		$query->setDuration($queryData);
+
+		if ($query->save())
+		{
+			$this->_successfulUpdate();
+		}
+		else
+		{
+			$this->_failedUpdate($query);
+		}
+	}
+
+	/*
+	 * Process successful update of tool search query
+	 *
+	 * @return  void
+	 */
+	protected function _successfulUpdate()
+	{
+		$forwardingUrl = Request::getString('forward');
+
+		App::redirect(
+			$forwardingUrl,
+			Lang::txt('COM_TOOLBOX_GUIDED_QUERY_UPDATE_SUCCESS'),
+			'passed'
+		);
+	}
+
+	/*
+	 * Process failed update of tool search query
+	 *
+	 * @param   object   $query   Current tool search query
+	 * @return  void
+	 */
+	protected function _failedUpdate($query)
+	{
+		$queryParams = UrlHelper::buildQueryString(['query' => $query->toArray()]);
+		$originUrl = Request::getString('origin') . "?$queryParams";
+		$errorMessage = $this->_generateErrorMessage($query);
+
+		Notify::error($errorMessage);
+
+		App::redirect($originUrl);
+	}
+
+	/*
+	 * Generates an error notification to display to the user
+	 *
+	 * @pram     object   $query   Query instance
+	 * @return   string
+	 */
+	protected function _generateErrorMessage($query)
+	{
+		$errors = $query->getErrors();
+
+		$errorMessage = Lang::txt('COM_TOOLBOX_GUIDED_QUERY_UPDATE_ERROR') . '</br></br>';
+
+		foreach ($errors as $error)
+		{
+			$errorMessage .= "• $error</br></br>";
+		}
+
+		return $errorMessage;
 	}
 
 }

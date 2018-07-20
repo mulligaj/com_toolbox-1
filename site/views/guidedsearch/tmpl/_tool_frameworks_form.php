@@ -33,59 +33,57 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('guidedType');
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	'Guided Search' => '/guidedsearch',
-	'Tool Type' => '/type'
-];
-
-$cumulativePath = '';
-$page = Lang::txt('COM_TOOLBOX_GUIDED_SEARCH');
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
-
-$formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=updateType"
+$action = $this->action;
+$controller = $this->controller;
+$option = $this->option;
+$forwardUrl = Route::url(
+	"index.php?option=$option&controller=$controller&task=context"
+);
+$originUrl = Route::url(
+	"index.php?option=$option&controller=$controller&task=frameworks"
 );
 $query = $this->query;
-$step = 'Tool Type';
-$types = $this->types;
 ?>
 
-<?php
-	$this->view('_header', 'tools')
-		->set('text', $page)
-		->display();
-?>
+<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
 
-<section class="main section">
-	<div class="grid">
-
-		<?php
-			$this->view('_steps_nav')
-				->set('current', $step)
-				->display();
-		?>
-
-		<div class="col span10 offset1">
+		<div class="fieldset-wrapper">
 			<?php
-				$this->view('_tool_type_form')
-					->set('action', $formAction)
-					->set('query', $query)
-					->set('types', $types)
-					->display();
+				$this->view('_aacu_rubric_fields')
+				->set('query', $query)
+				->display();
 			?>
 		</div>
 
-	</div>
-</section>
+		<div class="fieldset-wrapper">
+			<?php
+				$this->view('_idc_fields')
+				->set('query', $query)
+				->display();
+			?>
+		</div>
 
+		<div class="fieldset-wrapper">
+			<?php
+				$this->view('_bergs_fields')
+				->set('query', $query)
+				->display();
+			?>
+		</div>
+
+		<div class="fieldset-wrapper">
+			<?php
+				$this->view('_other_fields')
+				->set('query', $query)
+				->display();
+			?>
+		</div>
+
+		<?php echo Html::input('token'); ?>
+		<input type="hidden" name="origin" value="<?php echo $originUrl; ?>">
+		<input type="hidden" name="forward" value="<?php echo $forwardUrl; ?>">
+
+		<input class="btn btn-success" type="submit"
+			value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_NEXT'); ?>">
+
+</form>

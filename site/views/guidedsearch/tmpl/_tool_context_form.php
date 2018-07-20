@@ -33,75 +33,106 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('guidedContext');
+
 $action = $this->action;
 $controller = $this->controller;
 $option = $this->option;
 $forwardUrl = Route::url(
-	"index.php?option=$option&controller=$controller&task=frameworks"
+	"index.php?option=$option&controller=tools&task=list"
 );
 $originUrl = Route::url(
-	"index.php?option=$option&controller=$controller&task=type"
+	"index.php?option=$option&controller=$controller&task=context"
 );
 $query = $this->query;
-$selectedTypesIds = $query->get('typesIds');
-$types = $this->types;
+$subgroupSizes = [
+	'pairs',
+	'small',
+	'large',
+	'whole'
+];
 ?>
 
 <form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
 
-	<fieldset>
-		<legend>
-			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_TOOL_TYPE'); ?>
+	<div class="fieldset-wrapper">
+		<h4>
+			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_SUBGROUP_SIZE'); ?>
 			<span class="required">
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
 			</span>
-		</legend>
+		</h4>
 
 		<div class="grid">
-			<select name="query[typesIds][]" size="5">
-				<?php
-				foreach ($types as $type):
-				$typeId = $type->get('id')
-				?>
-				<option value="<?php echo $typeId; ?>"
-					<?php if (in_array($typeId, $selectedTypesIds)) echo 'selected'; ?>>
-					<?php echo $type->get('description'); ?>
-				</option>
-				<?php endforeach; ?>
-			</select>
-		</div>
-	</fieldset>
-
-	<fieldset>
-		<legend>
-			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_KINESTHETIC'); ?>
-			<span class="required">
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-			</span>
-		</legend>
-
-		<div class="grid">
-			<div class="col span12">
-
-			<span class="inline-radio">
-				<input type="radio" name="query[kinesthetic]" value="1"
-					<?php if (!!$query->get('kinesthetic')) echo 'checked'; ?>>
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
-			</span>
-			<span class="inline-radio">
-				<input type="radio" name="query[kinesthetic]" value="0"
-					<?php if (!$query->get('kinesthetic')) echo 'checked'; ?>>
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
-
+			<div class="col span3">
+				<select name="query[subgroup_size]">
+					<?php foreach ($subgroupSizes as $size): ?>
+						<option value="<?php echo $size; ?>"
+							<?php if ($size == $query->get('subgroup_size')) echo 'selected'; ?>>
+							<?php
+								echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_SUBGROUP_SIZE_' . strtoupper($size));
+							?>
+						</option>
+					<?php endforeach; ?>
+				</select>
 			</div>
 		</div>
-	</fieldset>
+	</div>
+
+	<div class="fieldset-wrapper">
+		<h4>
+			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_EXTERNAL_COST'); ?>
+			<span class="required">
+				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+			</span>
+		</h4>
+
+		<span class="inline-radio">
+			<input type="radio" name="query[external_cost]" value="1"
+				<?php if (!!$query->get('external_cost')) echo 'checked'; ?>>
+			<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
+		</span>
+		<span class="inline-radio">
+			<input type="radio" name="query[external_cost]" value="0"
+				<?php if (!$query->get('external_cost')) echo 'checked'; ?>>
+			<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
+		</span>
+	</div>
+
+	<div class="fieldset-wrapper">
+		<h4>
+			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_DURATION'); ?>
+			<span class="required">
+				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+			</span>
+		</h4>
+
+		<div id="duration-fields" class="grid">
+			<div class="col span1">
+				<input type="number" name="query[duration_min]" min="0"
+					value="<?php echo $query->get('duration_min'); ?>">
+			</div>
+
+			<div class="col span1 text">
+				<?php echo Lang::txt('COM_TOOLBOX_COMMON_TO'); ?>
+			</div>
+
+			<div class="col span1">
+				<input type="number" name="query[duration_max]" min="0"
+					value="<?php echo $query->get('duration_max'); ?>">
+			</div>
+
+			<div class="col span1 text">
+				<?php echo Lang::txt('COM_TOOLBOX_COMMON_MINUTES'); ?>
+			</div>
+		</div>
+	</div>
 
 	<?php echo Html::input('token'); ?>
 	<input type="hidden" name="origin" value="<?php echo $originUrl; ?>">
 	<input type="hidden" name="forward" value="<?php echo $forwardUrl; ?>">
 
 	<input class="btn btn-success" type="submit"
-		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_NEXT'); ?>">
+		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SEARCH'); ?>">
 
 </form>

@@ -30,62 +30,34 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Toolbox\Helpers;
 
-$this->css('guidedType');
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	'Guided Search' => '/guidedsearch',
-	'Tool Type' => '/type'
-];
-
-$cumulativePath = '';
-$page = Lang::txt('COM_TOOLBOX_GUIDED_SEARCH');
-
-foreach ($breadcrumbs as $text => $url)
+class UrlHelper
 {
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
+
+	/*
+	 * Builds a URL query string
+	 *
+	 * @param    array    $params   Query params
+	 * @return   string
+	 */
+	public static function buildQueryString($params)
+	{
+		$query = '';
+
+		foreach ($params as $name => $value)
+		{
+			if (is_array($value))
+			{
+				$query .= http_build_query([$name => $value]);
+			}
+			else
+			{
+				$query .= "$name=$value&";
+			}
+		}
+
+		return $query;
+	}
+
 }
-
-Document::setTitle($page);
-
-$formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=updateType"
-);
-$query = $this->query;
-$step = 'Tool Type';
-$types = $this->types;
-?>
-
-<?php
-	$this->view('_header', 'tools')
-		->set('text', $page)
-		->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
-		<?php
-			$this->view('_steps_nav')
-				->set('current', $step)
-				->display();
-		?>
-
-		<div class="col span10 offset1">
-			<?php
-				$this->view('_tool_type_form')
-					->set('action', $formAction)
-					->set('query', $query)
-					->set('types', $types)
-					->display();
-			?>
-		</div>
-
-	</div>
-</section>
-

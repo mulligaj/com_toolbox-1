@@ -33,59 +33,19 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('guidedType');
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	'Guided Search' => '/guidedsearch',
-	'Tool Type' => '/type'
-];
-
-$cumulativePath = '';
-$page = Lang::txt('COM_TOOLBOX_GUIDED_SEARCH');
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
-
-$formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=updateType"
-);
+$fields = $this->fields;
 $query = $this->query;
-$step = 'Tool Type';
-$types = $this->types;
 ?>
 
 <?php
-	$this->view('_header', 'tools')
-		->set('text', $page)
-		->display();
+	foreach ($fields as $field):
+	$uppercaseField = strtoupper($field);
 ?>
-
-<section class="main section">
-	<div class="grid">
-
-		<?php
-			$this->view('_steps_nav')
-				->set('current', $step)
-				->display();
-		?>
-
-		<div class="col span10 offset1">
-			<?php
-				$this->view('_tool_type_form')
-					->set('action', $formAction)
-					->set('query', $query)
-					->set('types', $types)
-					->display();
-			?>
-		</div>
-
+	<div class="checkbox-wrapper">
+		<input type="hidden" name="query[<?php echo $field; ?>]" value="0">
+		<input type="checkbox" name="query[<?php echo $field; ?>]" value="1"
+			<?php if ($query->$field) echo 'checked'; ?>>
+		<?php echo Lang::txt('COM_TOOLBOX_GUIDED_FRAMEWORKS_' . $uppercaseField); ?>
 	</div>
-</section>
+<?php endforeach; ?>
 
