@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('graySelect');
+
 $query = $this->query;
 $subgroupSizes = [
 	'pairs',
@@ -42,10 +44,11 @@ $subgroupSizes = [
 ];
 ?>
 
-<select name="query[subgroup_size]">
+<select id="subgroup-select" name="query[subgroup_size]" class="gray-select">
+	<option value="" selected disabled hidden>Select a subgroup size...</option>
 	<?php foreach ($subgroupSizes as $size): ?>
 		<option value="<?php echo $size; ?>"
-			<?php if ($size == $query->get('subgroup_size')) echo 'selected'; ?>>
+			<?php if ($size === $query->get('subgroup_size')) echo 'selected'; ?>>
 			<?php
 				echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_SUBGROUP_SIZE_' . strtoupper($size));
 			?>
