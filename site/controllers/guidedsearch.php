@@ -47,6 +47,15 @@ class Guidedsearch extends SiteController
 {
 
 	/*
+	 * Task mapping
+	 *
+	 * @var  array
+	 */
+	protected $_taskMap = [
+		'__default' => 'type'
+	];
+
+	/*
 	 * Returns the tool type page of the guided search process
 	 *
 	 * @return   void
@@ -190,6 +199,42 @@ class Guidedsearch extends SiteController
 		$query = Query::getCurrent();
 
 		// apply context validation
+		$query->setSubgroupSize($queryData);
+		$query->setExternalCost($queryData);
+		$query->setDuration($queryData);
+
+		if ($query->save())
+		{
+			$this->_successfulUpdate();
+		}
+		else
+		{
+			$this->_failedUpdate($query);
+		}
+	}
+
+	/*
+	 * Updates all attributes of current users tool search query
+	 *
+	 * @return   void
+	 */
+	public function updateAllTask()
+	{
+		Request::checkToken();
+
+		// get posted query data
+		$queryData = Request::getArray('query');
+
+		// get current query
+		$query = Query::getCurrent();
+
+		// update query
+		$query->setType($queryData);
+		$query->setKinesthetic($queryData);
+		$query->setAacu($queryData);
+		$query->setIdc($queryData);
+		$query->setBergs($queryData);
+		$query->setOtherSkills($queryData);
 		$query->setSubgroupSize($queryData);
 		$query->setExternalCost($queryData);
 		$query->setDuration($queryData);

@@ -43,7 +43,6 @@ $originUrl = Route::url(
 	"index.php?option=$option&controller=$controller&task=type"
 );
 $query = $this->query;
-$selectedTypesIds = $query->get('typesIds');
 $types = $this->types;
 ?>
 
@@ -58,17 +57,13 @@ $types = $this->types;
 		</legend>
 
 		<div class="grid">
-			<select name="query[typesIds][]" size="5">
-				<?php
-				foreach ($types as $type):
-				$typeId = $type->get('id')
-				?>
-				<option value="<?php echo $typeId; ?>"
-					<?php if (in_array($typeId, $selectedTypesIds)) echo 'selected'; ?>>
-					<?php echo $type->get('description'); ?>
-				</option>
-				<?php endforeach; ?>
-			</select>
+			<?php
+				$this->view('_type_select')
+					->set('query', $query)
+					->set('size', 5)
+					->set('types', $types)
+					->display();
+			?>
 		</div>
 	</fieldset>
 
@@ -85,12 +80,22 @@ $types = $this->types;
 
 			<span class="inline-radio">
 				<input type="radio" name="query[kinesthetic]" value="1"
-					<?php if (!!$query->get('kinesthetic')) echo 'checked'; ?>>
+					<?php
+						$kinesthetic = $query->get('kinesthetic');
+						if (!is_null($kinesthetic) && !!$kinesthetic):
+							echo 'checked';
+						endif;
+					?>>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
 			</span>
 			<span class="inline-radio">
 				<input type="radio" name="query[kinesthetic]" value="0"
-					<?php if (!$query->get('kinesthetic')) echo 'checked'; ?>>
+					<?php
+						$kinesthetic = $query->get('kinesthetic');
+						if (!is_null($kinesthetic) && !$kinesthetic):
+							echo 'checked';
+						endif;
+					?>>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
 
 			</div>

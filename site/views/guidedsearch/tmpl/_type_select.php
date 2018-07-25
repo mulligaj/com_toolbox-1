@@ -33,63 +33,23 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('emptyInfo');
-$this->css('infoWrapper');
-$this->css('infoTabs');
-$this->css('toolInfoRelated');
+$this->css('graySelect');
 
-$relatedTools = $this->relatedTools;
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Related Tools' => '/related'
-];
-
-$cumulativePath = '';
-$page = $toolName;
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
+$query = $this->query;
+$selectedTypesIds = $query->get('typesIds');
+$size = isset($this->size) ? $this->size : 1;
+$types = $this->types;
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
+<select name="query[typesIds][]" size="<?php echo $size; ?>" class="gray-select" required>
+	<option value="" selected disabled hidden>Select a tool type...</option>
 	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Related Tools')
-			->set('tool', $tool)
-			->display();
+	foreach ($types as $type):
+	$typeId = $type->get('id')
 	?>
-
-	<div class="col span12 info-wrapper">
-		<?php
-			if ($relatedTools->count() > 0):
-				$this->view('_tool_list')
-					->set('tools', $relatedTools)
-					->display();
-			else: ?>
-				<div class="empty-info">
-					<?php echo Lang::txt('COM_TOOLBOX_RELATED_NO_RELATED', $toolName); ?>
-				</div>
-			<?php endif; ?>
-	</div>
-
-	</div>
-</section>
+	<option value="<?php echo $typeId; ?>"
+		<?php if (in_array($typeId, $selectedTypesIds)) echo 'selected'; ?>>
+		<?php echo $type->get('description'); ?>
+	</option>
+	<?php endforeach; ?>
+</select>

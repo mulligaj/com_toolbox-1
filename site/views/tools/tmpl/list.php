@@ -33,25 +33,16 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('emptyInfo');
-$this->css('infoWrapper');
-$this->css('infoTabs');
-$this->css('toolInfoRelated');
-
-$relatedTools = $this->relatedTools;
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
+$this->css('toolsList');
 
 $breadcrumbs = [
 	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Related Tools' => '/related'
+	'Tools' => '/tools'
 ];
 
 $cumulativePath = '';
-$page = $toolName;
+$page = Lang::txt('COM_TOOLBOX_TOOLS_LIST');
+Document::setTitle($page);
 
 foreach ($breadcrumbs as $text => $url)
 {
@@ -59,7 +50,15 @@ foreach ($breadcrumbs as $text => $url)
 	Pathway::append($text, $cumulativePath);
 }
 
-Document::setTitle($page);
+$formAction = Route::url(
+	"index.php?option=$this->option&controller=guidedsearch&task=updateAll"
+);
+$query = $this->query;
+$toolListUrl = Route::url(
+	"index.php?option=$this->option&controller=$this->controller&task=$this->task"
+);
+$tools = $this->tools;
+$types = $this->types;
 ?>
 
 <?php
@@ -71,25 +70,33 @@ Document::setTitle($page);
 <section class="main section">
 	<div class="grid">
 
-	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Related Tools')
-			->set('tool', $tool)
-			->display();
-	?>
-
-	<div class="col span12 info-wrapper">
-		<?php
-			if ($relatedTools->count() > 0):
-				$this->view('_tool_list')
-					->set('tools', $relatedTools)
+		<div id="search-form" class="col span2">
+			<?php
+				$this->view('_tool_search_form')
+					->set('action', $formAction)
+					->set('query', $query)
+					->set('types', $types)
 					->display();
-			else: ?>
-				<div class="empty-info">
-					<?php echo Lang::txt('COM_TOOLBOX_RELATED_NO_RELATED', $toolName); ?>
+			?>
+		</div>
+
+		<div id="results" class="col span9">
+			<?php
+				if ($tools->count() > 0):
+					$this->view('_tool_list')
+						->set('tools', $tools)
+						->display();
+			?>
+				<form method="POST" action="<?php echo $toolListUrl; ?>">
+					<?php echo $tools->pagination; ?>
+				</form>
+			<?php else:	?>
+				<div id="no-results">
+					<?php echo Lang::txt('COM_TOOLBOX_LIST_NO_RESULTS'); ?>
 				</div>
-			<?php endif; ?>
-	</div>
+			<?php endif;	?>
+		</div>
+
 
 	</div>
 </section>

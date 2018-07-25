@@ -32,6 +32,11 @@
 
 namespace Components\Toolbox\Helpers;
 
+$toolboxPath = Component::path('com_toolbox');
+
+require_once "$toolboxPath/models/tool.php";
+
+use Components\Toolbox\Models\Tool;
 use Hubzero\Session;
 use Hubzero\Utility\Arr;
 
@@ -78,11 +83,11 @@ class Query
 		'diversity_inclusion' => 0,
 		'leadership' => 0,
 		'subgroup_size' => 0,
-		'external_cost' => 0,
-		'duration_max' => 0,
-		'duration_min' => 0,
+		'external_cost' => null,
+		'duration_max' => null,
+		'duration_min' => null,
 		'typesIds' => [],
-		'kinesthetic' => 0
+		'kinesthetic' => null
 	];
 
 	/*
@@ -459,7 +464,7 @@ class Query
 	 */
 	public function save()
 	{
-		if (!empty($this->getErrors()))
+		if (!$this->isValid())
 		{
 			return false;
 		}
@@ -476,6 +481,18 @@ class Query
 		}
 
 		return true;
+	}
+
+	/*
+	 * Indicates whether or not query is valid
+	 *
+	 * @return   bool
+	 */
+	public function isValid()
+	{
+		$isValid = empty($this->getErrors());
+
+		return $isValid;
 	}
 
 	/*
@@ -539,6 +556,125 @@ class Query
 		}
 
 		return $value;
+	}
+
+	/*
+	 * Finds records based query criteria
+	 *
+	 * @param    object   $recordClass   Record ORM class
+	 * @return   object
+	 */
+	public function findRecords($recordClass)
+	{
+		$records = $recordClass::all();
+
+		if (!$this->isEmpty())
+		{
+			$this->_filterRecords($records);
+		}
+
+		return $records;
+	}
+
+	/*
+	 * Indicates whether or not query has any non-empty values
+	 *
+	 * @return   bool
+	 */
+	public function isEmpty()
+	{
+		$criteria = $this->toArray();
+		$criteriaSum = array_sum(array_values($criteria));
+		$durationMax = Arr::pluck($criteria, 'duration_max');
+		$durationMin = Arr::pluck($criteria ,'duration_min');
+		$typesIds = Arr::pluck($criteria, 'typesIds');
+
+		$isEmpty = !$criteriaSum && !$durationMax && !$durationMin && empty($typesIds);
+
+		return $isEmpty;
+	}
+
+	/*
+	 * Filters records based on query instance's criteria
+	 *
+	 * @param    object   $records   All entity records
+	 * @return   object
+	 */
+	protected function _filterRecords($records)
+	{
+		$criteria = $this->toArray();
+		$durationMax = Arr::pluck($criteria, 'duration_max');
+		$durationMin = Arr::pluck($criteria ,'duration_min');
+		$typesIds = Arr::pluck($criteria, 'typesIds');
+
+		// filter by duration
+		$records->where('duration', '>=', $durationMin);
+		$records->where('duration', '<=', $durationMax);
+
+		// filter by Type ID
+		$this->_filterByAssociationIds($records, $typesIds);
+
+		// filter by one-to-one criteria
+		foreach ($criteria as $attribute => $value)
+		{
+			$records->whereEquals($attribute, $value);
+		}
+
+		return $records;
+	}
+
+	/*
+	 * Filters records based on association IDs
+	 *
+	 * @param    object   $records           All entity records
+	 * @param    array    $associationsIds   Association IDs
+	 * @return   void
+	 */
+	protected function _filterByAssociationIds($records, $associationsIds)
+	{
+		$toolsTypesTable = $this->_getToolsTypesTable();
+		$toolTypesTable = $this->_getToolTypesTable();
+		$toolsTable = $this->_getToolsTable();
+
+		$records->join($toolsTypesTable, "$toolsTable.id", "$toolsTypesTable.tool_id", 'left');
+		$records->join($toolTypesTable, "$toolsTypesTable.type_id", "$toolTypesTable.id", 'left');
+		$records->whereIn("$toolsTypesTable.type_id", $associationsIds);
+	}
+
+	/*
+	 * Returns name of the ToolsTypes table
+	 *
+	 * @return   string
+	 */
+	protected function _getToolsTypesTable()
+	{
+		$toolsTypesTable = '#__toolbox_tools_types';
+
+		return $toolsTypesTable;
+	}
+
+	/*
+	 * Returns name of the ToolTypes table
+	 *
+	 * @return   string
+	 */
+	protected function _getToolTypesTable()
+	{
+		$toolTypesTable = '#__toolbox_tool_types';
+
+		return $toolTypesTable;
+	}
+
+	/*
+	 * Returns name of the Tools table
+	 *
+	 * @return   string
+	 */
+	protected function _getToolsTable()
+	{
+		$toolsTable = '#__toolbox_tools';
+
+		return $toolsTable;
 	}
 
 }

@@ -38,6 +38,7 @@ $tagsPath = PATH_CORE . '/components/com_tags';
 require_once "$toolboxPath/models/link.php";
 require_once "$toolboxPath/models/tool.php";
 require_once "$toolboxPath/models/toolType.php";
+require_once "$toolboxPath/helpers/query.php";
 require_once "$toolboxPath/helpers/toolsTypesFactory.php";
 require_once "$toolboxPath/helpers/toolUpdateHelper.php";
 require_once "$tagsPath/models/tag.php";
@@ -45,6 +46,7 @@ require_once "$tagsPath/models/tag.php";
 use Components\Toolbox\Models\Link;
 use Components\Toolbox\Models\Tool;
 use Components\Toolbox\Models\ToolType;
+use Components\Toolbox\Helpers\Query;
 use Components\Toolbox\Helpers\ToolsTypesFactory;
 use Components\Toolbox\Helpers\ToolUpdateHelper;
 use Components\Tags\Models\Tag;
@@ -74,7 +76,7 @@ class Tools extends SiteController
 	 * @var  array
 	 */
 	protected $_taskMap = [
-		'__default' => 'newBasic',
+		'__default' => 'list',
 		'editObjectivesTask' => 'editObjectives'
 	];
 
@@ -361,7 +363,7 @@ class Tools extends SiteController
 
 		foreach ($tool->getErrors() as $error)
 		{
-			$errorMessage .= "<br/>> $error";
+			$errorMessage .= "<br/>• $error";
 		}
 
 		Notify::error($errorMessage);
@@ -385,7 +387,7 @@ class Tools extends SiteController
 
 		foreach ($errors as $error)
 		{
-			$errorMessage .= "<br/>> $error";
+			$errorMessage .= "<br/>• $error";
 		}
 
 		Notify::error($errorMessage);
@@ -505,7 +507,7 @@ class Tools extends SiteController
 
 		foreach ($tool->getErrors() as $error)
 		{
-			$errorMessage .= "<br/>> $error";
+			$errorMessage .= "<br/>• $error";
 		}
 
 		Notify::error($errorMessage);
@@ -674,6 +676,34 @@ class Tools extends SiteController
 		$this->view
 			->set('reviews', $reviews)
 			->set('tool', $tool);
+
+		$this->view->display();
+	}
+
+	/*
+	 * Lists tools that match given criteria
+	 *
+	 * @return   void
+	 */
+	public function listTask()
+	{
+		$query = Query::getCurrent();
+		$formQuery = $query;
+		$types = ToolType::all();
+
+		if (Request::has('query'))
+		{
+			$queryData = Request::getArray('query');
+			$formQuery = new Query($queryData);
+		}
+
+		$tools = $query->findRecords(Tool::class)
+			->paginated('limitstart', 'limit');
+
+		$this->view
+			->set('query', $formQuery)
+			->set('tools', $tools)
+			->set('types', $types);
 
 		$this->view->display();
 	}

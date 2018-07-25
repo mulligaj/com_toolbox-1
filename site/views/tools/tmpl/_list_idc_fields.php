@@ -33,63 +33,24 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('emptyInfo');
-$this->css('infoWrapper');
-$this->css('infoTabs');
-$this->css('toolInfoRelated');
-
-$relatedTools = $this->relatedTools;
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Related Tools' => '/related'
+$fields = [
+	'denial',
+	'polarization',
+	'minimization',
+	'acceptance'
 ];
-
-$cumulativePath = '';
-$page = $toolName;
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
+$query = $this->query;
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
+<div class="grid">
 
-<section class="main section">
-	<div class="grid">
-
-	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Related Tools')
-			->set('tool', $tool)
-			->display();
-	?>
-
-	<div class="col span12 info-wrapper">
+	<div class="col span11">
 		<?php
-			if ($relatedTools->count() > 0):
-				$this->view('_tool_list')
-					->set('tools', $relatedTools)
-					->display();
-			else: ?>
-				<div class="empty-info">
-					<?php echo Lang::txt('COM_TOOLBOX_RELATED_NO_RELATED', $toolName); ?>
-				</div>
-			<?php endif; ?>
+			$this->view('_checkbox_list')
+				->set('fields', $fields)
+				->set('query', $query)
+				->display();
+		?>
 	</div>
 
-	</div>
-</section>
+</div>

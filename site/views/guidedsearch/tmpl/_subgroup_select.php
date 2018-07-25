@@ -33,26 +33,25 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('relatedTool');
+$this->css('graySelect');
 
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
+$query = $this->query;
+$subgroupSizes = [
+	'pairs',
+	'small',
+	'large',
+	'whole'
+];
 ?>
 
-<div class="tool-summary-block grid">
-	<div class="col span3">
-		<a href="<?php echo $toolUrl; ?>">
-			<?php echo $tool->get('name'); ?>
-		</a>
-	</div>
-	<div class="col span3">
-		<?php echo $tool->subgroupSizeDescription(); ?>
-	</div>
-	<div class="col span2">
-		<?php echo $tool->durationDescription(); ?>
-	</div>
-	<div class="col span2">
-		<?php echo $tool->costDescription(); ?>
-	</div>
-</div>
+<select id="subgroup-select" name="query[subgroup_size]" class="gray-select" required>
+	<option value="" selected disabled hidden>Select a subgroup size...</option>
+	<?php foreach ($subgroupSizes as $size): ?>
+		<option value="<?php echo $size; ?>"
+			<?php if ($size === $query->get('subgroup_size')) echo 'selected'; ?>>
+			<?php
+				echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_SUBGROUP_SIZE_' . strtoupper($size));
+			?>
+		</option>
+	<?php endforeach; ?>
+</select>

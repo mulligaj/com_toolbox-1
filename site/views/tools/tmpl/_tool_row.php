@@ -33,63 +33,33 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('emptyInfo');
-$this->css('infoWrapper');
-$this->css('infoTabs');
-$this->css('toolInfoRelated');
-
-$relatedTools = $this->relatedTools;
+$maxStringLength = 21;
 $tool = $this->tool;
 $toolId = $tool->get('id');
-$toolName = $tool->get('name');
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Related Tools' => '/related'
-];
-
-$cumulativePath = '';
-$page = $toolName;
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
+$toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
+<li class="tool-row grid">
+	<div class="col span3">
+		<a href="<?php echo $toolUrl; ?>">
+			<?php
+				$name = $tool->get('name');
 
-<section class="main section">
-	<div class="grid">
+				if (strlen($name) > $maxStringLength):
+					$name = rtrim(substr($name, 0, $maxStringLength)) . '...';
+				endif;
 
-	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Related Tools')
-			->set('tool', $tool)
-			->display();
-	?>
-
-	<div class="col span12 info-wrapper">
-		<?php
-			if ($relatedTools->count() > 0):
-				$this->view('_tool_list')
-					->set('tools', $relatedTools)
-					->display();
-			else: ?>
-				<div class="empty-info">
-					<?php echo Lang::txt('COM_TOOLBOX_RELATED_NO_RELATED', $toolName); ?>
-				</div>
-			<?php endif; ?>
+				echo $name;
+			?>
+		</a>
 	</div>
-
+	<div class="col span3">
+		<?php echo $tool->subgroupSizeDescription(); ?>
 	</div>
-</section>
+	<div class="col span3">
+		<?php echo $tool->durationDescription(); ?>
+	</div>
+	<div class="col span2">
+		<?php echo $tool->costDescription(); ?>
+	</div>
+</li>
