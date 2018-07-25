@@ -1,0 +1,42 @@
+
+#form-header {
+	display: flex;
+	justify-content: flex-end;
+}
+
+hr {
+	margin: 1em 0 1em 0;
+}
+
+.row > h4 {
+	display: flex;
+	justify-content: space-between;
+}
+
+.fontcon {
+	display: inline;
+	font-family: "Fontcons";
+}
+
+.fontcon:hover {
+	cursor: pointer;
+}
+
+.inline-radio {
+	margin: 0 1.25em 0 0;
+}
+
+#duration-fields {
+	display: flex;
+	justify-content: space-between;
+}
+
+#duration-fields > input {
+	max-width: 30%;
+}
+
+.buttons {
+	display: flex;
+	justify-content: space-between;
+}
+

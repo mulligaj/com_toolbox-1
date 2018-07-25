@@ -45,12 +45,6 @@ $originUrl = Route::url(
 	"index.php?option=$option&controller=$controller&task=context"
 );
 $query = $this->query;
-$subgroupSizes = [
-	'pairs',
-	'small',
-	'large',
-	'whole'
-];
 ?>
 
 <form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
@@ -65,16 +59,11 @@ $subgroupSizes = [
 
 		<div class="grid">
 			<div class="col span3">
-				<select name="query[subgroup_size]">
-					<?php foreach ($subgroupSizes as $size): ?>
-						<option value="<?php echo $size; ?>"
-							<?php if ($size == $query->get('subgroup_size')) echo 'selected'; ?>>
-							<?php
-								echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_SUBGROUP_SIZE_' . strtoupper($size));
-							?>
-						</option>
-					<?php endforeach; ?>
-				</select>
+				<?php
+					$this->view('_subgroup_select')
+						->set('query', $query)
+						->display();
+				?>
 			</div>
 		</div>
 	</div>

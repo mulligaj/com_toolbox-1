@@ -43,7 +43,6 @@ $originUrl = Route::url(
 	"index.php?option=$option&controller=$controller&task=type"
 );
 $query = $this->query;
-$selectedTypesIds = $query->get('typesIds');
 $types = $this->types;
 ?>
 
@@ -58,17 +57,13 @@ $types = $this->types;
 		</legend>
 
 		<div class="grid">
-			<select name="query[typesIds][]" size="5">
-				<?php
-				foreach ($types as $type):
-				$typeId = $type->get('id')
-				?>
-				<option value="<?php echo $typeId; ?>"
-					<?php if (in_array($typeId, $selectedTypesIds)) echo 'selected'; ?>>
-					<?php echo $type->get('description'); ?>
-				</option>
-				<?php endforeach; ?>
-			</select>
+			<?php
+				$this->view('_type_select')
+					->set('query', $query)
+					->set('size', 5)
+					->set('types', $types)
+					->display();
+			?>
 		</div>
 	</fieldset>
 

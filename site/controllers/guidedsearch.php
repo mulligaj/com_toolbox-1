@@ -47,6 +47,15 @@ class Guidedsearch extends SiteController
 {
 
 	/*
+	 * Task mapping
+	 *
+	 * @var  array
+	 */
+	protected $_taskMap = [
+		'__default' => 'type'
+	];
+
+	/*
 	 * Returns the tool type page of the guided search process
 	 *
 	 * @return   void
