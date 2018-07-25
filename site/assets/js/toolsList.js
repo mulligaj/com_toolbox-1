@@ -66,17 +66,21 @@ toolSearchForm.masterCaretHandler = (e) => {
 
 	if (rowsVisible) {
 		$rowContentWrappers.slideUp(null, () => {
-			$masterCaret.html('&#xf0d7;')
-			$masterCaret.data(visibleKey, false)
-			toolSearchForm.toggleAllCaretDirections()
+			toolSearchForm.toggleAllCarets('&#xf0d7;', {[visibleKey]: false})
 		})
 	} else if (!rowsVisible) {
 		$rowContentWrappers.slideDown(null, () => {
-			$masterCaret.html('&#xf0d8;')
-			$masterCaret.data(visibleKey, true)
-			toolSearchForm.toggleAllCaretDirections()
+			toolSearchForm.toggleAllCarets('&#xf0d8;', {[visibleKey]: true})
 		})
 	}
+}
+
+toolSearchForm.toggleAllCarets = (html, data) => {
+	const $masterCaret = toolSearchForm.masterCaret
+
+	$masterCaret.html(html)
+	$masterCaret.data(data)
+	toolSearchForm.toggleAllCaretDirections()
 }
 
 toolSearchForm.toggleAllCaretDirections = () => {
