@@ -82,14 +82,19 @@ $types = $this->types;
 
 		<div id="results" class="col span9">
 			<?php
-				$this->view('_tool_list')
-					->set('tools', $tools)
-					->display();
+				if ($tools->count() > 0):
+					$this->view('_tool_list')
+						->set('tools', $tools)
+						->display();
 			?>
-
-			<form method="POST" action="<?php echo $toolListUrl; ?>">
-				<?php echo $tools->pagination; ?>
-			</form>
+				<form method="POST" action="<?php echo $toolListUrl; ?>">
+					<?php echo $tools->pagination; ?>
+				</form>
+			<?php else:	?>
+				<div id="no-results">
+					<?php echo Lang::txt('COM_TOOLBOX_LIST_NO_RESULTS'); ?>
+				</div>
+			<?php endif;	?>
 		</div>
 
 

@@ -78,11 +78,11 @@ class Query
 		'diversity_inclusion' => 0,
 		'leadership' => 0,
 		'subgroup_size' => 0,
-		'external_cost' => 0,
+		'external_cost' => null,
 		'duration_max' => null,
 		'duration_min' => null,
 		'typesIds' => [],
-		'kinesthetic' => 0
+		'kinesthetic' => null
 	];
 
 	/*

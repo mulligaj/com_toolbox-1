@@ -80,12 +80,22 @@ $types = $this->types;
 
 			<span class="inline-radio">
 				<input type="radio" name="query[kinesthetic]" value="1"
-					<?php if (!!$query->get('kinesthetic')) echo 'checked'; ?>>
+					<?php
+						$kinesthetic = $query->get('kinesthetic');
+						if (!is_null($kinesthetic) && !!$kinesthetic):
+							echo 'checked';
+						endif;
+					?>>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
 			</span>
 			<span class="inline-radio">
 				<input type="radio" name="query[kinesthetic]" value="0"
-					<?php if (!$query->get('kinesthetic')) echo 'checked'; ?>>
+					<?php
+						$kinesthetic = $query->get('kinesthetic');
+						if (!is_null($kinesthetic) && !$kinesthetic):
+							echo 'checked';
+						endif;
+					?>>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
 
 			</div>

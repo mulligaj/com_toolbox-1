@@ -49,6 +49,13 @@ input[type="number"] {
 	margin: 1em 0 0 0;
 }
 
+#no-results {
+	display: flex;
+	font-size: 2em;
+	justify-content: center;
+	padding: 5em;
+}
+
 .tool-row {
 	border: 2px solid #575757;
 	box-shadow: 2px 2px 2px #858585;

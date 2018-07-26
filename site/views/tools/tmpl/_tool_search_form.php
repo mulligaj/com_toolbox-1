@@ -77,12 +77,22 @@ $resultsUrl = Route::url(
 		<div class="content">
 			<span class="inline-radio">
 				<input type="radio" name="query[external_cost]" value="1"
-					<?php if (!!$query->get('external_cost')) echo 'checked'; ?>>
+					<?php
+						$externalCost = $query->get('external_cost');
+						if (!is_null($externalCost) && !!$externalCost):
+							echo 'checked';
+						endif;
+					?>>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
 			</span>
 			<span class="inline-radio">
 				<input type="radio" name="query[external_cost]" value="0"
-					<?php if (!$query->get('external_cost')) echo 'checked'; ?>>
+					<?php
+						$externalCost = $query->get('external_cost');
+						if (!is_null($externalCost) && !$externalCost):
+							echo 'checked';
+						endif;
+					?>>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
 			</span>
 		</div>
@@ -135,12 +145,22 @@ $resultsUrl = Route::url(
 		<div class="content">
 			<span class="inline-radio">
 				<input type="radio" name="query[kinesthetic]" value="1"
-					<?php if (!!$query->get('kinesthetic')) echo 'checked'; ?>>
+					<?php
+						$kinesthetic = $query->get('kinesthetic');
+						if (!is_null($kinesthetic) && !!$kinesthetic):
+							echo 'checked';
+						endif;
+					?>>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
 			</span>
 			<span class="inline-radio">
 				<input type="radio" name="query[kinesthetic]" value="0"
-					<?php if (!$query->get('kinesthetic')) echo 'checked'; ?>>
+					<?php
+						$kinesthetic = $query->get('kinesthetic');
+						if (!is_null($kinesthetic) && !$kinesthetic):
+							echo 'checked';
+						endif;
+					?>>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
 			</span>
 		</div>
