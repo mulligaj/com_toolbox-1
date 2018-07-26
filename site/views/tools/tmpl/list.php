@@ -54,6 +54,9 @@ $formAction = Route::url(
 	"index.php?option=$this->option&controller=guidedsearch&task=updateAll"
 );
 $query = $this->query;
+$toolListUrl = Route::url(
+	"index.php?option=$this->option&controller=$this->controller&task=$this->task"
+);
 $tools = $this->tools;
 $types = $this->types;
 ?>
@@ -83,7 +86,12 @@ $types = $this->types;
 					->set('tools', $tools)
 					->display();
 			?>
+
+			<form method="POST" action="<?php echo $toolListUrl; ?>">
+				<?php echo $tools->pagination; ?>
+			</form>
 		</div>
+
 
 	</div>
 </section>

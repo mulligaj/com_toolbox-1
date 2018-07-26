@@ -697,7 +697,8 @@ class Tools extends SiteController
 			$formQuery = new Query($queryData);
 		}
 
-		$tools = $query->findRecords(Tool::class);
+		$tools = $query->findRecords(Tool::class)
+			->paginated('limitstart', 'limit');
 
 		$this->view
 			->set('query', $formQuery)

@@ -568,8 +568,6 @@ class Query
 			$this->_filterRecords($records);
 		}
 
-		$records = $records->rows();
-
 		return $records;
 	}
 
