@@ -4,10 +4,6 @@
 	margin: 0;
 }
 
-#links-list li:first-child {
-	margin-top: 1.25em;
-}
-
 #links-list li {
 	margin: 0 0 1.25em 0;
 }

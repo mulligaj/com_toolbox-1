@@ -33,25 +33,17 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('graySelect');
+$this->css('toolRecordsList');
 
-$query = $this->query;
-$subgroupSizes = [
-	'pairs',
-	'small',
-	'large',
-	'whole'
-];
+$tools = $this->tools;
 ?>
 
-<select id="subgroup-select" name="query[subgroup_size]" class="gray-select" required>
-	<option value="" selected disabled hidden>Select a subgroup size...</option>
-	<?php foreach ($subgroupSizes as $size): ?>
-		<option value="<?php echo $size; ?>"
-			<?php if ($size === $query->get('subgroup_size')) echo 'selected'; ?>>
-			<?php
-				echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_SUBGROUP_SIZE_' . strtoupper($size));
-			?>
-		</option>
+<ul id="tool-records">
+	<?php foreach ($tools as $tool): ?>
+		<?php
+			$this->view('_tool_row')
+				->set('tool', $tool)
+				->display();
+		?>
 	<?php endforeach; ?>
-</select>
+</ul>

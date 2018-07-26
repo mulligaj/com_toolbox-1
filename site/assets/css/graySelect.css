@@ -1,9 +1,9 @@
 
-.gray-select {
-	color: #939393;
+.gray-select, .gray-select option {
+	color: #000;
 }
 
-option {
-	color: #000;
+select:invalid, select option[value=""] {
+	color: #939393;
 }
 

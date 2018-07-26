@@ -688,14 +688,21 @@ class Tools extends SiteController
 	public function listTask()
 	{
 		$query = Query::getCurrent();
+		$formQuery = $query;
 		$types = ToolType::all();
 
-		$tools = [];
+		if (Request::has('query'))
+		{
+			$queryData = Request::getArray('query');
+			$formQuery = new Query($queryData);
+		}
+
+		$tools = $query->findRecords(Tool::class);
 
 		$this->view
-			->set('query', $query)
-			->set('types', $types)
-			->set('tools', $tools);
+			->set('query', $formQuery)
+			->set('tools', $tools)
+			->set('types', $types);
 
 		$this->view->display();
 	}

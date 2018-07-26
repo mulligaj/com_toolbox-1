@@ -33,26 +33,33 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('relatedTool');
-
+$maxStringLength = 21;
 $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 ?>
 
-<div class="tool-summary-block grid">
+<li class="tool-row grid">
 	<div class="col span3">
 		<a href="<?php echo $toolUrl; ?>">
-			<?php echo $tool->get('name'); ?>
+			<?php
+				$name = $tool->get('name');
+
+				if (strlen($name) > $maxStringLength):
+					$name = rtrim(substr($name, 0, $maxStringLength)) . '...';
+				endif;
+
+				echo $name;
+			?>
 		</a>
 	</div>
 	<div class="col span3">
 		<?php echo $tool->subgroupSizeDescription(); ?>
 	</div>
-	<div class="col span2">
+	<div class="col span3">
 		<?php echo $tool->durationDescription(); ?>
 	</div>
 	<div class="col span2">
 		<?php echo $tool->costDescription(); ?>
 	</div>
-</div>
+</li>

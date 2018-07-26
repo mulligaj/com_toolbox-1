@@ -79,8 +79,8 @@ class Query
 		'leadership' => 0,
 		'subgroup_size' => 0,
 		'external_cost' => 0,
-		'duration_max' => 0,
-		'duration_min' => 0,
+		'duration_max' => null,
+		'duration_min' => null,
 		'typesIds' => [],
 		'kinesthetic' => 0
 	];
@@ -459,7 +459,7 @@ class Query
 	 */
 	public function save()
 	{
-		if (!empty($this->getErrors()))
+		if (!$this->isValid())
 		{
 			return false;
 		}
@@ -476,6 +476,18 @@ class Query
 		}
 
 		return true;
+	}
+
+	/*
+	 * Indicates whether or not query is valid
+	 *
+	 * @return   bool
+	 */
+	public function isValid()
+	{
+		$isValid = empty($this->getErrors());
+
+		return $isValid;
 	}
 
 	/*
@@ -539,6 +551,67 @@ class Query
 		}
 
 		return $value;
+	}
+
+	/*
+	 * Finds records based query criteria
+	 *
+	 * @param    object   $recordClass   Record ORM class
+	 * @return   object
+	 */
+	public function findRecords($recordClass)
+	{
+		$records = $recordClass::all();
+
+		if (!$this->isEmpty())
+		{
+			$this->_filterRecords($records);
+		}
+
+		$records = $records->rows();
+
+		return $records;
+	}
+
+	/*
+	 * Indicates whether or not query has any non-empty values
+	 *
+	 * @return   bool
+	 */
+	public function isEmpty()
+	{
+		$criteria = $this->toArray();
+		$criteriaSum = array_sum(array_values($criteria));
+		$durationMax = Arr::pluck($criteria, 'duration_max');
+		$durationMin = Arr::pluck($criteria ,'duration_min');
+		$typesIds = Arr::pluck($criteria, 'typesIds');
+
+		$isEmpty = !$criteriaSum && !$durationMax && !$durationMin && empty($typesIds);
+
+		return $isEmpty;
+	}
+
+	/*
+	 * Filters records based on query instance's criteria
+	 *
+	 * @param    object   $records   All entity records
+	 * @return   object
+	 */
+	protected function _filterRecords($records)
+	{
+		$criteria = $this->toArray();
+		$durationMax = Arr::pluck($criteria, 'duration_max');
+		$durationMin = Arr::pluck($criteria ,'duration_min');
+		$typesIds = Arr::pluck($criteria, 'typesIds');
+
+		// AF: add special query filters for ^
+
+		foreach ($criteria as $attribute => $value)
+		{
+			$records->whereEquals($attribute, $value);
+		}
+
+		return $records;
 	}
 
 }

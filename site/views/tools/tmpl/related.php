@@ -36,6 +36,7 @@ defined('_HZEXEC_') or die();
 $this->css('emptyInfo');
 $this->css('infoWrapper');
 $this->css('infoTabs');
+$this->css('toolInfoRelated');
 
 $relatedTools = $this->relatedTools;
 $tool = $this->tool;
@@ -80,12 +81,9 @@ Document::setTitle($page);
 	<div class="col span12 info-wrapper">
 		<?php
 			if ($relatedTools->count() > 0):
-				foreach ($relatedTools as $relatedTool)
-				{
-					$this->view('_tool_info_related_tool')
-						->set('tool', $relatedTool)
-						->display();
-				}
+				$this->view('_tool_list')
+					->set('tools', $relatedTools)
+					->display();
 			else: ?>
 				<div class="empty-info">
 					<?php echo Lang::txt('COM_TOOLBOX_RELATED_NO_RELATED', $toolName); ?>

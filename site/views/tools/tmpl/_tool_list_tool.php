@@ -33,25 +33,26 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('graySelect');
-
-$query = $this->query;
-$subgroupSizes = [
-	'pairs',
-	'small',
-	'large',
-	'whole'
-];
+$maxStringLength = 27;
+$tool = $this->tool;
+$toolId = $tool->get('id');
+$toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 ?>
 
-<select id="subgroup-select" name="query[subgroup_size]" class="gray-select" required>
-	<option value="" selected disabled hidden>Select a subgroup size...</option>
-	<?php foreach ($subgroupSizes as $size): ?>
-		<option value="<?php echo $size; ?>"
-			<?php if ($size === $query->get('subgroup_size')) echo 'selected'; ?>>
+
+<li class="tool-record grid">
+	<div class="col span4">
+		<a href="<?php echo $toolUrl; ?>">
 			<?php
-				echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_SUBGROUP_SIZE_' . strtoupper($size));
+				$name = $tool->get('name');
+
+				if (strlen($name) > $maxStringLength):
+					$name = rtrim(substr($name, 0, 27)) . '...';
+				endif;
+
+				echo $name;
 			?>
-		</option>
-	<?php endforeach; ?>
-</select>
+		</a>
+	</div>
+</li>
+

@@ -33,14 +33,15 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('toolsList');
 $this->js('toolsList');
 
 Html::behavior('core');
 
 $action = $this->action;
 $query = $this->query;
-$tools = $this->tools;
+$resultsUrl = Route::url(
+	"index.php?option=$this->option&controller=$this->controller"
+);
 ?>
 
 <form method="post" action="<?php echo $action; ?>">
@@ -96,12 +97,14 @@ $tools = $this->tools;
 
 		<div id="duration-fields" class="content">
 			<input type="number" name="query[duration_min]" min="0"
-				value="<?php echo $query->get('duration_min'); ?>">
+				value="<?php echo $query->get('duration_min'); ?>"
+				placeholder="min">
 
 			<?php echo Lang::txt('COM_TOOLBOX_COMMON_TO'); ?>
 
 			<input type="number" name="query[duration_max]" min="0"
-				value="<?php echo $query->get('duration_max'); ?>">
+				value="<?php echo $query->get('duration_max'); ?>"
+				placeholder="max">
 		</div>
 		<hr>
 	</div>
@@ -209,6 +212,8 @@ $tools = $this->tools;
 	</div>
 
 	<?php echo Html::input('token'); ?>
+	<input type="hidden" name="origin" value="<?php echo $resultsUrl; ?>">
+	<input type="hidden" name="forward" value="<?php echo $resultsUrl; ?>">
 
 	<div class="buttons">
 		<input class="btn btn-success" type="submit"

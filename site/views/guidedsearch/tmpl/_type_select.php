@@ -41,7 +41,7 @@ $size = isset($this->size) ? $this->size : 1;
 $types = $this->types;
 ?>
 
-<select name="query[typesIds][]" size="<?php echo $size; ?>" class="gray-select">
+<select name="query[typesIds][]" size="<?php echo $size; ?>" class="gray-select" required>
 	<option value="" selected disabled hidden>Select a tool type...</option>
 	<?php
 	foreach ($types as $type):

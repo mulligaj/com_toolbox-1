@@ -214,6 +214,42 @@ class Guidedsearch extends SiteController
 	}
 
 	/*
+	 * Updates all attributes of current users tool search query
+	 *
+	 * @return   void
+	 */
+	public function updateAllTask()
+	{
+		Request::checkToken();
+
+		// get posted query data
+		$queryData = Request::getArray('query');
+
+		// get current query
+		$query = Query::getCurrent();
+
+		// update query
+		$query->setType($queryData);
+		$query->setKinesthetic($queryData);
+		$query->setAacu($queryData);
+		$query->setIdc($queryData);
+		$query->setBergs($queryData);
+		$query->setOtherSkills($queryData);
+		$query->setSubgroupSize($queryData);
+		$query->setExternalCost($queryData);
+		$query->setDuration($queryData);
+
+		if ($query->save())
+		{
+			$this->_successfulUpdate();
+		}
+		else
+		{
+			$this->_failedUpdate($query);
+		}
+	}
+
+	/*
 	 * Process successful update of tool search query
 	 *
 	 * @return  void

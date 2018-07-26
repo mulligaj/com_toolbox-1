@@ -50,7 +50,9 @@ foreach ($breadcrumbs as $text => $url)
 	Pathway::append($text, $cumulativePath);
 }
 
-$formAction = ""; // AF: update
+$formAction = Route::url(
+	"index.php?option=$this->option&controller=guidedsearch&task=updateAll"
+);
 $query = $this->query;
 $tools = $this->tools;
 $types = $this->types;
@@ -70,13 +72,17 @@ $types = $this->types;
 				$this->view('_tool_search_form')
 					->set('action', $formAction)
 					->set('query', $query)
-					->set('tools', $tools)
 					->set('types', $types)
 					->display();
 			?>
 		</div>
 
 		<div id="results" class="col span9">
+			<?php
+				$this->view('_tool_list')
+					->set('tools', $tools)
+					->display();
+			?>
 		</div>
 
 	</div>
