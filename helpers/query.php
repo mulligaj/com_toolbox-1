@@ -32,6 +32,11 @@
 
 namespace Components\Toolbox\Helpers;
 
+$toolboxPath = Component::path('com_toolbox');
+
+require_once "$toolboxPath/models/tool.php";
+
+use Components\Toolbox\Models\Tool;
 use Hubzero\Session;
 use Hubzero\Utility\Arr;
 
@@ -602,14 +607,74 @@ class Query
 		$durationMin = Arr::pluck($criteria ,'duration_min');
 		$typesIds = Arr::pluck($criteria, 'typesIds');
 
-		// AF: add special query filters for ^
+		// filter by duration
+		$records->where('duration', '>=', $durationMin);
+		$records->where('duration', '<=', $durationMax);
 
+		// filter by Type ID
+		$this->_filterByAssociationIds($records, $typesIds);
+
+		// filter by one-to-one criteria
 		foreach ($criteria as $attribute => $value)
 		{
 			$records->whereEquals($attribute, $value);
 		}
 
 		return $records;
+	}
+
+	/*
+	 * Filters records based on association IDs
+	 *
+	 * @param    object   $records           All entity records
+	 * @param    array    $associationsIds   Association IDs
+	 * @return   void
+	 */
+	protected function _filterByAssociationIds($records, $associationsIds)
+	{
+		$toolsTypesTable = $this->_getToolsTypesTable();
+		$toolTypesTable = $this->_getToolTypesTable();
+		$toolsTable = $this->_getToolsTable();
+
+		$records->join($toolsTypesTable, "$toolsTable.id", "$toolsTypesTable.tool_id", 'left');
+		$records->join($toolTypesTable, "$toolsTypesTable.type_id", "$toolTypesTable.id", 'left');
+		$records->whereIn("$toolsTypesTable.type_id", $associationsIds);
+	}
+
+	/*
+	 * Returns name of the ToolsTypes table
+	 *
+	 * @return   string
+	 */
+	protected function _getToolsTypesTable()
+	{
+		$toolsTypesTable = '#__toolbox_tools_types';
+
+		return $toolsTypesTable;
+	}
+
+	/*
+	 * Returns name of the ToolTypes table
+	 *
+	 * @return   string
+	 */
+	protected function _getToolTypesTable()
+	{
+		$toolTypesTable = '#__toolbox_tool_types';
+
+		return $toolTypesTable;
+	}
+
+	/*
+	 * Returns name of the Tools table
+	 *
+	 * @return   string
+	 */
+	protected function _getToolsTable()
+	{
+		$toolsTable = '#__toolbox_tools';
+
+		return $toolsTable;
 	}
 
 }
