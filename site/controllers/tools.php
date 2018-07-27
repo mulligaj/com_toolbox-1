@@ -363,7 +363,7 @@ class Tools extends SiteController
 
 		foreach ($tool->getErrors() as $error)
 		{
-			$errorMessage .= "<br/>> $error";
+			$errorMessage .= "<br/>• $error";
 		}
 
 		Notify::error($errorMessage);
@@ -387,7 +387,7 @@ class Tools extends SiteController
 
 		foreach ($errors as $error)
 		{
-			$errorMessage .= "<br/>> $error";
+			$errorMessage .= "<br/>• $error";
 		}
 
 		Notify::error($errorMessage);
@@ -507,7 +507,7 @@ class Tools extends SiteController
 
 		foreach ($tool->getErrors() as $error)
 		{
-			$errorMessage .= "<br/>> $error";
+			$errorMessage .= "<br/>• $error";
 		}
 
 		Notify::error($errorMessage);
