@@ -33,9 +33,87 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->js('adminForm');
+
+$component = $this->option;
+$controller = $this->controller;
+$filters = $this->filters;
 $permissions = $this->permissions;
+$sortCriteria = $filters['sort'];
+$sortDirection = $filters['sort_Dir'];
+$tools = $this->tools;
 $toolbarTitle = $this->title;
+
+$toolsListUrl = Route::url("index.php?option=$component&controller=$controller");
 
 Toolbar::title($toolbarTitle);
 
+if ($permissions->get('core.manage'))
+{
+	Toolbar::archiveList('archive');
+}
+
 ?>
+
+<form action="<?php echo $toolsListUrl; ?>" method="post" name="adminForm">
+
+	<fieldset id="filter-bar">
+		<label for="filter_search"><?php echo Lang::txt('JSEARCH_FILTER'); ?>:</label>
+		<input type="text" name="search" id="filter_search" value="<?php echo $this->escape($filters['search']); ?>" placeholder="..." />
+
+		<input type="submit" value="<?php echo "Search"; ?>" />
+		<button id="clear-search" type="button">
+			<?php echo Lang::txt('JSEARCH_FILTER_CLEAR'); ?>
+		</button>
+	</fieldset>
+
+	<table class="adminlist">
+		<?php
+			$this->view('_tool_List_header')
+				->set('sortCriteria', $sortCriteria)
+				->set('sortDirection', $sortDirection)
+				->display();
+		?>
+
+		<tfoot>
+			<tr>
+				<td colspan="7"><?php echo $tools->pagination; ?></td>
+			</tr>
+		</tfoot>
+
+		<tbody>
+			<?php
+				$k = 0;
+				$i = 0;
+				foreach ($tools as $tool):
+
+					$this->view('_tool_row')
+						->set('i', $i)
+						->set('k', $k)
+						->set('tool', $tool)
+						->display();
+
+					$i++;
+					$k = 1 - $k;
+				endforeach;
+			?>
+		</tbody>
+	</table>
+
+	<?php echo Html::input('token'); ?>
+
+	<!-- Filtering dependencies -->
+	<input type="hidden" name="filter_order" value="<?php echo $sortCriteria; ?>" />
+	<input type="hidden" name="filter_order_Dir" value="<?php echo $sortDirection; ?>" />
+
+	<!-- Toolbar dependencies -->
+	<input type="hidden" name="controller" value="<?php echo $controller; ?>" />
+	<input type="hidden" name="option" value="<?php echo $component ?>" />
+	<input type="hidden" name="boxchecked" value="0" />
+	<input type="hidden" name="task" />
+
+	<!-- Redirect dependencies -->
+	<input type="hidden" name="origin" value="<?php echo $toolsListUrl; ?>" />
+	<input type="hidden" name="forward" value="<?php echo $toolsListUrl; ?>" />
+
+</form>
