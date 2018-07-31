@@ -34,7 +34,6 @@
 defined('_HZEXEC_') or die();
 
 $this->js('adminForm');
-$this->js('toolsList');
 
 $component = $this->option;
 $controller = $this->controller;
@@ -42,10 +41,12 @@ $filters = $this->filters;
 $permissions = $this->permissions;
 $sortCriteria = $filters['sort'];
 $sortDirection = $filters['sort_Dir'];
-$tools = $this->tools;
+$types = $this->types;
 $toolbarTitle = $this->title;
 
-$toolsListUrl = Route::url("index.php?option=$component&controller=$controller");
+$typesListUrl = Route::url(
+	"index.php?option=$component&controller=$controller"
+);
 
 Toolbar::title($toolbarTitle);
 
@@ -56,7 +57,7 @@ if ($permissions->get('core.manage'))
 
 ?>
 
-<form action="<?php echo $toolsListUrl; ?>" method="post" name="adminForm">
+<form action="<?php echo $typesListUrl; ?>" method="post" name="adminForm">
 
 	<fieldset id="filter-bar">
 		<label for="filter_search"><?php echo Lang::txt('JSEARCH_FILTER'); ?>:</label>
@@ -70,7 +71,7 @@ if ($permissions->get('core.manage'))
 
 	<table class="adminlist">
 		<?php
-			$this->view('_tool_List_header')
+			$this->view('_type_list_header')
 				->set('sortCriteria', $sortCriteria)
 				->set('sortDirection', $sortDirection)
 				->display();
@@ -78,7 +79,7 @@ if ($permissions->get('core.manage'))
 
 		<tfoot>
 			<tr>
-				<td colspan="7"><?php echo $tools->pagination; ?></td>
+				<td colspan="7"><?php echo $types->pagination; ?></td>
 			</tr>
 		</tfoot>
 
@@ -86,12 +87,12 @@ if ($permissions->get('core.manage'))
 			<?php
 				$k = 0;
 				$i = 0;
-				foreach ($tools as $tool):
+				foreach ($types as $type):
 
-					$this->view('_tool_row')
+					$this->view('_type_row')
 						->set('i', $i)
 						->set('k', $k)
-						->set('tool', $tool)
+						->set('type', $type)
 						->display();
 
 					$i++;
@@ -114,7 +115,7 @@ if ($permissions->get('core.manage'))
 	<input type="hidden" name="task" />
 
 	<!-- Redirect dependencies -->
-	<input type="hidden" name="origin" value="<?php echo $toolsListUrl; ?>" />
-	<input type="hidden" name="forward" value="<?php echo $toolsListUrl; ?>" />
+	<input type="hidden" name="origin" value="<?php echo $typesListUrl; ?>" />
+	<input type="hidden" name="forward" value="<?php echo $typesListUrl; ?>" />
 
 </form>

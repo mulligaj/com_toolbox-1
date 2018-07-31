@@ -34,6 +34,11 @@ $submenuEntries = [
 		'text' => 'Tools',
 		'url' => Route::url('index.php?option=com_toolbox&controller=tools&task=list'),
 		'selectedTest' => ($controllerName === 'tools' && ($taskName === '' || $taskName === 'list'))
+	],
+	[
+		'text' => 'Tool Types',
+		'url' => Route::url('index.php?option=com_toolbox&controller=toolTypes&task=list'),
+		'selectedTest' => ($controllerName === 'toolTypes' && ($taskName === '' || $taskName === 'list'))
 	]
 ];
 
@@ -43,7 +48,9 @@ foreach ($submenuEntries as $entry)
 }
 
 $controllerClassNameMap = [
-	'tools' => 'Tools'
+	'tools' => 'Tools',
+	'tooltypes' => 'ToolTypes',
+	'toolTypes' => 'ToolTypes'
 ];
 
 $controllerClassName = __NAMESPACE__ . "\\Controllers\\" . $controllerClassNameMap[$controllerName];

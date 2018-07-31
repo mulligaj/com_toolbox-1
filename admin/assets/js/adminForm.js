@@ -9,14 +9,14 @@ adminForm.FORM_NAME = 'adminForm'
 adminForm.CLEAR_SEARCH_BUTTON_ID = 'clear-search'
 adminForm.MASTER_CHECKBOX_NAME = 'toggle'
 adminForm.SEARCH_FIELD_ID = 'filter_search'
-adminForm.TOOL_CHECKBOX_CLASS = 'tool-checkbox'
+adminForm.RECORD_CHECKBOX_CLASS = 'record-checkbox'
 
 adminForm.init = () => {
 	adminForm.form = $(`form[name=${adminForm.FORM_NAME}]`)
 	adminForm.clearSearchButton = $(`#${adminForm.CLEAR_SEARCH_BUTTON_ID}`)
 	adminForm.masterCheckbox = $(`input[name="${adminForm.MASTER_CHECKBOX_NAME}"]`)
 	adminForm.searchField = $(`#${adminForm.SEARCH_FIELD_ID}`)
-	adminForm.toolCheckboxes = $(`.${adminForm.TOOL_CHECKBOX_CLASS}`)
+	adminForm.recordCheckboxes = $(`.${adminForm.RECORD_CHECKBOX_CLASS}`)
 }
 
 adminForm.clearSearchField = () => {
@@ -29,10 +29,11 @@ adminForm.clearSearchHandler = () => {
 }
 
 adminForm.masterCheckboxHandler = () => {
-	const masterCheckbox = adminForm.masterCheckbox
-	const masterIsChecked = masterCheckbox.prop('checked')
+	const $masterCheckbox = adminForm.masterCheckbox
+	const masterIsChecked = $masterCheckbox.prop('checked')
 
-	adminForm.toolCheckboxes.prop('checked', masterIsChecked)
+	adminForm.recordCheckboxes.prop('checked', masterIsChecked)
+	adminForm.setChecked(masterIsChecked, $masterCheckbox)
 }
 
 adminForm.submit = () => {
@@ -43,6 +44,10 @@ adminForm.checkboxHandler = (e) => {
 	const $checkbox = $(e.target)
 	const checked = $checkbox.prop('checked')
 
+	adminForm.setChecked(checked, $checkbox)
+}
+
+adminForm.setChecked = (checked, $checkbox) => {
 	isChecked(checked, $checkbox)
 }
 
@@ -52,7 +57,7 @@ $(document).ready(() => {
 
 	adminForm.clearSearchButton.click(adminForm.clearSearchHandler)
 
-	adminForm.toolCheckboxes.click(adminForm.checkboxHandler)
+	adminForm.recordCheckboxes.click(adminForm.checkboxHandler)
 
 	adminForm.masterCheckbox.click(adminForm.masterCheckboxHandler)
 })

@@ -33,60 +33,18 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$i = $this->i;
-$k = $this->k;
-$tool = $this->tool;
-$toolDuration = $this->escape($tool->get('duration'));
-$toolExternalCost = $tool->get('external_cost');
-$toolId = $tool->get('id');
-$toolName = $this->escape($tool->get('name'));
-$toolPublished = $tool->get('published');
-$toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
+$sortCriteria = $this->sortCriteria;
+$sortDirection = $this->sortDirection;
 ?>
 
-<tr class="<?php echo "row$k"; ?>">
-
-	<td>
-		<input class="record-checkbox" type="checkbox" name="toolIds[]" id="cb<?php echo $i; ?>"
-			value="<?php echo $toolId; ?>" />
-	</td>
-
-	<td class="priority-5">
-		<a href="<?php echo $toolUrl; ?>">
-			<?php echo $toolId; ?>
-		</a>
-	</td>
-
-	<td>
-		<?php echo $toolName; ?>
-	</td>
-
-	<td>
-		<?php echo $toolDuration; ?>
-	</td>
-
-	<td>
-		<?php if ($toolExternalCost): ?>
-			<span class="state publish">
-				<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
-			</span>
-		<?php else: ?>
-			<span class="state unpublish">
-				<span><?php echo Lang::txt('PUBLISH'); ?></span>
-			</span>
-		<?php endif; ?>
-	</td>
-
-	<td>
-		<?php if ($toolPublished): ?>
-			<span class="state publish">
-				<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
-			</span>
-		<?php else: ?>
-			<span class="state unpublish">
-				<span><?php echo Lang::txt('PUBLISH'); ?></span>
-			</span>
-		<?php endif; ?>
-	</td>
-
-</tr>
+<thead>
+	<tr>
+		<th><input type="checkbox" name="toggle" value="" /></th>
+		<th scope="col" class="priority-5">
+			<?php echo Html::grid('sort', 'ID', 'id', $sortDirection, $sortCriteria); ?>
+		</th>
+		<th scope="col">
+			<?php echo Html::grid('sort', 'DESCRIPTION', 'description', $sortDirection, $sortCriteria); ?>
+		</th>
+	</tr>
+</thead>

@@ -35,15 +35,15 @@ namespace Components\Toolbox\Admin\Controllers;
 $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/admin/helpers/filterHelper.php";
-require_once "$toolboxPath/models/tool.php";
+require_once "$toolboxPath/models/toolType.php";
 
 use \Components\Toolbox\Admin\Helpers\FilterHelper;
 use \Components\Toolbox\Admin\Helpers\Permissions;
-use \Components\Toolbox\Models\Tool;
+use \Components\Toolbox\Models\ToolType;
 use Hubzero\Component\AdminController;
 use Hubzero\Database\Query;
 
-class Tools extends AdminController
+class ToolTypes extends AdminController
 {
 
 	/*
@@ -63,7 +63,7 @@ class Tools extends AdminController
 	protected static $_toolbarTitle = 'Toolbox';
 
 	/*
-	 * Returns tool list view
+	 * Returns types list view
 	 *
 	 * @return   void
 	 */
@@ -72,31 +72,31 @@ class Tools extends AdminController
 		$component = $this->_option;
 		$controller = $this->_controller;
 		$filters = FilterHelper::getFilters($component, $controller);
-		$permissions = Permissions::getActions('tool');
+		$permissions = Permissions::getActions();
 
-		$tools = Tool::all()
+		$types = ToolType::all()
 			->whereEquals('archived', 0);
 
-		// filter tools by name
+		// filter types by name
 		if (!empty($filters['search']))
 		{
-			$tools->where('name', ' like ', "%{$filters['search']}%");
+			$types->where('name', ' like ', "%{$filters['search']}%");
 		}
 
-		// sort tools based on given criteria
-		$tools = $tools->order($filters['sort'], $filters['sort_Dir'])
+		// sort types based on given criteria
+		$types = $types->order($filters['sort'], $filters['sort_Dir'])
 			->paginated('limitstart', 'limit');
 
 		$this->view
 			->set('filters', $filters)
 			->set('permissions', $permissions)
 			->set('title', static::$_toolbarTitle)
-			->set('tools', $tools)
+			->set('types', $types)
 			->display();
 	}
 
 	/*
-	 * Archives given tools
+	 * Archives given types
 	 *
 	 * @return   void
 	 */
@@ -104,18 +104,18 @@ class Tools extends AdminController
 	{
 		Request::checkToken();
 
-		$toolIds = Request::getArray('toolIds');
+		$typesIds = Request::getArray('typesIds');
 
-		$toolTable = (new Tool())->getTableName();
+		$typesTable = (new ToolType())->getTableName();
 
 		$updateQuery = (new Query())
-			->update($toolTable)
+			->update($typesTable)
 			->set(['archived' => 1])
-			->whereIn('id', $toolIds);
+			->whereIn('id', $typesIds);
 
-		$toolsUpdated = $updateQuery->execute();
+		$typesUpdated = $updateQuery->execute();
 
-		if ($toolsUpdated)
+		if ($typesUpdated)
 		{
 			$this->_successfulArchive();
 		}
@@ -126,7 +126,7 @@ class Tools extends AdminController
 	}
 
 	/*
-	 * Redirects to tools list w/ success message
+	 * Redirects to types list w/ success message
 	 *
 	 * @return   void
 	 */
@@ -136,20 +136,20 @@ class Tools extends AdminController
 
 		App::redirect(
 			$forwardingUrl,
-			Lang::txt('COM_TOOLBOX_TOOLS_ARCHIVE_SUCCESS'),
+			Lang::txt('COM_TOOLBOX_TYPES_ARCHIVE_SUCCESS'),
 			'passed'
 		);
 	}
 
 	/*
-	 * Redirects to tools list w/ error message
+	 * Redirects to types list w/ error message
 	 *
 	 * @return   void
 	 */
 	protected function _failedArchive()
 	{
 		$originUrl = Request::getString('origin');
-		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_ARCHIVE_FAILURE');
+		$errorMessage = Lang::txt('COM_TOOLBOX_TYPES_ARCHIVE_FAILURE');
 
 		Notify::error($errorMessage);
 

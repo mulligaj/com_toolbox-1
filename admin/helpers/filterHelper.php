@@ -30,63 +30,41 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Toolbox\Admin\Helpers;
 
-$i = $this->i;
-$k = $this->k;
-$tool = $this->tool;
-$toolDuration = $this->escape($tool->get('duration'));
-$toolExternalCost = $tool->get('external_cost');
-$toolId = $tool->get('id');
-$toolName = $this->escape($tool->get('name'));
-$toolPublished = $tool->get('published');
-$toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
-?>
+class FilterHelper
+{
 
-<tr class="<?php echo "row$k"; ?>">
+	/*
+	 * Retrieves search filters from request
+	 *
+	 * @param    string   $component    Name of component
+	 * @param    string   $controller   Name of controller
+	 * @return   array
+	 */
+	public static function getFilters($component, $controller)
+	{
+		$filters = [
+			'search' => urldecode(
+				Request::getState(
+					"$component.$controller.search",
+					'search',
+					''
+				)
+			),
+			'sort' => Request::getState(
+				"$component.$controller.sort",
+				'filter_order',
+				'id'
+			),
+			'sort_Dir' => Request::getState(
+				"$component.$controller.sortdir",
+				'filter_order_Dir',
+				'ASC'
+			),
+		];
 
-	<td>
-		<input class="record-checkbox" type="checkbox" name="toolIds[]" id="cb<?php echo $i; ?>"
-			value="<?php echo $toolId; ?>" />
-	</td>
+		return $filters;
+	}
 
-	<td class="priority-5">
-		<a href="<?php echo $toolUrl; ?>">
-			<?php echo $toolId; ?>
-		</a>
-	</td>
-
-	<td>
-		<?php echo $toolName; ?>
-	</td>
-
-	<td>
-		<?php echo $toolDuration; ?>
-	</td>
-
-	<td>
-		<?php if ($toolExternalCost): ?>
-			<span class="state publish">
-				<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
-			</span>
-		<?php else: ?>
-			<span class="state unpublish">
-				<span><?php echo Lang::txt('PUBLISH'); ?></span>
-			</span>
-		<?php endif; ?>
-	</td>
-
-	<td>
-		<?php if ($toolPublished): ?>
-			<span class="state publish">
-				<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
-			</span>
-		<?php else: ?>
-			<span class="state unpublish">
-				<span><?php echo Lang::txt('PUBLISH'); ?></span>
-			</span>
-		<?php endif; ?>
-	</td>
-
-</tr>
+}

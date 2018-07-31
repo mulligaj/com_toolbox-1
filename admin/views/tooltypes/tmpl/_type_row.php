@@ -35,58 +35,24 @@ defined('_HZEXEC_') or die();
 
 $i = $this->i;
 $k = $this->k;
-$tool = $this->tool;
-$toolDuration = $this->escape($tool->get('duration'));
-$toolExternalCost = $tool->get('external_cost');
-$toolId = $tool->get('id');
-$toolName = $this->escape($tool->get('name'));
-$toolPublished = $tool->get('published');
-$toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
+$type = $this->type;
+$typeId = $type->get('id');
+$typeDescription = $this->escape($type->get('description'));
 ?>
 
 <tr class="<?php echo "row$k"; ?>">
 
 	<td>
-		<input class="record-checkbox" type="checkbox" name="toolIds[]" id="cb<?php echo $i; ?>"
-			value="<?php echo $toolId; ?>" />
+		<input class="record-checkbox" type="checkbox" name="typesIds[]" id="cb<?php echo $i; ?>"
+			value="<?php echo $typeId; ?>" />
 	</td>
 
 	<td class="priority-5">
-		<a href="<?php echo $toolUrl; ?>">
-			<?php echo $toolId; ?>
-		</a>
+		<?php echo $typeId; ?>
 	</td>
 
 	<td>
-		<?php echo $toolName; ?>
-	</td>
-
-	<td>
-		<?php echo $toolDuration; ?>
-	</td>
-
-	<td>
-		<?php if ($toolExternalCost): ?>
-			<span class="state publish">
-				<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
-			</span>
-		<?php else: ?>
-			<span class="state unpublish">
-				<span><?php echo Lang::txt('PUBLISH'); ?></span>
-			</span>
-		<?php endif; ?>
-	</td>
-
-	<td>
-		<?php if ($toolPublished): ?>
-			<span class="state publish">
-				<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
-			</span>
-		<?php else: ?>
-			<span class="state unpublish">
-				<span><?php echo Lang::txt('PUBLISH'); ?></span>
-			</span>
-		<?php endif; ?>
+		<?php echo $typeDescription; ?>
 	</td>
 
 </tr>
