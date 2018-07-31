@@ -30,34 +30,51 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Toolbox\Models;
+// No direct access
+defined('_HZEXEC_') or die();
 
-use Hubzero\Database\Relational;
+Html::behavior('framework', true);
 
-class ToolType extends Relational
-{
+$this->css('typeNew');
+$this->js('typeNew');
 
-	/*
-	 * Records table
-	 *
-	 * @var string
-	 */
-	protected $table = '#__toolbox_tool_types';
+$component = $this->option;
+$controller = $this->controller;
+$createUrl = Route::url(
+	"/administrator/index.php?option=$component&controller=$controller&task=create"
+);
+$tmpl = Request::getVar('tmpl', '');
+$type = $this->type;
 
-	/*
-	 * Attributes to be populated on record creation
-	 *
-	 * @var array
-	 */
-	public $initiate = ['created'];
+?>
 
-	/*
-	 * Attribute validation
-	 *
-	 * @var  array
-	 */
-	protected $rules = [
-		'description' => 'notempty'
-	];
+<form action="<?php echo $createUrl; ?>" method="POST" id="new-form">
 
-}
+	<?php if ($tmpl === 'component'): ?>
+		<fieldset>
+			<div class="configuration">
+			</div>
+		</fieldset>
+	<?php endif; ?>
+
+	<fieldset class="grid">
+		<div class="col span10 offset1">
+			<label>
+				<?php echo Lang::txt('COM_TOOLBOX_TYPES_DESCRIPTION_LABEL'); ?>
+
+				<span class="required">
+					<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+				</span>
+
+				<input type="text" name="type[description]"
+					value="<?php echo $type->get('description'); ?>">
+			</label>
+		</div>
+	</fieldset>
+
+	<?php echo Html::input('token'); ?>
+
+	<input type="submit" id="new-form-submit"
+		value="<?php echo Lang::txt('COM_TOOLBOX_TYPES_CREATE_BUTTON'); ?>">
+
+</form>

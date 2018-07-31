@@ -63,7 +63,7 @@ class ToolTypes extends AdminController
 	protected static $_toolbarTitle = 'Toolbox';
 
 	/*
-	 * Returns types list view
+	 * Renders types list view
 	 *
 	 * @return   void
 	 */
@@ -154,6 +154,62 @@ class ToolTypes extends AdminController
 		Notify::error($errorMessage);
 
 		App::redirect($originUrl);
+	}
+
+	/*
+	 * Renders the view for creating a new tool type
+	 *
+	 * @return  void
+	 */
+	public function newTask()
+	{
+		$type = new ToolType();
+
+		$this->view
+			->set('type', $type)
+			->display();
+	}
+
+	/*
+	 * Creates new tool type record using given data
+	 *
+	 * @return  void
+	 */
+	public function createTask()
+	{
+		Request::checkToken();
+
+		$component = $this->_option;
+		$controller = $this->_controller;
+		$typeData = Request::getArray('type');
+		$typeListUrl = Route::url(
+			"/administrator/index.php?option=$component&controller=$controller&task=list"
+		);
+
+		$type = ToolType::blank();
+
+		$type->set($typeData);
+
+		if ($type->save())
+		{
+			$message = Lang::txt('COM_TOOLBOX_TYPES_CREATE_SUCCESS');
+			$outcome = 'success';
+		}
+		else
+		{
+			$message = Lang::txt('COM_TOOLBOX_TYPES_CREATE_FAILURE') . '<br/>';
+			foreach ($type->getErrors() as $error)
+			{
+				$message .= "<br/>• $error";
+			}
+			$outcome = 'error';
+		}
+
+		App::redirect(
+			$typeListUrl,
+			$message,
+			$outcome
+		);
 	}
 
 }

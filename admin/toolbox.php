@@ -19,7 +19,7 @@ if (!User::authorise('core.manage','com_toolbox'))
 }
 
 $defaultControllerName = 'tools';
-$controllerName = Request::getCmd('controller');
+$controllerName = strtolower(Request::getCmd('controller'));
 $taskName = Request::getCmd('task');
 
 if (!file_exists("$componentAdminPath/controllers/$controllerName.php"))
@@ -38,7 +38,7 @@ $submenuEntries = [
 	[
 		'text' => 'Tool Types',
 		'url' => Route::url('index.php?option=com_toolbox&controller=toolTypes&task=list'),
-		'selectedTest' => ($controllerName === 'toolTypes' && ($taskName === '' || $taskName === 'list'))
+		'selectedTest' => ($controllerName === 'tooltypes' && ($taskName === '' || $taskName === 'list'))
 	]
 ];
 
@@ -49,8 +49,7 @@ foreach ($submenuEntries as $entry)
 
 $controllerClassNameMap = [
 	'tools' => 'Tools',
-	'tooltypes' => 'ToolTypes',
-	'toolTypes' => 'ToolTypes'
+	'tooltypes' => 'ToolTypes'
 ];
 
 $controllerClassName = __NAMESPACE__ . "\\Controllers\\" . $controllerClassNameMap[$controllerName];

@@ -52,6 +52,8 @@ Toolbar::title($toolbarTitle);
 
 if ($permissions->get('core.manage'))
 {
+	$createUrl = Route::url("index.php?option=$component&controller=$controller&task=new&tmpl=component");
+	Toolbar::appendButton('Popup', 'new', 'create a new type', $createUrl, 500, 200);
 	Toolbar::archiveList('archive');
 }
 
