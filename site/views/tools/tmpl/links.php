@@ -39,28 +39,19 @@ $this->css('infoWrapper');
 $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');
+
 $links = $tool->links();
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Links' => '/links'
-];
-
-$cumulativePath = '';
 $page = $toolName;
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
 Document::setTitle($page);
 ?>
 
 <?php
+	$this->view('_breadcrumbs')
+		->set('current', ['Links' => '/links'])
+		->set('toolId', $toolId)
+		->set('toolName', $toolName)
+		->display();
+
 	$this->view('_header')
 		->set('text', $page)
 		->display();

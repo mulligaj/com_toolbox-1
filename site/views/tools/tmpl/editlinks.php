@@ -35,23 +35,9 @@ defined('_HZEXEC_') or die();
 
 $tool = $this->tool;
 $toolId = $tool->get('id');
+$toolName = $tool->get('name');
 
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	"$toolId" => "/$toolId",
-	'Links' => '/editlinks',
-];
-
-$cumulativePath = '';
 $page = Lang::txt('COM_TOOLBOX_UPDATE_LINKS_HEADER_CONTENT');
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
 Document::setTitle($page);
 
 $blankLink = $this->blankLink;
@@ -62,6 +48,12 @@ $step = 'links';
 ?>
 
 <?php
+	$this->view('_breadcrumbs')
+		->set('current', ['Edit Links' => 'editlinks'])
+		->set('toolId', $toolId)
+		->set('toolName', $toolName)
+		->display();
+
 	$this->view('_header')
 		->set('text', $page)
 		->display();

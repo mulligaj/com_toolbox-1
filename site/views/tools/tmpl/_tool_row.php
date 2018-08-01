@@ -33,9 +33,12 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+use Hubzero\Utility\Str;
+
 $maxStringLength = 21;
 $tool = $this->tool;
 $toolId = $tool->get('id');
+$toolName = $tool->get('name');
 $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 ?>
 
@@ -43,13 +46,9 @@ $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 	<div class="col span3">
 		<a href="<?php echo $toolUrl; ?>">
 			<?php
-				$name = $tool->get('name');
+				$toolName = Str::truncate($toolName, $maxStringLength, ['exact' => true]);
 
-				if (strlen($name) > $maxStringLength):
-					$name = rtrim(substr($name, 0, $maxStringLength)) . '...';
-				endif;
-
-				echo $name;
+				echo $toolName;
 			?>
 		</a>
 	</div>

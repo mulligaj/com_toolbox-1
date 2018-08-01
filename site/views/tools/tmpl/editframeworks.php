@@ -35,23 +35,9 @@ defined('_HZEXEC_') or die();
 
 $tool = $this->tool;
 $toolId = $tool->get('id');
+$toolName = $tool->get('name');
 
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolId => "/$toolId",
-	'Theoretical Frameworks' => 'editframeworks'
-];
-
-$cumulativePath = '';
 $page = Lang::txt('COM_TOOLBOX_UPDATE_FRAMEWORKS_HEADER_CONTENT');
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
 Document::setTitle($page);
 
 $formAction = Route::url(
@@ -61,6 +47,12 @@ $step = 'frameworks';
 ?>
 
 <?php
+	$this->view('_breadcrumbs')
+		->set('current', ['Edit Frameworks' => 'editframeworks'])
+		->set('toolId', $toolId)
+		->set('toolName', $toolName)
+		->display();
+
 	$this->view('_header')
 		->set('text', $page)
 		->display();

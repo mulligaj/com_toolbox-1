@@ -41,26 +41,17 @@ $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');
 
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Theoretical Frameworks' => '/frameworks'
-];
-
-$cumulativePath = '';
 $page = $toolName;
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
 Document::setTitle($page);
 ?>
 
 <?php
+	$this->view('_breadcrumbs')
+		->set('current', ['Theoretical Frameworks' => '/frameworks'])
+		->set('toolId', $toolId)
+		->set('toolName', $toolName)
+		->display();
+
 	$this->view('_header')
 		->set('text', $page)
 		->display();

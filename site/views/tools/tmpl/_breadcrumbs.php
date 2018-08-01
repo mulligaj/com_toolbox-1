@@ -33,56 +33,22 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('infoTabs');
-$this->css('infoWrapper');
+use Hubzero\Utility\Str;
 
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
+$maxStringLength = 30;
+$toolId = $this->toolId;
+$toolName = Str::truncate($this->toolName, $maxStringLength, ['exact' => true]);
 
-$materials = $tool->get('materials');
-$page = $toolName;
-Document::setTitle($page);
-?>
+$finalSegment = $this->current;
 
-<?php
-	$this->view('_breadcrumbs')
-		->set('current', ['Materials' => '/materials'])
-		->set('toolId', $toolId)
-		->set('toolName', $toolName)
-		->display();
+$breadcrumbs = [
+	'Toolbox' => '/toolbox',
+	'Tools' => '/tools',
+	$toolName => "/$toolId"
+];
 
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
+$breadcrumbs = array_merge($breadcrumbs, $finalSegment);
 
-<section class="main section">
-	<div class="grid">
-
-	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Materials')
-			->set('tool', $tool)
-			->display();
-	?>
-
-	<div class="col span12 info-wrapper">
-		<?php if (!empty($materials)): ?>
-			<?php echo $materials; ?>
-		<?php else: ?>
-			<div class="empty-info">
-				<?php echo Lang::txt('COM_TOOLBOX_MATERIALS_NO_MATERIALS'); ?>
-			</div>
-		<?php endif; ?>
-	</div>
-
-	<?php
-			$this->view('_edit_link')
-				->set('attribute', 'materials')
-				->set('toolId', $toolId)
-				->display();
-	?>
-
-	</div>
-</section>
+$this->view('_breadcrumbs', 'shared')
+	->set('breadcrumbs', $breadcrumbs)
+	->display();

@@ -33,7 +33,6 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('emptyInfo');
 $this->css('infoTabs');
 $this->css('infoWrapper');
 $this->css('reviews');
@@ -43,30 +42,22 @@ $toolId = $tool->get('id');
 $toolName = $tool->get('name');
 $toolScope = $tool->getScope();
 
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Reviews' => '/reviews'
-];
-
-$cumulativePath = '';
-$page = $toolName;
-$reviews = $this->reviews;
 $toolReviewsTaskUrl = Route::url(
 	"index.php?option=$this->option&controller=$this->controller&task=reviews&id=$toolId"
 );
 
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
+$reviews = $this->reviews;
+$page = $toolName;
 Document::setTitle($page);
 ?>
 
 <?php
+	$this->view('_breadcrumbs')
+		->set('current', ['Reviews' => '/reviews'])
+		->set('toolId', $toolId)
+		->set('toolName', $toolName)
+		->display();
+
 	$this->view('_header')
 		->set('text', $page)
 		->display();
