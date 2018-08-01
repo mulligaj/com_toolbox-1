@@ -38,20 +38,14 @@ $this->css('toolInfoLinksList');
 $links = $this->links;
 ?>
 
-<?php if ($links->count() > 0): ?>
-	<div>
-		<ul id="links-list">
-			<?php foreach ($links as $link): ?>
-				<li>
-					<a href="<?php echo $link->get('url'); ?>">
-						<?php echo $link->get('text'); ?>
-					</a>
-				</li>
-			<?php endforeach; ?>
-		</ul>
-	</div>
-<?php else: ?>
-	<div id="no-links">
-		<?php echo Lang::txt('COM_TOOLBOX_DOWNLOAD_NO_DOWNLOADS'); ?>
-	</div>
-<?php endif; ?>
+<div>
+	<ul id="links-list">
+		<?php foreach ($links as $link): ?>
+			<li>
+				<a href="<?php echo $link->get('url'); ?>">
+					<?php echo $link->get('text'); ?>
+				</a>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+</div>

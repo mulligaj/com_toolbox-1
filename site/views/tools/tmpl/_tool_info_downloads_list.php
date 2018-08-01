@@ -38,20 +38,14 @@ $this->css('toolInfoDownloadsList');
 $downloads = $this->downloads;
 ?>
 
-<?php if ($downloads->count() > 0): ?>
-	<div>
-		<ul id="downloads-list">
-			<?php foreach ($downloads as $download): ?>
-				<li>
-				<a href="<?php echo $download->url(); ?>" download>
-					<?php echo $download->get('name'); ?>
-				</a>
-				</li>
-			<?php endforeach; ?>
-		</ul>
-	</div>
-<?php else: ?>
-	<div id="no-downloads">
-		<?php echo Lang::txt('COM_TOOLBOX_DOWNLOAD_NO_DOWNLOADS'); ?>
-	</div>
-<?php endif; ?>
+<div>
+	<ul id="downloads-list">
+		<?php foreach ($downloads as $download): ?>
+			<li>
+			<a href="<?php echo $download->url(); ?>" download>
+				<?php echo $download->get('name'); ?>
+			</a>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+</div>

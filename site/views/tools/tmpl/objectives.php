@@ -33,9 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('emptyInfo');
-$this->css('infoWrapper');
 $this->css('infoTabs');
+$this->css('infoWrapper');
 
 $tool = $this->tool;
 $toolId = $tool->get('id');
@@ -86,6 +85,13 @@ Document::setTitle($page);
 			</div>
 		<?php endif; ?>
 	</div>
+
+	<?php
+			$this->view('_edit_link')
+				->set('attribute', 'objectives')
+				->set('toolId', $toolId)
+				->display();
+	?>
 
 	</div>
 </section>

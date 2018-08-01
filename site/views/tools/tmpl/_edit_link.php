@@ -33,68 +33,26 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('infoTabs');
-$this->css('infoWrapper');
+$this->css('editLink');
 
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
-$links = $tool->links();
-
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	$toolName => "/$toolId",
-	'Links' => '/links'
+$attribute = $this->attribute;
+$attributeEditMappings = [
+	'downloads' => 'downloads',
+	'links' => 'links',
+	'materials' => 'objectives',
+	'notes' => 'objectives',
+	'objectives' => 'objectives',
+	'related' => 'related',
+	'frameworks' => 'frameworks'
 ];
-
-$cumulativePath = '';
-$page = $toolName;
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
+$editStep = $attributeEditMappings[$attribute];
+$toolId = $this->toolId;
+$url = Route::url("/toolbox/tools/$toolId/edit$editStep");
 ?>
 
-<?php
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
+<a href="<?php echo $url; ?>" class="btn" id="edit-link">
 	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Links')
-			->set('tool', $tool)
-			->display();
+		$languageKey = 'COM_TOOLBOX_TOOL_INFO_EDIT_' . strtoupper($attribute);
+		echo Lang::txt('COM_TOOLBOX_COMMON_EDIT') . ' ' . Lang::txt($languageKey);
 	?>
-
-	<div class="col span12 info-wrapper">
-		<?php if ($links->count() > 0): ?>
-			<?php
-				$this->view('_tool_info_links_list')
-					->set('links', $links)
-					->display(); ?>
-		<?php else: ?>
-			<div class="empty-info">
-				<?php echo Lang::txt('COM_TOOLBOX_LINKS_NO_LINKS'); ?>
-			</div>
-		<?php endif; ?>
-	</div>
-
-	<?php
-			$this->view('_edit_link')
-				->set('attribute', 'links')
-				->set('toolId', $toolId)
-				->display();
-	?>
-
-	</div>
-</section>
+</a>

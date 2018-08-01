@@ -33,8 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('downloads');
 $this->css('infoTabs');
+$this->css('infoWrapper');
 
 $tool = $this->tool;
 $toolId = $tool->get('id');
@@ -56,6 +56,7 @@ foreach ($breadcrumbs as $text => $url)
 	Pathway::append($text, $cumulativePath);
 }
 
+$downloads = $tool->downloads();
 Document::setTitle($page);
 ?>
 
@@ -75,13 +76,26 @@ Document::setTitle($page);
 			->display();
 	?>
 
-	<div id="downloads-list-wrapper" class="col span12">
-		<?php
-			$this->view('_tool_info_downloads_list')
-				->set('downloads', $tool->downloads())
-				->display();
-		?>
+	<div class="col span12 info-wrapper">
+		<?php if ($downloads->count() > 0): ?>
+			<?php
+				$this->view('_tool_info_downloads_list')
+					->set('downloads', $downloads)
+					->display();
+			?>
+		<?php else: ?>
+			<div class="empty-info">
+				<?php echo Lang::txt('COM_TOOLBOX_DOWNLOAD_NO_DOWNLOADS'); ?>
+			</div>
+		<?php endif; ?>
 	</div>
+
+	<?php
+			$this->view('_edit_link')
+				->set('attribute', 'downloads')
+				->set('toolId', $toolId)
+				->display();
+	?>
 
 	</div>
 </section>
