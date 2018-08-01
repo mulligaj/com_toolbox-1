@@ -356,7 +356,7 @@ class Tool extends Relational
 		}
 		else
 		{
-			$costDescription = Lang::txt('COM_TOOLBOX_TOOL_NO_EXTERNAL_COST');
+			$costDescription = '';
 		}
 
 		return $costDescription;

@@ -38,18 +38,14 @@ use Hubzero\Utility\Str;
 $maxStringLength = 21;
 $tool = $this->tool;
 $toolId = $tool->get('id');
-$toolName = $tool->get('name');
+$toolName = Str::truncate($tool->get('name'), $maxStringLength, ['exact' => true]);
 $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 ?>
 
 <li class="tool-row grid">
 	<div class="col span3">
 		<a href="<?php echo $toolUrl; ?>">
-			<?php
-				$toolName = Str::truncate($toolName, $maxStringLength, ['exact' => true]);
-
-				echo $toolName;
-			?>
+			<?php echo $toolName; ?>
 		</a>
 	</div>
 	<div class="col span3">

@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$component = $this->option;
+$controller = $this->controller;
 $i = $this->i;
 $k = $this->k;
 $tool = $this->tool;
@@ -42,6 +44,9 @@ $toolId = $tool->get('id');
 $toolName = $this->escape($tool->get('name'));
 $toolPublished = $tool->get('published');
 $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
+
+$publishUrl = Route::url("index.php?option=$component&controller=$controller&task=publish&id=$toolId");
+$unpublishUrl = Route::url("index.php?option=$component&controller=$controller&task=unpublish&id=$toolId");
 ?>
 
 <tr class="<?php echo "row$k"; ?>">
@@ -79,13 +84,17 @@ $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 
 	<td>
 		<?php if ($toolPublished): ?>
-			<span class="state publish">
-				<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
-			</span>
+			<a href="<?php echo $unpublishUrl; ?>">
+				<span class="state publish">
+					<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
+				</span>
+			</a>
 		<?php else: ?>
-			<span class="state unpublish">
-				<span><?php echo Lang::txt('PUBLISH'); ?></span>
-			</span>
+			<a href="<?php echo $publishUrl; ?>">
+				<span class="state unpublish">
+					<span><?php echo Lang::txt('PUBLISH'); ?></span>
+				</span>
+			</a>
 		<?php endif; ?>
 	</td>
 

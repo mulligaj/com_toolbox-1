@@ -43,7 +43,7 @@ $controller = $this->controller;
 $createUrl = Route::url(
 	"/administrator/index.php?option=$component&controller=$controller&task=create"
 );
-$tmpl = Request::getVar('tmpl', '');
+$tmpl = Request::getString('tmpl', '');
 $type = $this->type;
 
 ?>

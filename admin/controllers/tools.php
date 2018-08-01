@@ -156,4 +156,93 @@ class Tools extends AdminController
 		App::redirect($originUrl);
 	}
 
+	/*
+	 * Updates given tool to be published
+	 *
+	 * @return   void
+	 */
+	public function publishTask()
+	{
+		$toolId = Request::getInt('id');
+		$tool = Tool::oneOrFail($toolId);
+
+		$tool->set('published', 1);
+
+		if ($tool->save())
+		{
+			$this->_successfulPublishUpdate();
+		}
+		else
+		{
+			$this->_failedPublishUpdate($tool);
+		}
+	}
+
+	/*
+	 * Updates given tool to not be published
+	 *
+	 * @return   void
+	 */
+	public function unpublishTask()
+	{
+		$toolId = Request::getInt('id');
+		$tool = Tool::oneOrFail($toolId);
+
+		$tool->set('published', 0);
+
+		if ($tool->save())
+		{
+			$this->_successfulPublishUpdate();
+		}
+		else
+		{
+			$this->_failedPublishUpdate($tool);
+		}
+	}
+
+
+	/*
+	 * Handles successful update of a tools published status
+	 *
+	 * @return   void
+	 */
+	protected function _successfulPublishUpdate()
+	{
+		$this->_redirectToToolList();
+	}
+
+	/*
+	 * Handles failed update of a tools published status
+	 *
+	 * @param   object   $tool   Tool object
+	 * @return   void
+	 */
+	protected function _failedPublishUpdate($tool)
+	{
+		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_PUBLISH_FAILURE') . '<br/>';
+
+		foreach ($tool->getErrors() as $error)
+		{
+			$errorMessage .= "<br/>• $error";
+		}
+
+		Notify::error($errorMessage);
+
+		$this->_redirectToToolList();
+	}
+
+	/*
+	 * Redirects user to tool list
+	 *
+	 * @return   void
+	 */
+	protected function _redirectToToolList()
+	{
+		$component = $this->_option;
+		$controller = $this->_controller;
+		$toolListUrl = Route::url("/administrator/index.php?option=$component&controller=$controller");
+
+		App::redirect($toolListUrl);
+	}
+
 }

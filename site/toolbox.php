@@ -35,7 +35,7 @@ namespace Components\Toolbox\Site;
 $componentDirectory = 'com_toolbox';
 $defaultController = 'tools';
 
-$controller = \Request::getVar('controller', $defaultController);
+$controller = \Request::getCmd('controller', $defaultController);
 
 if (!file_exists(Component::path($componentDirectory) . "/site/controllers/$controller.php"))
 {
