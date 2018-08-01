@@ -66,6 +66,11 @@ class Router extends Base
 			if (is_numeric($segments[1]))
 			{
 				$vars['id'] = $segments[1];
+
+				if (!isset($segments[2]))
+				{
+					$vars['task'] = 'downloads';
+				}
 			}
 			else
 			{
