@@ -87,7 +87,7 @@ class Tools extends SiteController
 	 * @param   array               $typeIds  IDs of types to associate
 	 * @return  void
 	 */
-	public function newBasicTask($tool = null, $typeIds = [])
+	public function newTask($tool = null, $typeIds = [])
 	{
 		$tool = $tool ? $tool : Tool::blank();
 		$types = ToolType::all();
@@ -512,8 +512,8 @@ class Tools extends SiteController
 
 		Notify::error($errorMessage);
 
-		$this->setView(null, 'newbasic');
-		$this->newBasicTask($tool, $typeIds);
+		$this->setView(null, 'new');
+		$this->newTask($tool, $typeIds);
 	}
 
 	/*

@@ -78,6 +78,11 @@ $types = $this->types;
 					->set('types', $types)
 					->display();
 			?>
+
+			<a href="<?php echo Route::url('/toolbox/tools/new'); ?>"
+				class="btn" id="create-tool">
+				<?php echo Lang::txt('COM_TOOLBOX_LIST_CREATE_NEW_TOOL'); ?>
+			</a>
 		</div>
 
 		<div id="results" class="col span9">
