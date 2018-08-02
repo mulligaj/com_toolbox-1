@@ -106,14 +106,7 @@ class ToolTypes extends AdminController
 
 		$typesIds = Request::getArray('typesIds');
 
-		$typesTable = (new ToolType())->getTableName();
-
-		$updateQuery = (new Query())
-			->update($typesTable)
-			->set(['archived' => 1])
-			->whereIn('id', $typesIds);
-
-		$typesUpdated = $updateQuery->execute();
+		$typesUpdated = $this->_updateArchivedStatus($typesIds, 1);
 
 		if ($typesUpdated)
 		{
@@ -133,12 +126,10 @@ class ToolTypes extends AdminController
 	protected function _successfulArchive()
 	{
 		$forwardingUrl = Request::getString('forward');
+		$langKey = 'COM_TOOLBOX_TYPES_ARCHIVE_SUCCESS';
+		$notificationType = 'passed';
 
-		App::redirect(
-			$forwardingUrl,
-			Lang::txt('COM_TOOLBOX_TYPES_ARCHIVE_SUCCESS'),
-			'passed'
-		);
+		$this->_redirectAndNotify($forwardingUrl, $langKey, $notificationType);
 	}
 
 	/*
@@ -149,11 +140,10 @@ class ToolTypes extends AdminController
 	protected function _failedArchive()
 	{
 		$originUrl = Request::getString('origin');
-		$errorMessage = Lang::txt('COM_TOOLBOX_TYPES_ARCHIVE_FAILURE');
+		$langKey = 'COM_TOOLBOX_TYPES_ARCHIVE_FAILURE';
+		$notificationType = 'error';
 
-		Notify::error($errorMessage);
-
-		App::redirect($originUrl);
+		$this->_redirectAndNotify($originUrl, $langKey, $notificationType);
 	}
 
 	/*
@@ -210,6 +200,137 @@ class ToolTypes extends AdminController
 			$message,
 			$outcome
 		);
+	}
+
+	/*
+	 * Renders the archived types view
+	 *
+	 * @return   void
+	 */
+	public function archivedTask()
+	{
+		$component = $this->_option;
+		$controller = $this->_controller;
+		$filters = FilterHelper::getFilters($component, $controller);
+		$permissions = Permissions::getActions();
+
+		$types = ToolType::all()
+			->whereEquals('archived', 1);
+
+		// filter types by name
+		if (!empty($filters['search']))
+		{
+			$types->where('name', ' like ', "%{$filters['search']}%");
+		}
+
+		// sort types based on given criteria
+		$types = $types->order($filters['sort'], $filters['sort_Dir'])
+			->paginated('limitstart', 'limit');
+
+		$this->view
+			->set('filters', $filters)
+			->set('permissions', $permissions)
+			->set('title', static::$_toolbarTitle)
+			->set('types', $types)
+			->display();
+	}
+
+/*
+	 * Unarchives given types
+	 *
+	 * @return   void
+	 */
+	public function unarchiveTask()
+	{
+		Request::checkToken();
+
+		$typesIds = Request::getArray('typesIds');
+
+		$typesUpdated = $this->_updateArchivedStatus($typesIds, 0);
+
+		if ($typesUpdated)
+		{
+			$this->_successfulUnarchive();
+		}
+		else
+		{
+			$this->_failedUnarchive();
+		}
+	}
+
+	/*
+	 * Updates archived status of tool type(s) with given IDs
+	 *
+	 * @param    array   $typesIds         Set of types IDs
+	 * @param    int     $archivedStatus   Archived status to update to
+	 * @return   bool
+	 */
+	protected function _updateArchivedStatus($typesIds, $archivedStatus)
+	{
+		$typesTable = (new ToolType())->getTableName();
+
+		$updateQuery = (new Query())
+			->update($typesTable)
+			->set(['archived' => $archivedStatus])
+			->whereIn('id', $typesIds);
+
+		$typesUpdated = $updateQuery->execute();
+
+		return $typesUpdated;
+	}
+
+	/*
+	 * Handles successful un-archival of tool type(s)
+	 *
+	 * @return   void
+	 */
+	protected function _successfulUnarchive()
+	{
+		$forwardingUrl = Request::getString('forward');
+		$langKey = 'COM_TOOLBOX_TYPES_UNARCHIVE_SUCCESS';
+		$notificationType = 'passed';
+
+		$this->_redirectAndNotify($forwardingUrl, $langKey, $notificationType);
+	}
+
+	/*
+	 * Handles failed un-archival of tool type(s)
+	 *
+	 * @return   void
+	 */
+	protected function _failedUnarchive()
+	{
+		$originUrl = Request::getString('origin');
+		$langKey = 'COM_TOOLBOX_TYPES_UNARCHIVE_FAILURE';
+		$notificationType = 'error';
+
+		$this->_redirectAndNotify($originUrl, $langKey, $notificationType);
+	}
+
+	/*
+	 * Redirects user to a given URL and displays a message
+	 *
+	 * @param    text   $url                URL to redirect user to
+	 * @param    text   $messageKey         Lang key of message to show user
+	 * @param    text   $notificationType   Type of notification to display
+	 * @return   void
+	 */
+	protected function _redirectAndNotify($url, $messageKey, $notificationType)
+	{
+		App::redirect(
+			$url,
+			Lang::txt($messageKey),
+			$notificationType
+		);
+	}
+
+	/*
+	 * Destroys given tool type(s)
+	 *
+	 * @return   void
+	 */
+	public function destroyTask()
+	{
 	}
 
 }

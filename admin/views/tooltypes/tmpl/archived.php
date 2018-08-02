@@ -44,22 +44,21 @@ $sortDirection = $filters['sort_Dir'];
 $types = $this->types;
 $toolbarTitle = $this->title;
 
-$typesListUrl = Route::url(
-	"index.php?option=$component&controller=$controller"
+$archivedTypesListUrl = Route::url(
+	"index.php?option=$component&controller=$controller&task=archived"
 );
 
 Toolbar::title($toolbarTitle);
 
 if ($permissions->get('core.manage'))
 {
-	$createUrl = Route::url("index.php?option=$component&controller=$controller&task=new&tmpl=component");
-	Toolbar::appendButton('Popup', 'new', 'create a new type', $createUrl, 500, 200);
-	Toolbar::archiveList('archive');
+	Toolbar::archiveList('unarchive');
+	//Toolbar::deleteList('Permanently delete selected types?', 'destroy');
 }
 
 ?>
 
-<form action="<?php echo $typesListUrl; ?>" method="post" name="adminForm">
+<form action="<?php echo $archivedTypesListUrl; ?>" method="post" name="adminForm">
 
 	<fieldset id="filter-bar">
 		<label for="filter_search"><?php echo Lang::txt('JSEARCH_FILTER'); ?>:</label>
@@ -89,10 +88,10 @@ if ($permissions->get('core.manage'))
 	<input type="hidden" name="controller" value="<?php echo $controller; ?>" />
 	<input type="hidden" name="option" value="<?php echo $component ?>" />
 	<input type="hidden" name="boxchecked" value="0" />
-	<input type="hidden" name="task" />
+	<input type="hidden" name="task" value="archived" />
 
 	<!-- Redirect dependencies -->
-	<input type="hidden" name="origin" value="<?php echo $typesListUrl; ?>" />
-	<input type="hidden" name="forward" value="<?php echo $typesListUrl; ?>" />
+	<input type="hidden" name="origin" value="<?php echo $archivedTypesListUrl; ?>" />
+	<input type="hidden" name="forward" value="<?php echo $archivedTypesListUrl; ?>" />
 
 </form>

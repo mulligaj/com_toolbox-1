@@ -44,6 +44,11 @@ $submenuEntries = [
 		'text' => 'Archived Tools',
 		'url' => Route::url('index.php?option=com_toolbox&controller=tools&task=archived'),
 		'selectedTest' => ($controllerName === 'tools' && $taskName === 'archived')
+	],
+	[
+		'text' => 'Archived Types',
+		'url' => Route::url('index.php?option=com_toolbox&controller=toolTypes&task=archived'),
+		'selectedTest' => ($controllerName === 'tooltypes' && $taskName === 'archived')
 	]
 ];
 
