@@ -44,20 +44,21 @@ $sortDirection = $filters['sort_Dir'];
 $toolbarTitle = $this->title;
 $tools = $this->tools;
 
-$toolsListUrl = Route::url(
-	"/administrator/index.php?option=$component&controller=$controller"
+$archivedToolsListUrl = Route::url(
+	"/administrator/index.php?option=$component&controller=$controller&task=archived"
 );
 
 Toolbar::title($toolbarTitle);
 
 if ($permissions->get('core.manage'))
 {
-	Toolbar::archiveList('archive');
+	Toolbar::archiveList('unarchive');
+	Toolbar::deleteList('Permanently delete selected tools?', 'destroy');
 }
 
 ?>
 
-<form action="<?php echo $toolsListUrl; ?>" method="post" name="adminForm">
+<form action="<?php echo $archivedToolsListUrl; ?>" method="post" name="adminForm">
 
 	<fieldset id="filter-bar">
 		<label for="filter_search"><?php echo Lang::txt('JSEARCH_FILTER'); ?>:</label>
@@ -71,6 +72,7 @@ if ($permissions->get('core.manage'))
 
 	<?php
 		$this->view('_tool_list')
+			->set('showPublished', false)
 			->set('sortCriteria', $sortCriteria)
 			->set('sortDirection', $sortDirection)
 			->set('tools', $tools)
@@ -90,7 +92,7 @@ if ($permissions->get('core.manage'))
 	<input type="hidden" name="task" />
 
 	<!-- Redirect dependencies -->
-	<input type="hidden" name="origin" value="<?php echo $toolsListUrl; ?>" />
-	<input type="hidden" name="forward" value="<?php echo $toolsListUrl; ?>" />
+	<input type="hidden" name="origin" value="<?php echo $archivedToolsListUrl; ?>" />
+	<input type="hidden" name="forward" value="<?php echo $archivedToolsListUrl; ?>" />
 
 </form>

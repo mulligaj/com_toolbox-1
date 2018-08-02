@@ -245,4 +245,98 @@ class Tools extends AdminController
 		App::redirect($toolListUrl);
 	}
 
+	/*
+	 * Returns archived tool list view
+	 *
+	 * @return   void
+	 */
+	public function archivedTask()
+	{
+		$component = $this->_option;
+		$controller = $this->_controller;
+		$filters = FilterHelper::getFilters($component, $controller);
+		$permissions = Permissions::getActions('tool');
+
+		$tools = Tool::all()
+			->whereEquals('archived', 1);
+
+		// filter tools by name
+		if (!empty($filters['search']))
+		{
+			$tools->where('name', ' like ', "%{$filters['search']}%");
+		}
+
+		// sort tools based on given criteria
+		$tools = $tools->order($filters['sort'], $filters['sort_Dir'])
+			->paginated('limitstart', 'limit');
+
+		$this->view
+			->set('filters', $filters)
+			->set('permissions', $permissions)
+			->set('title', static::$_toolbarTitle)
+			->set('tools', $tools)
+			->display();
+	}
+
+	/*
+	 * Un-archives given tools
+	 *
+	 * @return   void
+	 */
+	public function unarchiveTask()
+	{
+		Request::checkToken();
+
+		$toolIds = Request::getArray('toolIds');
+
+		$toolTable = (new Tool())->getTableName();
+
+		$updateQuery = (new Query())
+			->update($toolTable)
+			->set(['archived' => 0])
+			->whereIn('id', $toolIds);
+
+		$toolsUpdated = $updateQuery->execute();
+
+		if ($toolsUpdated)
+		{
+			$this->_successfulUnarchive();
+		}
+		else
+		{
+			$this->_failedUnarchive();
+		}
+	}
+
+	/*
+	 * Redirects to archived tools list w/ success message
+	 *
+	 * @return   void
+	 */
+	protected function _successfulUnarchive()
+	{
+		$forwardingUrl = Request::getString('forward');
+
+		App::redirect(
+			$forwardingUrl,
+			Lang::txt('COM_TOOLBOX_TOOLS_UNARCHIVE_SUCCESS'),
+			'passed'
+		);
+	}
+
+	/*
+	 * Redirects to tools list w/ error message
+	 *
+	 * @return   void
+	 */
+	protected function _failedUnarchive()
+	{
+		$originUrl = Request::getString('origin');
+		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_UNARCHIVE_FAILURE');
+
+		Notify::error($errorMessage);
+
+		App::redirect($originUrl);
+	}
+
 }

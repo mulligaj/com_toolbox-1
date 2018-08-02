@@ -36,27 +36,40 @@ defined('_HZEXEC_') or die();
 $showPublished = isset($this->showPublished) ? $this->showPublished : true;
 $sortCriteria = $this->sortCriteria;
 $sortDirection = $this->sortDirection;
+$tools = $this->tools;
 ?>
 
-<thead>
-	<tr>
-		<th><input type="checkbox" name="toggle" value="" /></th>
-		<th scope="col" class="priority-5">
-			<?php echo Html::grid('sort', 'ID', 'id', $sortDirection, $sortCriteria); ?>
-		</th>
-		<th scope="col">
-			<?php echo Html::grid('sort', 'NAME', 'name', $sortDirection, $sortCriteria); ?>
-		</th>
-		<th scope="col">
-			<?php echo Html::grid('sort', 'DURATION', 'duration', $sortDirection, $sortCriteria); ?>
-		</th>
-		<th scope="col">
-			<?php echo Html::grid('sort', 'EXTERNAL COST', 'external_cost', $sortDirection, $sortCriteria); ?>
-		</th>
-		<?php if ($showPublished): ?>
-			<th scope="col">
-				<?php echo Html::grid('sort', 'PUBLISHED', 'published', $sortDirection, $sortCriteria); ?>
-			</th>
-		<?php endif; ?>
-	</tr>
-</thead>
+<table class="adminlist">
+	<?php
+		$this->view('_tool_list_header')
+			->set('showPublished', $showPublished)
+			->set('sortCriteria', $sortCriteria)
+			->set('sortDirection', $sortDirection)
+			->display();
+	?>
+
+	<tfoot>
+		<tr>
+			<td colspan="7"><?php echo $tools->pagination; ?></td>
+		</tr>
+	</tfoot>
+
+	<tbody>
+		<?php
+			$k = 0;
+			$i = 0;
+			foreach ($tools as $tool):
+
+				$this->view('_tool_row')
+					->set('i', $i)
+					->set('k', $k)
+					->set('showPublished', $showPublished)
+					->set('tool', $tool)
+					->display();
+
+				$i++;
+				$k = 1 - $k;
+			endforeach;
+		?>
+	</tbody>
+</table>
