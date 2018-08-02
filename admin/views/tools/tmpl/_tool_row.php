@@ -37,6 +37,7 @@ $component = $this->option;
 $controller = $this->controller;
 $i = $this->i;
 $k = $this->k;
+$showPublished = isset($this->showPublished) ? $this->showPublished : true;
 $tool = $this->tool;
 $toolDuration = $this->escape($tool->get('duration'));
 $toolExternalCost = $tool->get('external_cost');
@@ -82,20 +83,22 @@ $unpublishUrl = Route::url("index.php?option=$component&controller=$controller&t
 		<?php endif; ?>
 	</td>
 
-	<td>
-		<?php if ($toolPublished): ?>
-			<a href="<?php echo $unpublishUrl; ?>">
-				<span class="state publish">
-					<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
-				</span>
-			</a>
-		<?php else: ?>
-			<a href="<?php echo $publishUrl; ?>">
-				<span class="state unpublish">
-					<span><?php echo Lang::txt('PUBLISH'); ?></span>
-				</span>
-			</a>
-		<?php endif; ?>
-	</td>
+	<?php if ($showPublished): ?>
+		<td>
+			<?php if ($toolPublished): ?>
+				<a href="<?php echo $unpublishUrl; ?>">
+					<span class="state publish">
+						<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
+					</span>
+				</a>
+			<?php else: ?>
+				<a href="<?php echo $publishUrl; ?>">
+					<span class="state unpublish">
+						<span><?php echo Lang::txt('PUBLISH'); ?></span>
+					</span>
+				</a>
+			<?php endif; ?>
+		</td>
+	<?php endif; ?>
 
 </tr>

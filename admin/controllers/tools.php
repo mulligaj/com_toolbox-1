@@ -52,7 +52,8 @@ class Tools extends AdminController
 	 * @var  array
 	 */
 	protected $_taskMap = [
-		'__default' => 'list'
+		'__default' => 'list',
+		'archived' => 'archived'
 	];
 
 	/*
@@ -243,6 +244,160 @@ class Tools extends AdminController
 		$toolListUrl = Route::url("/administrator/index.php?option=$component&controller=$controller");
 
 		App::redirect($toolListUrl);
+	}
+
+	/*
+	 * Returns archived tool list view
+	 *
+	 * @return   void
+	 */
+	public function archivedTask()
+	{
+		$component = $this->_option;
+		$controller = $this->_controller;
+		$filters = FilterHelper::getFilters($component, $controller);
+		$permissions = Permissions::getActions('tool');
+
+		$tools = Tool::all()
+			->whereEquals('archived', 1);
+
+		// filter tools by name
+		if (!empty($filters['search']))
+		{
+			$tools->where('name', ' like ', "%{$filters['search']}%");
+		}
+
+		// sort tools based on given criteria
+		$tools = $tools->order($filters['sort'], $filters['sort_Dir'])
+			->paginated('limitstart', 'limit');
+
+		$this->view
+			->set('filters', $filters)
+			->set('permissions', $permissions)
+			->set('title', static::$_toolbarTitle)
+			->set('tools', $tools)
+			->display();
+	}
+
+	/*
+	 * Un-archives given tools
+	 *
+	 * @return   void
+	 */
+	public function unarchiveTask()
+	{
+		Request::checkToken();
+
+		$toolIds = Request::getArray('toolIds');
+
+		$toolTable = (new Tool())->getTableName();
+
+		$updateQuery = (new Query())
+			->update($toolTable)
+			->set(['archived' => 0])
+			->whereIn('id', $toolIds);
+
+		$toolsUpdated = $updateQuery->execute();
+
+		if ($toolsUpdated)
+		{
+			$this->_successfulUnarchive();
+		}
+		else
+		{
+			$this->_failedUnarchive();
+		}
+	}
+
+	/*
+	 * Redirects to archived tools list w/ success message
+	 *
+	 * @return   void
+	 */
+	protected function _successfulUnarchive()
+	{
+		$forwardingUrl = Request::getString('forward');
+
+		App::redirect(
+			$forwardingUrl,
+			Lang::txt('COM_TOOLBOX_TOOLS_UNARCHIVE_SUCCESS'),
+			'passed'
+		);
+	}
+
+	/*
+	 * Redirects to archived tools list w/ error message
+	 *
+	 * @return   void
+	 */
+	protected function _failedUnarchive()
+	{
+		$originUrl = Request::getString('origin');
+		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_UNARCHIVE_FAILURE');
+
+		Notify::error($errorMessage);
+
+		App::redirect($originUrl);
+	}
+
+	/*
+	 * Destroys the given tools
+	 *
+	 * @return   void
+	 */
+	public function destroyTask()
+	{
+		Request::checkToken();
+
+		$toolIds = Request::getArray('toolIds');
+
+		$toolTable = (new Tool())->getTableName();
+
+		$destroyQuery = (new Query())
+			->delete($toolTable)
+			->whereIn('id', $toolIds);
+
+		$toolsDestroyed = $destroyQuery->execute();
+
+		if ($toolsDestroyed)
+		{
+			$this->_successfulDestroy();
+		}
+		else
+		{
+			$this->_failedDestroy();
+		}
+	}
+
+	/*
+	 * Handles successful
+	 *
+	 * @return   void
+	 */
+	protected function _successfulDestroy()
+	{
+		$forwardingUrl = Request::getString('forward');
+
+		App::redirect(
+			$forwardingUrl,
+			Lang::txt('COM_TOOLBOX_TOOLS_DESTROY_SUCCESS'),
+			'passed'
+		);
+	}
+
+	/*
+	 * Redirects to archived tools list w/ error message
+	 *
+	 * @return   void
+	 */
+	protected function _failedDestroy()
+	{
+		$originUrl = Request::getString('origin');
+		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_DESTROY_FAILURE');
+
+		Notify::error($errorMessage);
+
+		App::redirect($originUrl);
 	}
 
 }
