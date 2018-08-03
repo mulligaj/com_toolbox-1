@@ -42,6 +42,15 @@ class Review extends Relational
 {
 
 	/*
+	 * Scope to class mapping
+	 *
+	 * @var   array
+	 */
+	protected $_scopeClassMap = [
+		'tool' => 'Tool'
+	];
+
+	/*
 	 * Records table
 	 *
 	 * @var string
@@ -68,6 +77,20 @@ class Review extends Relational
 	];
 
 	/*
+	 * Returns created date formatted
+	 *
+	 * @return   object
+	 */
+	public function formattedCreated()
+	{
+		$created = $this->get('created');
+
+		$formattedCreated = date("g:i a d F Y ", strtotime($created));
+
+		return $formattedCreated;
+	}
+
+	/*
 	 * Returns the user that created the review
 	 *
 	 * @return   object
@@ -77,9 +100,80 @@ class Review extends Relational
 		$userModelName = 'Hubzero\User\User';
 		$foreignKey = 'user_id';
 
-		$user = $this->belongsToOne($userModelName, $foreignKey);
+		$user = $this->belongsToOne($userModelName, $foreignKey)->row();
 
 		return $user;
+	}
+
+	/*
+	 * Returns the user's ID
+	 *
+	 * @return   object
+	 */
+	public function userId()
+	{
+		$user = $this->user();
+
+		$userId = $user->get('id');
+
+		return $userId;
+	}
+
+	/*
+	 * Returns the user's name
+	 *
+	 * @return   object
+	 */
+	public function userName()
+	{
+		$user = $this->user();
+
+		$userName = $user->get('username');
+
+		return $userName;
+	}
+
+	/*
+	 * Returns the subject of the review
+	 *
+	 * @return   object
+	 */
+	public function subject()
+	{
+		$subjectClass = $this->_getSubjectModel();
+		$foreignKey = 'scope_id';
+
+		$subject = $this->belongsToOne($subjectClass, $foreignKey)->row();
+
+		return $subject;
+	}
+
+	/*
+	 * Returns the subject's ID
+	 *
+	 * @return   object
+	 */
+	public function subjectId()
+	{
+		$subject = $this->subject();
+
+		$subjectId = $subject->get('id');
+
+		return $subjectId;
+	}
+
+	/*
+	 * Returns the class of the associated subject
+	 *
+	 * @return   string
+	 */
+	public function _getSubjectModel()
+	{
+		$scope = $this->get('scope');
+
+		$subjectClass = $this->_scopeClassMap[$scope];
+
+		return $subjectClass;
 	}
 
 }

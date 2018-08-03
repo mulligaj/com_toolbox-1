@@ -33,38 +33,69 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('toolInfoReview');
+use Hubzero\Utility\Str;
 
-use Hubzero\Date;
+$i = $this->i;
+$k = $this->k;
 
+$component = $this->option;
+$controller = $this->controller;
 $review = $this->review;
-$user = $this->user;
-$userId = $user->get('id');
-$username = $user->get('username');
-$userPicture = $user->picture();
-$userUrl = Route::url("index.php?option=com_members&id=$userId");
+$approved = $review->get('approved');
+$content = Str::truncate(
+	$this->escape($review->get('content')),
+	125,
+	['exact' => true]
+);
+$created = $review->formattedCreated();
+$id = $review->get('id');
+$toolId = $review->subjectId();
+$approveUrl = Route::url("index.php?option=$component&controller=$controller&task=approve&id=$id");
+$unapproveUrl = Route::url("index.php?option=$component&controller=$controller&task=unapprove&id=$id");
+$url = Route::url("/toolbox/tools/$toolId/reviews");
+$userId = $review->userId();
+$userName = $review->userName();
 ?>
 
-<li class="review">
+<tr class="<?php echo "row$k"; ?>">
 
-	<span>
-		<img src="<?php echo $userPicture; ?>"
-			alt="User <?php echo $username; ?>'s profile picture" />
-	</span>
+	<td>
+		<input class="record-checkbox" type="checkbox" name="reviewIds[]" id="cb<?php echo $i; ?>"
+			value="<?php echo $id; ?>" />
+	</td>
 
-	<span class="review-content">
-		<span class="review-header">
-			<strong>
-				<a href="<?php echo $userUrl; ?>">
-					<?php echo $username; ?>
-				</a>
-			</strong>
-			<span><?php echo $review->formattedCreated(); ?></span>
-		</span>
+	<td class="priority-5">
+		<a href="<?php echo $url; ?>">
+			<?php echo $id; ?>
+		</a>
+	</td>
 
-		<span class="comment-body">
-			<?php echo $review->get('content'); ?>
-		</span>
-	</span>
+	<td>
+		<?php echo $content; ?>
+	</td>
 
-</li>
+	<td>
+		<?php echo $userName; ?>
+	</td>
+
+	<td>
+		<?php echo $created; ?>
+	</td>
+
+	<td>
+		<?php if ($approved): ?>
+			<a href="<?php echo $unapproveUrl; ?>">
+				<span class="state publish">
+					<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
+				</span>
+			</a>
+		<?php else: ?>
+			<a href="<?php echo $approveUrl; ?>">
+				<span class="state unpublish">
+					<span><?php echo Lang::txt('PUBLISH'); ?></span>
+				</span>
+			</a>
+		<?php endif; ?>
+	</td>
+
+</tr>

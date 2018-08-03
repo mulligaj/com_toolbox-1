@@ -33,19 +33,27 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('toolReviewsList');
-
-$reviews = $this->reviews;
+$sortCriteria = $this->sortCriteria;
+$sortDirection = $this->sortDirection;
 ?>
 
-<ol id="tool-reviews-list">
-	<?php
-		foreach ($reviews as $review)
-		{
-			$this->view('_tool_info_review')
-				->set('review', $review)
-				->set('user', $review->user())
-				->display();
-		}
-	?>
-</ol>
+<thead>
+	<tr>
+		<th><input type="checkbox" name="toggle" value="" /></th>
+		<th scope="col" class="priority-5">
+			<?php echo Html::grid('sort', 'ID', 'id', $sortDirection, $sortCriteria); ?>
+		</th>
+		<th scope="col">
+			<?php echo Html::grid('sort', 'CONTENT', 'content', $sortDirection, $sortCriteria); ?>
+		</th>
+		<th scope="col">
+			<?php echo Html::grid('sort', 'AUTHOR', 'author', $sortDirection, $sortCriteria); ?>
+		</th>
+		<th scope="col">
+			<?php echo Html::grid('sort', 'CREATED', 'created', $sortDirection, $sortCriteria); ?>
+		</th>
+		<th scope="col">
+			<?php echo Html::grid('sort', 'APPROVED', 'approved', $sortDirection, $sortCriteria); ?>
+		</th>
+	</tr>
+</thead>

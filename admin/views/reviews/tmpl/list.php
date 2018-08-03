@@ -33,19 +33,39 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('toolReviewsList');
+$this->js('adminForm');
 
+$component = $this->option;
+$controller = $this->controller;
+$filters = $this->filters;
+$permissions = $this->permissions;
+$sortCriteria = $filters['sort'];
+$sortDirection = $filters['sort_Dir'];
+$toolbarTitle = $this->title;
 $reviews = $this->reviews;
+
+$reviewsListUrl = Route::url(
+	"/administrator/index.php?option=$component&controller=$controller"
+);
+
+Toolbar::title($toolbarTitle);
+
 ?>
 
-<ol id="tool-reviews-list">
+<form action="<?php echo $reviewsListUrl; ?>" method="post" name="adminForm">
+
 	<?php
-		foreach ($reviews as $review)
-		{
-			$this->view('_tool_info_review')
-				->set('review', $review)
-				->set('user', $review->user())
-				->display();
-		}
+		$this->view('_reviews_list')
+			->set('sortCriteria', $sortCriteria)
+			->set('sortDirection', $sortDirection)
+			->set('reviews', $reviews)
+			->display();
 	?>
-</ol>
+
+	<?php echo Html::input('token'); ?>
+
+	<!-- Filtering dependencies -->
+	<input type="hidden" name="filter_order" value="<?php echo $sortCriteria; ?>" />
+	<input type="hidden" name="filter_order_Dir" value="<?php echo $sortDirection; ?>" />
+
+</form>

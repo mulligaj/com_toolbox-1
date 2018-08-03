@@ -201,7 +201,6 @@ class Tools extends AdminController
 		}
 	}
 
-
 	/*
 	 * Handles successful update of a tools published status
 	 *

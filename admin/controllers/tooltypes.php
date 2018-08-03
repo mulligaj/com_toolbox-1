@@ -119,7 +119,7 @@ class ToolTypes extends AdminController
 	}
 
 	/*
-	 * Redirects to types list w/ success message
+	 * Handles successful archival of tool type(s)
 	 *
 	 * @return   void
 	 */
@@ -133,7 +133,7 @@ class ToolTypes extends AdminController
 	}
 
 	/*
-	 * Redirects to types list w/ error message
+	 * Handles failed archival of tool type(s)
 	 *
 	 * @return   void
 	 */

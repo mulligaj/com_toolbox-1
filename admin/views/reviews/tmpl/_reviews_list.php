@@ -33,19 +33,40 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('toolReviewsList');
-
+$sortCriteria = $this->sortCriteria;
+$sortDirection = $this->sortDirection;
 $reviews = $this->reviews;
 ?>
 
-<ol id="tool-reviews-list">
+<table class="adminlist">
 	<?php
-		foreach ($reviews as $review)
-		{
-			$this->view('_tool_info_review')
-				->set('review', $review)
-				->set('user', $review->user())
-				->display();
-		}
+		$this->view('_reviews_list_header')
+			->set('sortCriteria', $sortCriteria)
+			->set('sortDirection', $sortDirection)
+			->display();
 	?>
-</ol>
+
+	<tfoot>
+		<tr>
+			<td colspan="7"><?php echo $reviews->pagination; ?></td>
+		</tr>
+	</tfoot>
+
+	<tbody>
+		<?php
+			$k = 0;
+			$i = 0;
+			foreach ($reviews as $review):
+
+				$this->view('_review_row')
+					->set('i', $i)
+					->set('k', $k)
+					->set('review', $review)
+					->display();
+
+				$i++;
+				$k = 1 - $k;
+			endforeach;
+		?>
+	</tbody>
+</table>
