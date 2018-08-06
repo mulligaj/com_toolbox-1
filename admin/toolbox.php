@@ -43,7 +43,7 @@ $submenuEntries = [
 	[
 		'text' => 'Reviews',
 		'url' => Route::url('index.php?option=com_toolbox&controller=reviews&task=list'),
-		'selectedTest' => ($controllerName === 'reviews' && $taskName === 'list')
+		'selectedTest' => ($controllerName === 'reviews')
 	],
 	[
 		'text' => 'Archived Tools',

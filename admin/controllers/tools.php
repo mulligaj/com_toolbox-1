@@ -35,9 +35,11 @@ namespace Components\Toolbox\Admin\Controllers;
 $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/admin/helpers/filterHelper.php";
+require_once "$toolboxPath/admin/helpers/redirectHelper.php";
 require_once "$toolboxPath/models/tool.php";
 
 use \Components\Toolbox\Admin\Helpers\FilterHelper;
+use \Components\Toolbox\Admin\Helpers\RedirectHelper;
 use \Components\Toolbox\Admin\Helpers\Permissions;
 use \Components\Toolbox\Models\Tool;
 use Hubzero\Component\AdminController;
@@ -369,34 +371,31 @@ class Tools extends AdminController
 	}
 
 	/*
-	 * Handles successful
+	 * Handles successful destruction of given tool record(s)
 	 *
 	 * @return   void
 	 */
 	protected function _successfulDestroy()
 	{
 		$forwardingUrl = Request::getString('forward');
+		$langKey = 'COM_TOOLBOX_TOOLS_DESTROY_SUCCESS';
+		$notificationType = 'passed';
 
-		App::redirect(
-			$forwardingUrl,
-			Lang::txt('COM_TOOLBOX_TOOLS_DESTROY_SUCCESS'),
-			'passed'
-		);
+		RedirectHelper::redirectAndNotify($forwardingUrl, $langKey, $notificationType);
 	}
 
 	/*
-	 * Redirects to archived tools list w/ error message
+	 * Handles failed destruction of given tool record(s)
 	 *
 	 * @return   void
 	 */
 	protected function _failedDestroy()
 	{
 		$originUrl = Request::getString('origin');
-		$errorMessage = Lang::txt('COM_TOOLBOX_TOOLS_DESTROY_FAILURE');
+		$langKey = 'COM_TOOLBOX_TOOLS_DESTROY_FAILURE';
+		$notificationType = 'error';
 
-		Notify::error($errorMessage);
-
-		App::redirect($originUrl);
+		RedirectHelper::redirectAndNotify($originUrl, $langKey, $notificationType);
 	}
 
 }

@@ -35,9 +35,11 @@ namespace Components\Toolbox\Admin\Controllers;
 $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/admin/helpers/filterHelper.php";
+require_once "$toolboxPath/admin/helpers/redirectHelper.php";
 require_once "$toolboxPath/models/toolType.php";
 
 use \Components\Toolbox\Admin\Helpers\FilterHelper;
+use \Components\Toolbox\Admin\Helpers\RedirectHelper;
 use \Components\Toolbox\Admin\Helpers\Permissions;
 use \Components\Toolbox\Models\ToolType;
 use Hubzero\Component\AdminController;
@@ -129,7 +131,7 @@ class ToolTypes extends AdminController
 		$langKey = 'COM_TOOLBOX_TYPES_ARCHIVE_SUCCESS';
 		$notificationType = 'passed';
 
-		$this->_redirectAndNotify($forwardingUrl, $langKey, $notificationType);
+		RedirectHelper::redirectAndNotify($forwardingUrl, $langKey, $notificationType);
 	}
 
 	/*
@@ -143,7 +145,7 @@ class ToolTypes extends AdminController
 		$langKey = 'COM_TOOLBOX_TYPES_ARCHIVE_FAILURE';
 		$notificationType = 'error';
 
-		$this->_redirectAndNotify($originUrl, $langKey, $notificationType);
+		RedirectHelper::redirectAndNotify($originUrl, $langKey, $notificationType);
 	}
 
 	/*
@@ -290,7 +292,7 @@ class ToolTypes extends AdminController
 		$langKey = 'COM_TOOLBOX_TYPES_UNARCHIVE_SUCCESS';
 		$notificationType = 'passed';
 
-		$this->_redirectAndNotify($forwardingUrl, $langKey, $notificationType);
+		RedirectHelper::redirectAndNotify($forwardingUrl, $langKey, $notificationType);
 	}
 
 	/*
@@ -304,24 +306,7 @@ class ToolTypes extends AdminController
 		$langKey = 'COM_TOOLBOX_TYPES_UNARCHIVE_FAILURE';
 		$notificationType = 'error';
 
-		$this->_redirectAndNotify($originUrl, $langKey, $notificationType);
-	}
-
-	/*
-	 * Redirects user to a given URL and displays a message
-	 *
-	 * @param    text   $url                URL to redirect user to
-	 * @param    text   $messageKey         Lang key of message to show user
-	 * @param    text   $notificationType   Type of notification to display
-	 * @return   void
-	 */
-	protected function _redirectAndNotify($url, $messageKey, $notificationType)
-	{
-		App::redirect(
-			$url,
-			Lang::txt($messageKey),
-			$notificationType
-		);
+		RedirectHelper::redirectAndNotify($originUrl, $langKey, $notificationType);
 	}
 
 	/*

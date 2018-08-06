@@ -50,6 +50,11 @@ $reviewsListUrl = Route::url(
 
 Toolbar::title($toolbarTitle);
 
+if ($permissions->get('core.manage'))
+{
+	Toolbar::deleteList(Lang::txt('COM_TOOLBOX_REVIEWS_DESTROY_CONFIRM'), 'destroy');
+}
+
 ?>
 
 <form action="<?php echo $reviewsListUrl; ?>" method="post" name="adminForm">
@@ -67,5 +72,15 @@ Toolbar::title($toolbarTitle);
 	<!-- Filtering dependencies -->
 	<input type="hidden" name="filter_order" value="<?php echo $sortCriteria; ?>" />
 	<input type="hidden" name="filter_order_Dir" value="<?php echo $sortDirection; ?>" />
+
+	<!-- Toolbar dependencies -->
+	<input type="hidden" name="controller" value="<?php echo $controller; ?>" />
+	<input type="hidden" name="option" value="<?php echo $component ?>" />
+	<input type="hidden" name="boxchecked" value="0" />
+	<input type="hidden" name="task" value="list" />
+
+	<!-- Redirect dependencies -->
+	<input type="hidden" name="origin" value="<?php echo $reviewsListUrl; ?>" />
+	<input type="hidden" name="forward" value="<?php echo $reviewsListUrl; ?>" />
 
 </form>

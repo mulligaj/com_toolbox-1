@@ -35,12 +35,15 @@ namespace Components\Toolbox\Admin\Controllers;
 $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/admin/helpers/filterHelper.php";
+require_once "$toolboxPath/admin/helpers/redirectHelper.php";
 require_once "$toolboxPath/models/review.php";
 
 use \Components\Toolbox\Admin\Helpers\FilterHelper;
+use \Components\Toolbox\Admin\Helpers\RedirectHelper;
 use \Components\Toolbox\Admin\Helpers\Permissions;
 use \Components\Toolbox\Models\Review;
 use Hubzero\Component\AdminController;
+use Hubzero\Database\Query;
 
 class Reviews extends AdminController
 {
@@ -176,6 +179,205 @@ class Reviews extends AdminController
 		);
 
 		App::redirect($reviewsListUrl);
+	}
+
+	/*
+	 * Destroys the given review(s)
+	 *
+	 * @return   void
+	 */
+	public function destroyTask()
+	{
+		Request::checkToken();
+
+		$reviewIds = Request::getArray('reviewIds');
+
+		$reviewTable = (new Review())->getTableName();
+
+		$destroyQuery = (new Query())
+			->delete($reviewTable)
+			->whereIn('id', $reviewIds);
+
+		$reviewsDestroyed = $destroyQuery->execute();
+
+		if ($reviewsDestroyed)
+		{
+			$this->_successfulDestroy();
+		}
+		else
+		{
+			$this->_failedDestroy();
+		}
+	}
+
+	/*
+	 * Handles successful destruction of given review(s)
+	 *
+	 * @return   void
+	 */
+	protected function _successfulDestroy()
+	{
+		$forwardingUrl = Request::getString('forward');
+		$langKey = 'COM_TOOLBOX_REVIEWS_DESTROY_SUCCESS';
+		$notificationType = 'passed';
+
+		RedirectHelper::redirectAndNotify($forwardingUrl, $langKey, $notificationType);
+	}
+
+	/*
+	 * Handles failed destruction of given review(s)
+	 *
+	 * @return   void
+	 */
+	protected function _failedDestroy()
+	{
+		$originUrl = Request::getString('origin');
+		$langKey = 'COM_TOOLBOX_REVIEWS_DESTROY_FAILURE';
+		$notificationType = 'error';
+
+		RedirectHelper::redirectAndNotify($originUrl, $langKey, $notificationType);
+	}
+
+	/*
+	 * Renders the review details page
+	 *
+	 * @return   void
+	 */
+	public function showTask()
+	{
+		$permissions = Permissions::getActions();
+		$reviewId = Request::getInt('id');
+
+		$review = Review::oneOrFail($reviewId);
+
+		$this->view
+			->set('permissions', $permissions)
+			->set('review', $review)
+			->set('title', static::$_toolbarTitle)
+			->display();
+	}
+
+	/*
+	 * Updates given review
+	 *
+	 * @return   void
+	 */
+	public function saveTask()
+	{
+		$review = $this->_updateReview();
+
+		if ($review->save())
+		{
+			$this->_successfulSave();
+		}
+		else
+		{
+			$reviewId = $review->get('id');
+			$this->_failedSave($reviewId);
+		}
+	}
+
+	/*
+	 * Handles the successful save submission of a review record
+	 *
+	 * @return   void
+	 */
+	protected function _successfulSave()
+	{
+		$forwardingUrl = Route::url(
+			'/administrator/index.php?option=com_toolbox&controller=reviews&task=list'
+		);
+		$langKey = 'COM_TOOLBOX_REVIEWS_SAVE_SUCCESS';
+		$notificationType = 'passed';
+
+		RedirectHelper::redirectAndNotify($forwardingUrl, $langKey, $notificationType);
+	}
+
+	/*
+	 * Handles the failed save submission of a review record
+	 *
+	 * @param    int    $reviewId   ID of given review
+	 * @return   void
+	 */
+	protected function _failedSave($reviewId)
+	{
+		$forwardingUrl = Route::url(
+			"/administrator/index.php?option=com_toolbox&controller=reviews&task=show&id=$reviewId"
+		);
+		$langKey = 'COM_TOOLBOX_REVIEWS_SAVE_FAILURE';
+		$notificationType = 'error';
+
+		RedirectHelper::redirectAndNotify($forwardingUrl, $langKey, $notificationType);
+	}
+
+	/*
+	 * Updates given review and returns user to review detail page
+	 *
+	 * @return   void
+	 */
+	public function applyTask()
+	{
+		$review = $this->_updateReview();
+		$reviewId = $review->get('id');
+
+		if ($review->save())
+		{
+			$this->_successfulApply($reviewId);
+		}
+		else
+		{
+			$this->_failedApply($reviewId);
+		}
+	}
+
+	/*
+	 * Handles the successful apply submission of a review record
+	 *
+	 * @param    int    $reviewId   ID of given review
+	 * @return   void
+	 */
+	protected function _successfulApply($reviewId)
+	{
+		$forwardingUrl = Route::url(
+			"/administrator/index.php?option=com_toolbox&controller=reviews&task=show&id=$reviewId"
+		);
+		$langKey = 'COM_TOOLBOX_REVIEWS_SAVE_SUCCESS';
+		$notificationType = 'passed';
+
+		RedirectHelper::redirectAndNotify($forwardingUrl, $langKey, $notificationType);
+	}
+
+	/*
+	 * Handles the failed apply submission of a review record
+	 *
+	 * @param    int    $reviewId   ID of given review
+	 * @return   void
+	 */
+	protected function _failedApply($reviewId)
+	{
+		$forwardingUrl = Route::url(
+			"/administrator/index.php?option=com_toolbox&controller=reviews&task=show&id=$reviewId"
+		);
+		$langKey = 'COM_TOOLBOX_REVIEWS_SAVE_FAILURE';
+		$notificationType = 'error';
+
+		RedirectHelper::redirectAndNotify($forwardingUrl, $langKey, $notificationType);
+	}
+
+	/*
+	 * Updates given review record
+	 *
+	 * @return   object
+	 */
+	protected function _updateReview()
+	{
+		$reviewId = Request::getInt('id');
+		$review = Review::oneOrFail($reviewId);
+		$reviewData = Request::getArray('review');
+
+		$review->set($reviewData);
+
+		return $review;
 	}
 
 }

@@ -49,10 +49,15 @@ $content = Str::truncate(
 );
 $created = $review->formattedCreated();
 $id = $review->get('id');
-$toolId = $review->subjectId();
-$approveUrl = Route::url("index.php?option=$component&controller=$controller&task=approve&id=$id");
-$unapproveUrl = Route::url("index.php?option=$component&controller=$controller&task=unapprove&id=$id");
-$url = Route::url("/toolbox/tools/$toolId/reviews");
+$approveUrl = Route::url(
+	"index.php?option=$component&controller=$controller&task=approve&id=$id"
+);
+$unapproveUrl = Route::url(
+	"index.php?option=$component&controller=$controller&task=unapprove&id=$id"
+);
+$url = Route::url(
+	"/administrator/index.php?option=$component&controller=$controller&task=show&id=$id"
+);
 $userId = $review->userId();
 $userName = $review->userName();
 ?>

@@ -53,7 +53,7 @@ Toolbar::title($toolbarTitle);
 if ($permissions->get('core.manage'))
 {
 	Toolbar::archiveList('unarchive');
-	Toolbar::deleteList('Permanently delete selected tools?', 'destroy');
+	Toolbar::deleteList(Lang::txt('COM_TOOLBOX_TOOLS_DESTROY_CONFIRM'), 'destroy');
 }
 
 ?>
