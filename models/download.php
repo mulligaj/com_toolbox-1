@@ -111,16 +111,19 @@ class Download extends Relational
 	 */
 	public function save()
 	{
+		$name = $this->get('name');
+
 		// determine which function to use to move file
 		$fileIoFunction = $this->isNew() ? 'store' : 'replace';
 
-		// add error & return if file was not moved
-		if (!DownloadsHelper::$fileIoFunction($this))
+		// add error if file was not moved
+		if ($this->get('error') || !DownloadsHelper::$fileIoFunction($this))
 		{
-			$name = $this->get('name');
-
 			$this->addError(Lang::txt('COM_TOOLBOX_DOWNLOAD_FILE_SAVE_ERROR', $name));
+		}
 
+		if (!empty($this->getErrors()))
+		{
 			return false;
 		}
 
