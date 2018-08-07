@@ -34,9 +34,11 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
+require_once "$toolboxPath/helpers/authHelper.php";
 require_once "$toolboxPath/helpers/fileUploadHelper.php";
 require_once "$toolboxPath/helpers/downloadsFactory.php";
 
+use Components\Toolbox\Helpers\AuthHelper;
 use Components\Toolbox\Helpers\FileUploadHelper;
 use Components\Toolbox\Helpers\DownloadsFactory;
 use Hubzero\Component\SiteController;
@@ -51,6 +53,7 @@ class Downloads extends SiteController
 	 */
 	public function updateTask()
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
 		Request::checkToken();
 
 		// get posted downloads data

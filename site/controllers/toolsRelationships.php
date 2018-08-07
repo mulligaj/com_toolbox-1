@@ -34,10 +34,12 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
+require_once "$toolboxPath/helpers/authHelper.php";
 require_once "$toolboxPath/helpers/toolsRelationshipsFactory.php";
 require_once "$toolboxPath/models/toolsRelationship.php";
 require_once "$toolboxPath/models/tool.php";
 
+use Components\Toolbox\Helpers\AuthHelper;
 use Components\Toolbox\Helpers\ToolsRelationshipsFactory;
 use Components\Toolbox\Models\ToolsRelationship;
 use Components\Toolbox\Models\Tool;
@@ -53,6 +55,7 @@ class ToolsRelationships extends SiteController
 	 */
 	public function updateTask()
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
 		Request::checkToken();
 
 		// get tool record to relate other tools to

@@ -38,6 +38,7 @@ $tagsPath = PATH_CORE . '/components/com_tags';
 require_once "$toolboxPath/models/link.php";
 require_once "$toolboxPath/models/tool.php";
 require_once "$toolboxPath/models/toolType.php";
+require_once "$toolboxPath/helpers/authHelper.php";
 require_once "$toolboxPath/helpers/query.php";
 require_once "$toolboxPath/helpers/toolsTypesFactory.php";
 require_once "$toolboxPath/helpers/toolUpdateHelper.php";
@@ -46,6 +47,7 @@ require_once "$tagsPath/models/tag.php";
 use Components\Toolbox\Models\Link;
 use Components\Toolbox\Models\Tool;
 use Components\Toolbox\Models\ToolType;
+use Components\Toolbox\Helpers\AuthHelper;
 use Components\Toolbox\Helpers\Query;
 use Components\Toolbox\Helpers\ToolsTypesFactory;
 use Components\Toolbox\Helpers\ToolUpdateHelper;
@@ -64,7 +66,7 @@ class Tools extends SiteController
 		'name', 'source', 'external_cost',
 		'duration', 'duration_hours', 'materials', 'notes', 'learning_objectives', 'links',
 		'kinesthetic', 'subgroup_size', 'published', 'archived',
-		'self_awareness', 'openness', 'communication', 'empathy', 'curiousity', 'worldview',
+		'self_awareness', 'openness', 'communication', 'empathy', 'curiosity', 'worldview',
 		'denial', 'polarization', 'minimization', 'acceptance',
 		'self', 'other', 'emotions', 'bridging',
 		'friendship', 'teamwork', 'mentorship', 'diversity_inclusion', 'leadership'
@@ -89,6 +91,8 @@ class Tools extends SiteController
 	 */
 	public function newTask($tool = null, $typeIds = [])
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
+
 		$tool = $tool ? $tool : Tool::blank();
 		$types = ToolType::all();
 
@@ -107,6 +111,7 @@ class Tools extends SiteController
 	 */
 	public function createTask()
 	{
+		AuthHelper::redirectUnlessAuthorized('core.create');
 		Request::checkToken();
 
 		// instantiate tool
@@ -145,6 +150,8 @@ class Tools extends SiteController
 	 */
 	public function editBasicTask($tool = null, $typeIds = null)
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
+
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);
 		$typeIds = $typeIds ? $typeIds : $tool->typeIds();
@@ -166,6 +173,8 @@ class Tools extends SiteController
 	 */
 	public function editFrameworksTask($tool = null)
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
+
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);
 
@@ -183,6 +192,8 @@ class Tools extends SiteController
 	 */
 	public function editObjectivesTask($tool = null)
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
+
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);
 
@@ -199,6 +210,8 @@ class Tools extends SiteController
 	 */
 	public function editLinksTask()
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
+
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
 
@@ -218,6 +231,8 @@ class Tools extends SiteController
 	 */
 	public function editDownloadsTask()
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
+
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
 
@@ -234,6 +249,8 @@ class Tools extends SiteController
 	 */
 	public function editRelatedTask()
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
+
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
 		$otherTools = Tool::otherTools([$tool])
@@ -263,6 +280,8 @@ class Tools extends SiteController
 	 */
 	public function editTagsTask()
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
+
 		$id = Request::getInt('id');
 		$tags = Tag::all();
 		$tool = Tool::one($id);
@@ -291,6 +310,7 @@ class Tools extends SiteController
 	 */
 	public function updateTask()
 	{
+		AuthHelper::redirectUnlessAuthorized('core.edit');
 		Request::checkToken();
 
 		// fetch tool record
@@ -426,7 +446,6 @@ class Tools extends SiteController
 
 		App::redirect($nextStepUrl);
 	}
-
 
 	/*
 	 * Process successful creation of a tool record

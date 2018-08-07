@@ -55,6 +55,12 @@ if ($permissions->get('core.manage'))
 	Toolbar::archiveList('archive');
 }
 
+if ($permissions->get('core.admin'))
+{
+	Toolbar::spacer();
+	Toolbar::preferences($component, '550');
+}
+
 ?>
 
 <form action="<?php echo $toolsListUrl; ?>" method="post" name="adminForm">
