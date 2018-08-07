@@ -45,20 +45,24 @@ class AuthHelper
 	protected static $_componentName = 'com_toolbox';
 
 	/*
+	 * Current user
+	 *
+	 * @var   object
+	 */
+	protected static $_currentUser = null;
+
+	/*
 	 * Redirects user unless the user is in the given access group
 	 *
-	 * @param    string   $accessGroup   User access group
+	 * @param    string   $action   Category of access
 	 * @return   void
 	 */
-	public static function redirectUnlessAuthorized($accessGroup)
+	public static function redirectUnlessAuthorized($action)
 	{
-		$component = static::$_componentName;
-		$currentUser = User::getCurrentUser();
+		static::redirectIfGuest();
 
-		static::redirectIfGuest($currentUser);
-
-		// check if user is in toolbox admin access group
-		$isAuthorized = User::authorize($accessGroup, $component);
+		$currentUser = static::_getCurrentUser();
+		$isAuthorized = static::currentIsAuthorized($action);
 
 		if (!$isAuthorized)
 		{
@@ -71,17 +75,16 @@ class AuthHelper
 	/*
 	 * Redirects to given URL unless the user is authenticated
 	 *
-	 * @param    object   $user   Hub user
 	 * @param    string   $url    URL to redirect to
 	 * @return   void
 	 */
-	public static function redirectIfGuest($user = null, $url = null)
+	public static function redirectIfGuest($url = null)
 	{
-		$user = $user ? $user : User::getCurrentUser();
+		$currentUser = static::_getCurrentUser();
 		$url = $url ? $url : '/login?' . static::_friendlyForward();
 		$langKey = 'COM_TOOLBOX_AUTH_REQUEST_SIGN_IN';
 
-		if ($user->isGuest())
+		if ($currentUser->isGuest())
 		{
 			static::redirect($url, $langKey);
 		}
@@ -99,6 +102,35 @@ class AuthHelper
 		$friendlyForwardParam = 'return=' . base64_encode($currentUrl);
 
 		return $friendlyForwardParam;
+	}
+
+	/*
+	 * Determines if current user has the given authorization
+	 *
+	 * @param    string   $action   Category of access
+	 * @return   bool
+	 */
+	public static function currentIsAuthorized($action)
+	{
+		$component = static::$_componentName;
+		$isAuthorized = User::authorize($action, $component);
+
+		return $isAuthorized;
+	}
+
+	/*
+	 * Returns current user
+	 *
+	 * @return   object
+	 */
+	protected static function _getCurrentUser()
+	{
+		if (static::$_currentUser === null)
+		{
+			$currentUser = User::getCurrentUser();
+		}
+
+		return $currentUser;
 	}
 
 	/*
