@@ -72,10 +72,10 @@ $tool = $this->tool;
 			</label>
 
 			<label>
-					<input name="tool[curiousity]" type="hidden" value="0">
-					<input name="tool[curiousity]" type="checkbox" value="1"
-						<?php if ($tool->get('curiousity')) echo 'checked'; ?>>
-					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_CURIOUSITY'); ?>
+					<input name="tool[curiosity]" type="hidden" value="0">
+					<input name="tool[curiosity]" type="checkbox" value="1"
+						<?php if ($tool->get('curiosity')) echo 'checked'; ?>>
+					<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_CURIOSITY'); ?>
 			</label>
 
 			<label>

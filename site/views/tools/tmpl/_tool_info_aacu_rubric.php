@@ -63,8 +63,8 @@ $tool = $this->tool;
 			<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_EMPATHY'); ?>
 		</div>
 		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('curiousity')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_CURIOUSITY'); ?>
+			<input type="checkbox" <?php if ($tool->get('curiosity')) echo 'checked'; ?> disabled>
+			<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_CURIOSITY'); ?>
 		</div>
 		<div class="checkbox-wrapper">
 			<input type="checkbox" <?php if ($tool->get('worldview')) echo 'checked'; ?> disabled>
