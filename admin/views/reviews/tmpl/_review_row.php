@@ -58,6 +58,7 @@ $unapproveUrl = Route::url(
 $url = Route::url(
 	"/administrator/index.php?option=$component&controller=$controller&task=show&id=$id"
 );
+$toolId = $review->subjectId();
 $userId = $review->userId();
 $userName = $review->userName();
 ?>
@@ -73,6 +74,10 @@ $userName = $review->userName();
 		<a href="<?php echo $url; ?>">
 			<?php echo $id; ?>
 		</a>
+	</td>
+
+	<td>
+		<?php echo $toolId; ?>
 	</td>
 
 	<td>

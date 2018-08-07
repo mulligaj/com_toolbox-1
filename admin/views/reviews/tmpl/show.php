@@ -57,7 +57,7 @@ if ($permissions->get('core.edit'))
 Toolbar::cancel();
 ?>
 
-<form action="<?php // AF: update ?>" method="post" name="adminForm" class="editform" id="item-form">
+<form action="" method="post" name="adminForm" class="editform" id="item-form">
 	<div class="grid">
 
 		<div class="col span7">

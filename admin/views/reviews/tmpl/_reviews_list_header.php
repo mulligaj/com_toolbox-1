@@ -43,6 +43,9 @@ $sortDirection = $this->sortDirection;
 		<th scope="col" class="priority-5">
 			<?php echo Html::grid('sort', 'ID', 'id', $sortDirection, $sortCriteria); ?>
 		</th>
+		<th scope="col" class="priority-5">
+			<?php echo Html::grid('sort', 'TOOL ID', 'scope_id', $sortDirection, $sortCriteria); ?>
+		</th>
 		<th scope="col">
 			<?php echo Html::grid('sort', 'CONTENT', 'content', $sortDirection, $sortCriteria); ?>
 		</th>
