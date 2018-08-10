@@ -1,106 +1,109 @@
+'use strict';
 
-var TOOLBOX = TOOLBOX || {}
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-TOOLBOX.toolSearchForm = TOOLBOX.toolSearchForm || {}
+var TOOLBOX = TOOLBOX || {};
 
-toolSearchForm = TOOLBOX.toolSearchForm
+TOOLBOX.toolSearchForm = TOOLBOX.toolSearchForm || {};
 
-toolSearchForm.CARET_CLASS = 'caret'
-toolSearchForm.CONTENT_CLASS = 'content'
-toolSearchForm.MASTER_CARET_ID = 'master-caret'
-toolSearchForm.ROW_CLASS = 'row'
+var toolSearchForm = TOOLBOX.toolSearchForm;
 
-toolSearchForm.init = () => {
+toolSearchForm.CARET_CLASS = 'caret';
+toolSearchForm.CONTENT_CLASS = 'content';
+toolSearchForm.MASTER_CARET_ID = 'master-caret';
+toolSearchForm.ROW_CLASS = 'row';
+
+toolSearchForm.init = function () {
 	// Collect row content wrappers
-	toolSearchForm.rowContentWrappers = $(`.${toolSearchForm.CONTENT_CLASS}`)
+	toolSearchForm.rowContentWrappers = $('.' + toolSearchForm.CONTENT_CLASS);
 
 	// Collect carets
-	toolSearchForm.carets = $(`.${toolSearchForm.CARET_CLASS}`)
+	toolSearchForm.carets = $('.' + toolSearchForm.CARET_CLASS);
 
 	// Collect master caret
-	toolSearchForm.masterCaret = $(`#${toolSearchForm.MASTER_CARET_ID}`)
-}
+	toolSearchForm.masterCaret = $('#' + toolSearchForm.MASTER_CARET_ID);
+};
 
-toolSearchForm.caretHandler = (e) => {
-	const $caret = $(e.target)
-	const $rowContent = toolSearchForm.findCaretRowContent($caret)
+toolSearchForm.caretHandler = function (e) {
+	var $caret = $(e.target);
+	var $rowContent = toolSearchForm.findCaretRowContent($caret);
 
 	if ($rowContent.is(':visible')) {
-		$rowContent.slideUp(null, () => {
-			toolSearchForm.toggleCaretDirection($caret, $rowContent)
-		})
+		$rowContent.slideUp(null, function () {
+			toolSearchForm.toggleCaretDirection($caret, $rowContent);
+		});
 	} else if ($rowContent.is(':hidden')) {
-		$rowContent.slideDown(null, () => {
-			toolSearchForm.toggleCaretDirection($caret, $rowContent)
-		})
+		$rowContent.slideDown(null, function () {
+			toolSearchForm.toggleCaretDirection($caret, $rowContent);
+		});
 	}
-}
+};
 
-toolSearchForm.toggleCaretDirection = ($caret, $rowContent = null) => {
+toolSearchForm.toggleCaretDirection = function ($caret) {
+	var $rowContent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
 	if (!$rowContent) {
-		$rowContent =	toolSearchForm.findCaretRowContent($caret)
+		$rowContent = toolSearchForm.findCaretRowContent($caret);
 	}
-	let html
+	var html = void 0;
 
 	if ($rowContent.is(':visible')) {
-		html = '&#x2303;'
+		html = '&#x2303;';
 	} else if ($rowContent.is(':hidden')) {
-		html = '&#x2304;'
+		html = '&#x2304;';
 	}
 
-	$caret.html(html)
-}
+	$caret.html(html);
+};
 
-toolSearchForm.findCaretRowContent = ($caret) => {
-	const $row = $caret.closest(`.${toolSearchForm.ROW_CLASS}`)
-	const $rowContent = $row.find(`.${toolSearchForm.CONTENT_CLASS}`)
+toolSearchForm.findCaretRowContent = function ($caret) {
+	var $row = $caret.closest('.' + toolSearchForm.ROW_CLASS);
+	var $rowContent = $row.find('.' + toolSearchForm.CONTENT_CLASS);
 
-	return $rowContent
-}
+	return $rowContent;
+};
 
-toolSearchForm.masterCaretHandler = (e) => {
-	const $masterCaret = toolSearchForm.masterCaret
-	const $rowContentWrappers = toolSearchForm.rowContentWrappers
-	const visibleKey = 'visible'
-	const rowsVisible = !!$masterCaret.data(visibleKey)
+toolSearchForm.masterCaretHandler = function (e) {
+	var $masterCaret = toolSearchForm.masterCaret;
+	var $rowContentWrappers = toolSearchForm.rowContentWrappers;
+	var visibleKey = 'visible';
+	var rowsVisible = !!$masterCaret.data(visibleKey);
 
 	if (rowsVisible) {
-		$rowContentWrappers.slideUp(null, () => {
-			toolSearchForm.toggleAllCarets('&#xf0d7;', {[visibleKey]: false})
-		})
+		$rowContentWrappers.slideUp(null, function () {
+			toolSearchForm.toggleAllCarets('&#xf0d7;', _defineProperty({}, visibleKey, false));
+		});
 	} else if (!rowsVisible) {
-		$rowContentWrappers.slideDown(null, () => {
-			toolSearchForm.toggleAllCarets('&#xf0d8;', {[visibleKey]: true})
-		})
+		$rowContentWrappers.slideDown(null, function () {
+			toolSearchForm.toggleAllCarets('&#xf0d8;', _defineProperty({}, visibleKey, true));
+		});
 	}
-}
+};
 
-toolSearchForm.toggleAllCarets = (html, data) => {
-	const $masterCaret = toolSearchForm.masterCaret
+toolSearchForm.toggleAllCarets = function (html, data) {
+	var $masterCaret = toolSearchForm.masterCaret;
 
-	$masterCaret.html(html)
-	$masterCaret.data(data)
-	toolSearchForm.toggleAllCaretDirections()
-}
+	$masterCaret.html(html);
+	$masterCaret.data(data);
+	toolSearchForm.toggleAllCaretDirections();
+};
 
-toolSearchForm.toggleAllCaretDirections = () => {
-	const $carets = toolSearchForm.carets
+toolSearchForm.toggleAllCaretDirections = function () {
+	var $carets = toolSearchForm.carets;
 
-	$.each($carets, (_, caret) => {
-		toolSearchForm.toggleCaretDirection($(caret))
-	})
-}
+	$.each($carets, function (_, caret) {
+		toolSearchForm.toggleCaretDirection($(caret));
+	});
+};
 
-$(document).ready(() => {
+$(document).ready(function () {
 
 	// initialize search form
-	toolSearchForm.init()
+	toolSearchForm.init();
 
 	// add click handler to carets
-	toolSearchForm.carets.click(toolSearchForm.caretHandler)
+	toolSearchForm.carets.click(toolSearchForm.caretHandler);
 
 	// add click handler to master caret
-	toolSearchForm.masterCaret.click(toolSearchForm.masterCaretHandler)
-
-})
-
+	toolSearchForm.masterCaret.click(toolSearchForm.masterCaretHandler);
+});

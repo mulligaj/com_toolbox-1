@@ -1,38 +1,53 @@
+'use strict';
 
-class Api {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	static get(url, data) {
-		const promise = this._makeApiRequest(url, data, 'GET')
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-		return promise
+var Api = function () {
+	function Api() {
+		_classCallCheck(this, Api);
 	}
 
-	static post(url, data) {
-		const promise = this._makeApiRequest(url, data, 'POST')
+	_createClass(Api, null, [{
+		key: 'get',
+		value: function get(url, data) {
+			var promise = this._makeApiRequest(url, data, 'GET');
 
-		return promise
-	}
+			return promise;
+		}
+	}, {
+		key: 'post',
+		value: function post(url, data) {
+			var promise = this._makeApiRequest(url, data, 'POST');
 
-	static delete(url, data) {
-		const promise = this._makeApiRequest(url, data, 'DELETE')
+			return promise;
+		}
+	}, {
+		key: 'delete',
+		value: function _delete(url, data) {
+			var promise = this._makeApiRequest(url, data, 'DELETE');
 
-		return promise
-	}
+			return promise;
+		}
+	}, {
+		key: '_makeApiRequest',
+		value: function _makeApiRequest(url, data, method) {
+			var baseApiUrl = '/api';
 
-	static _makeApiRequest(url, data, method) {
-		const baseApiUrl = '/api'
+			var promise = $.ajax({
+				url: '' + baseApiUrl + url,
+				data: data,
+				method: method
+			});
 
-		const promise = $.ajax({
-			url: `${baseApiUrl}${url}`,
-			data,
-			method
-		})
+			return promise;
+		}
+	}]);
 
-		return promise
-	}
+	return Api;
+}();
 
-}
+var TOOLBOX = TOOLBOX || {};
 
-var TOOLBOX = TOOLBOX || {}
-
-TOOLBOX.Api = Api
+TOOLBOX.Api = Api;
