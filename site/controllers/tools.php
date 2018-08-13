@@ -563,9 +563,13 @@ class Tools extends SiteController
 	 */
 	public function downloadsTask()
 	{
+		AuthHelper::redirectIfGuest();
+
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
+
+		$this->_authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -580,9 +584,13 @@ class Tools extends SiteController
 	 */
 	public function linksTask()
 	{
+		AuthHelper::redirectIfGuest();
+
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
+
+		$this->_authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -597,9 +605,13 @@ class Tools extends SiteController
 	 */
 	public function materialsTask()
 	{
+		AuthHelper::redirectIfGuest();
+
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
+
+		$this->_authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -614,9 +626,13 @@ class Tools extends SiteController
 	 */
 	public function notesTask()
 	{
+		AuthHelper::redirectIfGuest();
+
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
+
+		$this->_authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -631,9 +647,13 @@ class Tools extends SiteController
 	 */
 	public function objectivesTask()
 	{
+		AuthHelper::redirectIfGuest();
+
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
+
+		$this->_authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -648,9 +668,13 @@ class Tools extends SiteController
 	 */
 	public function frameworksTask()
 	{
+		AuthHelper::redirectIfGuest();
+
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
+
+		$this->_authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -665,10 +689,14 @@ class Tools extends SiteController
 	 */
 	public function relatedTask()
 	{
+		AuthHelper::redirectIfGuest();
+
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 		$relatedTools = $tool->relatedTools()->rows();
+
+		$this->_authorizeViewing($tool);
 
 		$this->view
 			->set('relatedTools', $relatedTools)
@@ -684,6 +712,8 @@ class Tools extends SiteController
 	 */
 	public function reviewsTask()
 	{
+		AuthHelper::redirectIfGuest();
+
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
@@ -691,6 +721,8 @@ class Tools extends SiteController
 			->whereEquals('approved', 1)
 			->paginated('limitstart', 'limit')
 			->rows();
+
+		$this->_authorizeViewing($tool);
 
 		$this->view
 			->set('reviews', $reviews)
@@ -718,6 +750,7 @@ class Tools extends SiteController
 
 		$tools = $query->findRecords(Tool::class)
 			->whereEquals('published', 1)
+			->whereEquals('archived', 0)
 			->paginated('limitstart', 'limit');
 
 		$this->view
@@ -726,6 +759,20 @@ class Tools extends SiteController
 			->set('types', $types);
 
 		$this->view->display();
+	}
+
+	/*
+	 * Redirects user if tool is unpublished per authorization
+	 *
+	 * @param    object   $tool   Tool instance
+	 * @return   void
+	 */
+	protected function _authorizeViewing($tool)
+	{
+		if (!$tool->get('published'))
+		{
+			AuthHelper::redirectUnlessAuthorized('core.unpublished');
+		}
 	}
 
 }

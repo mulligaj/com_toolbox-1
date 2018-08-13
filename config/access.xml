@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <access component="com_toolbox">
 	<section name="component">
+		<action name="core.unpublished" title="COM_TOOLBOX_ACCESS_VIEW_UNPUBLISHED" description="COM_TOOLBOX_ACCESS_VIEW_UNPUBLISHED_DESCRIPTION" />
 		<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
 		<action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
 		<action name="core.create" title="JACTION_CREATE" description="JACTION_CREATE_COMPONENT_DESC" />

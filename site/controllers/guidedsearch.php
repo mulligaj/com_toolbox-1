@@ -35,10 +35,12 @@ namespace Components\Toolbox\Site\Controllers;
 $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/models/toolType.php";
+require_once "$toolboxPath/helpers/authHelper.php";
 require_once "$toolboxPath/helpers/query.php";
 require_once "$toolboxPath/helpers/urlHelper.php";
 
 use Components\Toolbox\Models\ToolType;
+use Components\Toolbox\Helpers\AuthHelper;
 use Components\Toolbox\Helpers\Query;
 use Components\Toolbox\Helpers\UrlHelper;
 use Hubzero\Component\SiteController;
@@ -54,6 +56,18 @@ class Guidedsearch extends SiteController
 	protected $_taskMap = [
 		'__default' => 'type'
 	];
+
+	/*
+	 * Executes given task
+	 *
+	 * @return  void
+	 */
+	public function execute()
+	{
+		AuthHelper::redirectIfGuest();
+
+		parent::execute();
+	}
 
 	/*
 	 * Returns the tool type page of the guided search process

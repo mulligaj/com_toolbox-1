@@ -23,7 +23,7 @@ linksForm.createLinkPanel = function () {
 	linkPanel += '</label>';
 	linkPanel += '</div>';
 	linkPanel += '<div class="col span1 delete-wrapper">';
-	linkPanel += '<div class="btn btn-danger">?</div>';
+	linkPanel += '<div class="btn btn-danger">\u2716</div>';
 	linkPanel += '</div>';
 	linkPanel += '<input type="hidden" name="links[' + panelNumber + '][id]" value="0">';
 	linkPanel += '</div>';
