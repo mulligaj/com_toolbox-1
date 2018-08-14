@@ -85,7 +85,8 @@ class Guidedsearch extends SiteController
 		{
 			$query = Query::getCurrent();
 		}
-		$types = ToolType::all();
+		$types = ToolType::all()
+			->whereEquals('archived', 0);
 
 		$this->view
 			->set('query', $query)

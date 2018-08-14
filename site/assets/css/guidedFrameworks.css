@@ -12,11 +12,15 @@
 	margin: 0 0 3em 0;
 }
 
-input[type="submit"] {
+input[type='submit'] {
 	margin: 2em 0 0 0 !important;
 	max-width: 15%;
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
 	margin-top: 0 !important;
+}
+
+.fontcon {
+	font-family: 'Fontcons';
 }

@@ -50,6 +50,12 @@ $query = $this->query;
 		<span>
 			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_AACU_PROMPT'); ?>
 		</span>
+		<span class="required">
+			<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+		</span>
+		<span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_ONE_NOT_ALL'); ?>">
+			<span class="fontcon">&#xf075;</span>
+		</span>
 	</div>
 
 	<div class="col span11">

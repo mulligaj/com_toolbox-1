@@ -15,3 +15,7 @@ fieldset > .grid {
 	max-width: 15%;
 	float: left;
 }
+
+.fontcon {
+	font-family: "Fontcons";
+}

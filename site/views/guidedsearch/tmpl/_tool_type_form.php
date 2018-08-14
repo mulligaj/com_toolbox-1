@@ -73,6 +73,9 @@ $types = $this->types;
 			<span class="required">
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
 			</span>
+			<span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_KINESTHETIC'); ?>">
+				<span class="fontcon">&#xf075;</span>
+			</span>
 		</legend>
 
 		<div class="grid">

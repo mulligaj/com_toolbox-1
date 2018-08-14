@@ -49,6 +49,9 @@ $query = $this->query;
 		<span>
 			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_OTHER_PROMPT'); ?>
 		</span>
+		<span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_NONE_DEFAULTS_ALL'); ?>">
+			<span class="fontcon">&#xf075;</span>
+		</span>
 	</div>
 
 	<div class="col span11">
