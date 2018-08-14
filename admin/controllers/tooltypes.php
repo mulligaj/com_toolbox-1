@@ -36,14 +36,15 @@ $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/admin/helpers/filterHelper.php";
 require_once "$toolboxPath/admin/helpers/redirectHelper.php";
+require_once "$toolboxPath/admin/helpers/toolTypesFactory.php";
 require_once "$toolboxPath/models/toolType.php";
 
 use \Components\Toolbox\Admin\Helpers\FilterHelper;
-use \Components\Toolbox\Admin\Helpers\RedirectHelper;
 use \Components\Toolbox\Admin\Helpers\Permissions;
+use \Components\Toolbox\Admin\Helpers\RedirectHelper;
+use \Components\Toolbox\Admin\Helpers\ToolTypesFactory;
 use \Components\Toolbox\Models\ToolType;
 use Hubzero\Component\AdminController;
-use Hubzero\Database\Query;
 
 class ToolTypes extends AdminController
 {
@@ -108,15 +109,15 @@ class ToolTypes extends AdminController
 
 		$typesIds = Request::getArray('typesIds');
 
-		$typesUpdated = $this->_updateArchivedStatus($typesIds, 1);
+		$archiveResult = ToolTypesFactory::archive($typesIds);
 
-		if ($typesUpdated)
+		if ($archiveResult->succeeded())
 		{
 			$this->_successfulArchive();
 		}
 		else
 		{
-			$this->_failedArchive();
+			$this->_failedArchive($archiveResult);
 		}
 	}
 
@@ -137,15 +138,45 @@ class ToolTypes extends AdminController
 	/*
 	 * Handles failed archival of tool type(s)
 	 *
+	 * @param    object   $archiveResult   Result of archive update
 	 * @return   void
 	 */
-	protected function _failedArchive()
+	protected function _failedArchive($archiveResult)
 	{
 		$originUrl = Request::getString('origin');
-		$langKey = 'COM_TOOLBOX_TYPES_ARCHIVE_FAILURE';
-		$notificationType = 'error';
 
-		RedirectHelper::redirectAndNotify($originUrl, $langKey, $notificationType);
+		$failedSaves = $archiveResult->getFailedSaves();
+		$successfulSaves = $archiveResult->getSuccessfulSaves();
+
+		if (!empty($failedSaves))
+		{
+			$errorsMessage = Lang::txt('COM_TOOLBOX_TYPES_ARCHIVE_FAILURE') . '<br><br>';
+
+			foreach($failedSaves as $type)
+			{
+				$modelErrors = $type->get('description') . ' type: ';
+				$modelErrors .= implode($type->getErrors(), ', ');
+				$errorsMessage .= $modelErrors;
+				$errorsMessage .= '.<br><br>';
+			}
+
+			Notify::error($errorsMessage);
+		}
+
+		if (!empty($successfulSaves))
+		{
+			$successMessage = Lang::txt('COM_TOOLBOX_TYPES_ARCHIVE_SUCCESS');
+
+			$typeDescriptions = array_map(function($type) {
+				return $type->get('description');
+			}, $successfulSaves);
+
+			$successMessage .= implode($typeDescriptions, ', ') . '.';
+
+			Notify::success($successMessage);
+		}
+
+		App::redirect($originUrl);
 	}
 
 	/*
@@ -248,9 +279,9 @@ class ToolTypes extends AdminController
 
 		$typesIds = Request::getArray('typesIds');
 
-		$typesUpdated = $this->_updateArchivedStatus($typesIds, 0);
+		$typesUnarchived = ToolTypesFactory::unarchive($typesIds);
 
-		if ($typesUpdated)
+		if ($typesUnarchived)
 		{
 			$this->_successfulUnarchive();
 		}
@@ -258,27 +289,6 @@ class ToolTypes extends AdminController
 		{
 			$this->_failedUnarchive();
 		}
-	}
-
-	/*
-	 * Updates archived status of tool type(s) with given IDs
-	 *
-	 * @param    array   $typesIds         Set of types IDs
-	 * @param    int     $archivedStatus   Archived status to update to
-	 * @return   bool
-	 */
-	protected function _updateArchivedStatus($typesIds, $archivedStatus)
-	{
-		$typesTable = (new ToolType())->getTableName();
-
-		$updateQuery = (new Query())
-			->update($typesTable)
-			->set(['archived' => $archivedStatus])
-			->whereIn('id', $typesIds);
-
-		$typesUpdated = $updateQuery->execute();
-
-		return $typesUpdated;
 	}
 
 	/*

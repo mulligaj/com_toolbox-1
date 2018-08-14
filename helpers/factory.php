@@ -286,5 +286,4 @@ class Factory
 		return $errors;
 	}
 
-
 }

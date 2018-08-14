@@ -94,7 +94,8 @@ class Tools extends SiteController
 		AuthHelper::redirectUnlessAuthorized('core.edit');
 
 		$tool = $tool ? $tool : Tool::blank();
-		$types = ToolType::all();
+		$types = ToolType::all()
+			->whereEquals('archived', 0);
 
 		$this->view
 			->set('tool', $tool)
@@ -155,7 +156,8 @@ class Tools extends SiteController
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);
 		$typeIds = $typeIds ? $typeIds : $tool->typeIds();
-		$types = ToolType::all();
+		$types = ToolType::all()
+			->whereEquals('archived', 0);
 
 		$this->view
 			->set('tool', $tool)
@@ -740,7 +742,8 @@ class Tools extends SiteController
 	{
 		$query = Query::getCurrent();
 		$formQuery = $query;
-		$types = ToolType::all();
+		$types = ToolType::all()
+			->whereEquals('archived', 0);
 
 		if (Request::has('query'))
 		{

@@ -30,79 +30,67 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Toolbox\Models;
+namespace Components\Toolbox\Admin\Helpers;
 
 $toolboxPath = Component::path('com_toolbox');
 
-require_once "$toolboxPath/models/tool.php";
+require_once "$toolboxPath/helpers/factory.php";
+require_once "$toolboxPath/models/toolType.php";
 
-use Hubzero\Database\Relational;
+use Components\Toolbox\Helpers\Factory;
+use Components\Toolbox\Models\ToolType;
+use Hubzero\Database\Query;
 
-class ToolType extends Relational
+class ToolTypesFactory extends Factory
 {
 
 	/*
-	 * Records table
+	 * Model name
 	 *
 	 * @var string
 	 */
-	protected $table = '#__toolbox_tool_types';
+	protected static $modelName = 'Components\Toolbox\Models\ToolType';
 
 	/*
-	 * Attributes to be populated on record creation
+	 * Archives type(s) with given IDs
 	 *
-	 * @var array
+	 * @param    array   $typesIds   IDs of type records
+	 * @return
 	 */
-	public $initiate = ['created'];
-
-	/*
-	 * Attribute validation
-	 *
-	 * @var  array
-	 */
-	protected $rules = [
-		'description' => 'notempty'
-	];
-
-	/*
-	 * Performs any instance-specific setup
-	 *
-	 * @return   void
-	 */
-	public function setup()
+	public static function archive($typesIds)
 	{
-		$this->addRule('archived', function($attributes) {
-			$tools = $this->tools();
+		$types = self::getRecordsById($typesIds);
+		$typesArray = [];
 
-			if ($tools->count() > 0)
-			{
-				return Lang::txt('COM_TOOLBOX_TYPE_ARCHIVE_FAILURE_TOOLS');
-			}
+		foreach ($types as $type)
+		{
+			$type->set(['archived' => 1]);
+			$typesArray[] = $type;
+		}
 
-			return false;
-		});
+		$updateResult = self::save($typesArray);
+
+		return $updateResult;
 	}
 
 	/*
-	 * Returns associated tool record(s)
+	 * Unarchives type(s) with given IDs
 	 *
-	 * @return   object
+	 * @param    array   $typesIds   IDs of type records
+	 * @return   bool
 	 */
-	public function tools()
+	public static function unarchive($typesIds)
 	{
-		$toolModelName = 'Components\Toolbox\Models\Tool';
-		$associativeTable = '#__toolbox_tools_types';
-		$primaryKey = 'type_id';
-		$foreignKey = 'tool_id';
+		$typesTable = (new ToolType())->getTableName();
 
-		$tools = $this->manyToMany(
-			$toolModelName,
-			$associativeTable,
-			$primaryKey,
-			$foreignKey
-		);
+		$updateQuery = (new Query())
+			->update($typesTable)
+			->set(['archived' => 0])
+			->whereIn('id', $typesIds);
 
-		return $tools;
+		$typesUnarchived = $updateQuery->execute();
+
+		return $typesUnarchived;
 	}
 
 }

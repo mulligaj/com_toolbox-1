@@ -113,7 +113,10 @@ class Tools extends AdminController
 
 		$updateQuery = (new Query())
 			->update($toolTable)
-			->set(['archived' => 1])
+			->set([
+				'archived' => 1,
+				'published' => 0
+			])
 			->whereIn('id', $toolIds);
 
 		$toolsUpdated = $updateQuery->execute();

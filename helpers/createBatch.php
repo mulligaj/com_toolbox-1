@@ -94,6 +94,16 @@ class CreateBatch
 	}
 
 	/*
+	 * Getter for _successfulSaves
+	 *
+	 * @return   array
+	 */
+	public function getSuccessfulSaves()
+	{
+		return $this->_successfulSaves;
+	}
+
+	/*
 	 * Indicates that batch is a create batch
 	 *
 	 * @return bool
