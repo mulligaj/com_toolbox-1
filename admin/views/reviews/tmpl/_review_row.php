@@ -77,7 +77,9 @@ $userName = $review->userName();
 	</td>
 
 	<td>
-		<?php echo $toolId; ?>
+		<a href="<?php echo Route::url("/toolbox/tools/$toolId/reviews"); ?>">
+			<?php echo $toolId; ?>
+		</a>
 	</td>
 
 	<td>

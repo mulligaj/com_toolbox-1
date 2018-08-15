@@ -33,60 +33,48 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('infoTabs');
-$this->css('infoWrapper');
+use Hubzero\Utility\Number;
 
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
+$i = $this->i;
+$k = $this->k;
 
-$downloads = $tool->synchronizedDownloads();
-$page = $toolName;
-Document::setTitle($page);
+$component = $this->option;
+$controller = $this->controller;
+$download = $this->download;
+$id = $download->get('id');
+$toolId = $download->get('tool_id');
+$name = $download->get('name');
+$type = $download->get('type');
+$size = Number::formatBytes($download->get('size'));
 ?>
 
-<?php
-	$this->view('_breadcrumbs')
-		->set('current', ['Downloads' => '/downloads'])
-		->set('toolId', $toolId)
-		->set('toolName', $toolName)
-		->display();
+<tr class="<?php echo "row$k"; ?>">
 
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
+	<td>
+		<input class="record-checkbox" type="checkbox" name="downloadsIds[]" id="cb<?php echo $i; ?>"
+			value="<?php echo $id; ?>" />
+	</td>
 
-<section class="main section">
-	<div class="grid">
+	<td class="priority-5">
+		<?php echo $id; ?>
+	</td>
 
-	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Downloads')
-			->set('tool', $tool)
-			->display();
-	?>
+	<td>
+		<a href="<?php echo Route::url("/toolbox/tools/$toolId"); ?>">
+			<?php echo $toolId; ?>
+		</a>
+	</td>
 
-	<div class="col span12 info-wrapper">
-		<?php if ($downloads->count() > 0): ?>
-			<?php
-				$this->view('_tool_info_downloads_list')
-					->set('downloads', $downloads)
-					->display();
-			?>
-		<?php else: ?>
-			<div class="empty-info">
-				<?php echo Lang::txt('COM_TOOLBOX_DOWNLOAD_NO_DOWNLOADS'); ?>
-			</div>
-		<?php endif; ?>
-	</div>
+	<td>
+		<?php echo $name; ?>
+	</td>
 
-	<?php
-			$this->view('_edit_link')
-				->set('attribute', 'downloads')
-				->set('toolId', $toolId)
-				->display();
-	?>
+	<td>
+		<?php echo $type; ?>
+	</td>
 
-	</div>
-</section>
+	<td>
+		<?php echo $size; ?>
+	</td>
+
+</tr>

@@ -1,0 +1,61 @@
+<article>
+	<h1><span>Desynchronized Downloads</span></h1>
+
+	<ul class="nav">
+		<li><a href="#overview">Overview</a></li>
+		<li><a href="#resolution">Handling Desynchronized Downloads</a></li>
+	</ul>
+
+	<section id="overview">
+		<h2><span>Overview</span></h2>
+
+		<p>
+			A download becomes desynchronized when a user attempts to delete a download, but the system fails to delete the record and recover the file associated with the download record. Although the system was not able to properly recover the file, it is possible that the file can be recovered by a developer.
+		</p>
+	</section>
+
+	<section id="resolution">
+		<h2><span>Handling Desynchronized Downloads</span></h2>
+
+		<p>
+			To recover a desynchronized file, follow the steps below.
+		</p>
+
+		<ol>
+			<li>Establish an ssh connection with hubicl.org</li>
+
+			<li>
+				Determine where download files are moved during the destruction process<sup>1</sup>
+			</li>
+
+			<li>
+				Navigate to the temporary directory and locate the file
+			</li>
+
+			<li>
+				Relocate the file using the destination schema<sup>2</sup>
+			</li>
+
+			<li>
+				Confirm that the file can be successfully downloaded via the tool downloads page
+			</li>
+
+			<li>
+				Update the desynchronized status of the download via the administrator Desynchronized Downloads list
+			</li>
+		</ol>
+
+		<div>
+			<p>
+					<sup>1</sup>Temporary file directory can be found in <code>/app/com_toolbox/helpers/downloadsHelper.php::_getGarbageDirectory</code>
+			</p>
+			<p>
+					<sup>2</sup><code>&lt;toolbox downloads path<sup>3</sup>&gt;/&lt;tool ID&gt;/</code>
+			</p>
+			<p>
+					<sup>3</sup>Toolbox downloads path can be found in <code>/app/com_toolbox/helpers/downloadsHelper.php::getDownloadsPath</code>
+			</p>
+		</div>
+	</section>
+
+</article>

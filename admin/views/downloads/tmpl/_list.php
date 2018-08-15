@@ -33,60 +33,40 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('infoTabs');
-$this->css('infoWrapper');
-
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
-
-$downloads = $tool->synchronizedDownloads();
-$page = $toolName;
-Document::setTitle($page);
+$sortCriteria = $this->sortCriteria;
+$sortDirection = $this->sortDirection;
+$downloads = $this->downloads;
 ?>
 
-<?php
-	$this->view('_breadcrumbs')
-		->set('current', ['Downloads' => '/downloads'])
-		->set('toolId', $toolId)
-		->set('toolName', $toolName)
-		->display();
-
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
+<table class="adminlist">
 	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Downloads')
-			->set('tool', $tool)
+		$this->view('_list_header')
+			->set('sortCriteria', $sortCriteria)
+			->set('sortDirection', $sortDirection)
 			->display();
 	?>
 
-	<div class="col span12 info-wrapper">
-		<?php if ($downloads->count() > 0): ?>
-			<?php
-				$this->view('_tool_info_downloads_list')
-					->set('downloads', $downloads)
+	<tfoot>
+		<tr>
+			<td colspan="7"><?php echo $downloads->pagination; ?></td>
+		</tr>
+	</tfoot>
+
+	<tbody>
+		<?php
+			$k = 0;
+			$i = 0;
+			foreach ($downloads as $download):
+
+				$this->view('_row')
+					->set('i', $i)
+					->set('k', $k)
+					->set('download', $download)
 					->display();
-			?>
-		<?php else: ?>
-			<div class="empty-info">
-				<?php echo Lang::txt('COM_TOOLBOX_DOWNLOAD_NO_DOWNLOADS'); ?>
-			</div>
-		<?php endif; ?>
-	</div>
 
-	<?php
-			$this->view('_edit_link')
-				->set('attribute', 'downloads')
-				->set('toolId', $toolId)
-				->display();
-	?>
-
-	</div>
-</section>
+				$i++;
+				$k = 1 - $k;
+			endforeach;
+		?>
+	</tbody>
+</table>

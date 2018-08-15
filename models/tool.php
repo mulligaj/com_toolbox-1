@@ -235,6 +235,21 @@ class Tool extends Relational
 	}
 
 	/*
+	 * Returns associated Download records that are synchornized
+	 *
+	 * @return   object
+	 */
+	public function synchronizedDownloads()
+	{
+		$downloads = $this->downloads();
+
+		$synchronizedDownloads = $downloads
+			->whereEquals('desynchronized', 0);
+
+		return $synchronizedDownloads;
+	}
+
+	/*
 	 * Returns associated Download records
 	 *
 	 * @return   object
@@ -243,7 +258,7 @@ class Tool extends Relational
 	{
 		$downloadModelName = 'Components\Toolbox\Models\Download';
 
-		$downloads = $this->oneToMany($downloadModelName, 'tool_id')->rows();
+		$downloads = $this->oneToMany($downloadModelName, 'tool_id');
 
 		return $downloads;
 	}

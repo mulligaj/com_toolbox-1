@@ -52,7 +52,7 @@ Toolbar::title($toolbarTitle);
 
 if ($permissions->get('core.manage'))
 {
-	Toolbar::archiveList('unarchive');
+	Toolbar::archiveList('unarchive', Lang::txt('COM_TOOLBOX_COMMON_UNARCHIVE'));
 	//Toolbar::deleteList('Permanently delete selected types?', 'destroy');
 }
 

@@ -42,40 +42,36 @@ $permissions = $this->permissions;
 $sortCriteria = $filters['sort'];
 $sortDirection = $filters['sort_Dir'];
 $toolbarTitle = $this->title;
-$tools = $this->tools;
+$downloads = $this->downloads;
 
-$archivedToolsListUrl = Route::url(
-	"/administrator/index.php?option=$component&controller=$controller&task=archived"
+$downloadsListUrl = Route::url(
+	"/administrator/index.php?option=$component&controller=$controller"
 );
 
 Toolbar::title($toolbarTitle);
 
 if ($permissions->get('core.manage'))
 {
-	Toolbar::archiveList('unarchive', Lang::txt('COM_TOOLBOX_COMMON_UNARCHIVE'));
-	Toolbar::deleteList(Lang::txt('COM_TOOLBOX_TOOLS_DESTROY_CONFIRM'), 'destroy');
+	Toolbar::appendButton(
+		'Confirm',
+		Lang::txt('COM_TOOLBOX_DOWNLOADS_SYNCHRONIZE_CONFIRM'),
+		'archive',
+		Lang::txt('COM_TOOLBOX_COMMON_SYNCHRONIZE'),
+	 	'synchronize'
+	);
+	Toolbar::spacer();
 }
 
+Toolbar::help('downloads');
 ?>
 
-<form action="<?php echo $archivedToolsListUrl; ?>" method="post" name="adminForm">
-
-	<fieldset id="filter-bar">
-		<label for="filter_search"><?php echo Lang::txt('JSEARCH_FILTER'); ?>:</label>
-		<input type="text" name="search" id="filter_search" value="<?php echo $this->escape($filters['search']); ?>" placeholder="..." />
-
-		<input type="submit" value="<?php echo "Search"; ?>" />
-		<button id="clear-search" type="button">
-			<?php echo Lang::txt('JSEARCH_FILTER_CLEAR'); ?>
-		</button>
-	</fieldset>
+<form action="<?php echo $downloadsListUrl; ?>" method="post" name="adminForm">
 
 	<?php
-		$this->view('_tool_list')
-			->set('showPublished', false)
+		$this->view('_list')
 			->set('sortCriteria', $sortCriteria)
 			->set('sortDirection', $sortDirection)
-			->set('tools', $tools)
+			->set('downloads', $downloads)
 			->display();
 	?>
 
@@ -89,10 +85,10 @@ if ($permissions->get('core.manage'))
 	<input type="hidden" name="controller" value="<?php echo $controller; ?>" />
 	<input type="hidden" name="option" value="<?php echo $component ?>" />
 	<input type="hidden" name="boxchecked" value="0" />
-	<input type="hidden" name="task" value="archived" />
+	<input type="hidden" name="task" value="list" />
 
 	<!-- Redirect dependencies -->
-	<input type="hidden" name="origin" value="<?php echo $archivedToolsListUrl; ?>" />
-	<input type="hidden" name="forward" value="<?php echo $archivedToolsListUrl; ?>" />
+	<input type="hidden" name="origin" value="<?php echo $downloadsListUrl; ?>" />
+	<input type="hidden" name="forward" value="<?php echo $downloadsListUrl; ?>" />
 
 </form>

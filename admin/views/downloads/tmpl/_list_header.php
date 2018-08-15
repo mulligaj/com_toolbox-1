@@ -33,60 +33,33 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('infoTabs');
-$this->css('infoWrapper');
-
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
-
-$downloads = $tool->synchronizedDownloads();
-$page = $toolName;
-Document::setTitle($page);
+$sortCriteria = $this->sortCriteria;
+$sortDirection = $this->sortDirection;
 ?>
 
-<?php
-	$this->view('_breadcrumbs')
-		->set('current', ['Downloads' => '/downloads'])
-		->set('toolId', $toolId)
-		->set('toolName', $toolName)
-		->display();
+<thead>
+	<tr>
+		<th><input type="checkbox" name="toggle" value="" /></th>
 
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
+		<th scope="col" class="priority-5">
+			<?php echo Html::grid('sort', 'ID', 'id', $sortDirection, $sortCriteria); ?>
+		</th>
 
-<section class="main section">
-	<div class="grid">
+		<th scope="col">
+			<?php echo Html::grid('sort', 'TOOL ID', 'tool_id', $sortDirection, $sortCriteria); ?>
+		</th>
 
-	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Downloads')
-			->set('tool', $tool)
-			->display();
-	?>
+		<th scope="col">
+			<?php echo Html::grid('sort', 'NAME', 'name', $sortDirection, $sortCriteria); ?>
+		</th>
 
-	<div class="col span12 info-wrapper">
-		<?php if ($downloads->count() > 0): ?>
-			<?php
-				$this->view('_tool_info_downloads_list')
-					->set('downloads', $downloads)
-					->display();
-			?>
-		<?php else: ?>
-			<div class="empty-info">
-				<?php echo Lang::txt('COM_TOOLBOX_DOWNLOAD_NO_DOWNLOADS'); ?>
-			</div>
-		<?php endif; ?>
-	</div>
+		<th scope="col">
+			<?php echo Html::grid('sort', 'TYPE', 'type', $sortDirection, $sortCriteria); ?>
+		</th>
 
-	<?php
-			$this->view('_edit_link')
-				->set('attribute', 'downloads')
-				->set('toolId', $toolId)
-				->display();
-	?>
+		<th scope="col">
+			<?php echo Html::grid('sort', 'SIZE', 'size', $sortDirection, $sortCriteria); ?>
+		</th>
 
-	</div>
-</section>
+	</tr>
+</thead>
