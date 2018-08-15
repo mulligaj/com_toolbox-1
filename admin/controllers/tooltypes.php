@@ -45,6 +45,7 @@ use \Components\Toolbox\Admin\Helpers\RedirectHelper;
 use \Components\Toolbox\Admin\Helpers\ToolTypesFactory;
 use \Components\Toolbox\Models\ToolType;
 use Hubzero\Component\AdminController;
+use Hubzero\Database\Query;
 
 class ToolTypes extends AdminController
 {
@@ -165,7 +166,7 @@ class ToolTypes extends AdminController
 
 		if (!empty($successfulSaves))
 		{
-			$successMessage = Lang::txt('COM_TOOLBOX_TYPES_ARCHIVE_SUCCESS');
+			$successMessage = Lang::txt('COM_TOOLBOX_TYPES_ARCHIVE_PARTIAL_SUCCESS');
 
 			$typeDescriptions = array_map(function($type) {
 				return $type->get('description');
@@ -326,6 +327,54 @@ class ToolTypes extends AdminController
 	 */
 	public function destroyTask()
 	{
+		Request::checkToken();
+
+		$typeIds = Request::getArray('typesIds');
+
+		$typeTable = (new ToolType())->getTableName();
+
+		$destroyQuery = (new Query())
+			->delete($typeTable)
+			->whereIn('id', $typeIds);
+
+		$typesDestroyed = $destroyQuery->execute();
+
+		if ($typesDestroyed)
+		{
+			$this->_successfulDestroy();
+		}
+		else
+		{
+			$this->_failedDestroy();
+		}
+	}
+
+	/*
+	 * Handles successful destruction of given type(s)
+	 *
+	 * @return   void
+	 */
+	protected function _successfulDestroy()
+	{
+		$forwardingUrl = Request::getString('forward');
+		$langKey = 'COM_TOOLBOX_TYPES_DESTROY_SUCCESS';
+		$notificationType = 'passed';
+
+		RedirectHelper::redirectAndNotify($forwardingUrl, $langKey, $notificationType);
+	}
+
+	/*
+	 * Handles failed destruction of given type(s)
+	 *
+	 * @return   void
+	 */
+	protected function _failedDestroy()
+	{
+		$originUrl = Request::getString('origin');
+		$langKey = 'COM_TOOLBOX_TYPES_DESTROY_FAILURE';
+		$notificationType = 'error';
+
+		RedirectHelper::redirectAndNotify($originUrl, $langKey, $notificationType);
 	}
 
 }
