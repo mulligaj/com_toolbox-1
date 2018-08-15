@@ -36,11 +36,13 @@ $toolboxPath = Component::path('com_toolbox');
 
 require_once "$toolboxPath/admin/helpers/filterHelper.php";
 require_once "$toolboxPath/admin/helpers/redirectHelper.php";
+require_once "$toolboxPath/admin/helpers/toolsFactory.php";
 require_once "$toolboxPath/models/tool.php";
 
 use \Components\Toolbox\Admin\Helpers\FilterHelper;
-use \Components\Toolbox\Admin\Helpers\RedirectHelper;
 use \Components\Toolbox\Admin\Helpers\Permissions;
+use \Components\Toolbox\Admin\Helpers\RedirectHelper;
+use \Components\Toolbox\Admin\Helpers\ToolsFactory;
 use \Components\Toolbox\Models\Tool;
 use Hubzero\Component\AdminController;
 use Hubzero\Database\Query;
@@ -355,21 +357,15 @@ class Tools extends AdminController
 
 		$toolIds = Request::getArray('toolIds');
 
-		$toolTable = (new Tool())->getTableName();
+		$destroyResult = ToolsFactory::destroyById($toolIds);
 
-		$destroyQuery = (new Query())
-			->delete($toolTable)
-			->whereIn('id', $toolIds);
-
-		$toolsDestroyed = $destroyQuery->execute();
-
-		if ($toolsDestroyed)
+		if ($destroyResult->succeeded())
 		{
 			$this->_successfulDestroy();
 		}
 		else
 		{
-			$this->_failedDestroy();
+			$this->_failedDestroy($destroyResult);
 		}
 	}
 
@@ -390,15 +386,45 @@ class Tools extends AdminController
 	/*
 	 * Handles failed destruction of given tool record(s)
 	 *
+	 * @param    object   $destroyResult   Result of attempting to destroy tool(s)
 	 * @return   void
 	 */
-	protected function _failedDestroy()
+	protected function _failedDestroy($destroyResult)
 	{
 		$originUrl = Request::getString('origin');
-		$langKey = 'COM_TOOLBOX_TOOLS_DESTROY_FAILURE';
-		$notificationType = 'error';
 
-		RedirectHelper::redirectAndNotify($originUrl, $langKey, $notificationType);
+		$failedDestroys = $destroyResult->getFailedDestroys();
+		$successfulDestroys = $destroyResult->getSuccessfulDestroys();
+
+		if (!empty($failedDestroys))
+		{
+			$errorsMessage = Lang::txt('COM_TOOLBOX_TOOLS_DESTROY_FAILURE') . '<br><br>';
+
+			foreach($failedDestroys as $tool)
+			{
+				$modelErrors = $tool->get('name') . ' tool: ';
+				$modelErrors .= implode($tool->getErrors(), ', ');
+				$errorsMessage .= $modelErrors;
+				$errorsMessage .= '.<br><br>';
+			}
+
+			Notify::error($errorsMessage);
+		}
+
+		if (!empty($successfulDestroys))
+		{
+			$successMessage = Lang::txt('COM_TOOLBOX_TOOLS_DESTROY_PARTIAL_SUCCESS');
+
+			$typeDescriptions = array_map(function($tool) {
+				return $tool->get('name');
+			}, $successfulDestroys);
+
+			$successMessage .= implode($typeDescriptions, ', ') . '.';
+
+			Notify::success($successMessage);
+		}
+
+		App::redirect($originUrl);
 	}
 
 }

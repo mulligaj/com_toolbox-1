@@ -35,11 +35,13 @@ namespace Components\Toolbox\Models;
 $toolboxPath = Component::path('com_toolbox');
 $tagsPath = Component::path('com_tags');
 
+require_once "$tagsPath/models/tag.php";
+require_once "$tagsPath/models/cloud.php";
 require_once "$toolboxPath/models/download.php";
 require_once "$toolboxPath/models/link.php";
 require_once "$toolboxPath/models/review.php";
-require_once "$tagsPath/models/tag.php";
-require_once "$tagsPath/models/cloud.php";
+require_once "$toolboxPath/models/toolsRelationship.php";
+require_once "$toolboxPath/models/toolsType.php";
 
 use Components\Tags\Models\Cloud;
 use Hubzero\Database\Relational;
@@ -155,6 +157,20 @@ class Tool extends Relational
 	}
 
 	/*
+	 * Returns associated type join records
+	 *
+	 * @return   object
+	 */
+	protected function _typeJoins()
+	{
+		$joinModelName = 'Components\Toolbox\Models\ToolsType';
+
+		$typeJoins = $this->oneToMany($joinModelName, 'tool_id');
+
+		return $typeJoins;
+	}
+
+	/*
 	 * Returns the IDs of related tool records
 	 *
 	 * @return   array
@@ -192,6 +208,34 @@ class Tool extends Relational
 		);
 
 		return $relatedTools;
+	}
+
+	/*
+	 * Returns tool join records where this tool is the origin tool
+	 *
+	 * @return   object
+	 */
+	protected function _toolOriginJoins()
+	{
+		$joinModelName = 'Components\Toolbox\Models\ToolsRelationship';
+
+		$toolJoins = $this->oneToMany($joinModelName, 'origin_id');
+
+		return $toolJoins;
+	}
+
+	/*
+	 * Returns tool join records where this tool is the related tool
+	 *
+	 * @return   object
+	 */
+	protected function _toolRelatedJoins()
+	{
+		$joinModelName = 'Components\Toolbox\Models\ToolsRelationship';
+
+		$toolJoins = $this->oneToMany($joinModelName, 'related_id');
+
+		return $toolJoins;
 	}
 
 	/*
@@ -235,6 +279,20 @@ class Tool extends Relational
 	}
 
 	/*
+	 * Returns tag join records
+	 *
+	 * @return   object
+	 */
+	protected function _tagJoins()
+	{
+		$joinModelName = 'Components\Tags\Models\Objct';
+
+		$tagJoins = $this->oneToMany($joinModelName, 'objectid');
+
+		return $tagJoins;
+	}
+
+	/*
 	 * Returns associated Download records that are synchornized
 	 *
 	 * @return   object
@@ -272,7 +330,7 @@ class Tool extends Relational
 	{
 		$linkModelName = 'Components\Toolbox\Models\Link';
 
-		$links = $this->oneToMany($linkModelName, 'tool_id')->rows();
+		$links = $this->oneToMany($linkModelName, 'tool_id');
 
 		return $links;
 	}
@@ -425,6 +483,50 @@ class Tool extends Relational
 		$scope = strtolower($modelName);
 
 		return $scope;
+	}
+
+	/*
+	 * Destroys tool and dependent associations
+	 *
+	 * @return   bool
+	 */
+	public function destroy()
+	{
+		$associations = $this->_getAllAssociations();
+
+		foreach ($associations as $associatedRecords)
+		{
+			$associatedRecords->destroyAll();
+		}
+
+		$toolDestroyed = parent::destroy();
+
+		return $toolDestroyed;
+	}
+
+	/*
+	 * Returns all associated records in the form of an array with a row object
+	 * per associated type
+	 *
+	 * @return   array
+	 */
+	protected function _getAllAssociations()
+	{
+		$associations = [];
+
+		$associations[] = $this->downloads();
+		$associations[] = $this->links();
+		$associations[] = $this->_tagJoins();
+		$associations[] = $this->_toolOriginJoins();
+		$associations[] = $this->_toolRelatedJoins();
+		$associations[] = $this->reviews();
+		$associations[] = $this->_typeJoins();
+
+		$associations = array_map(function($associatedType) {
+			return $associatedType->rows();
+		}, $associations);
+
+		return $associations;
 	}
 
 }

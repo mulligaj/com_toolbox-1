@@ -30,62 +30,24 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-// No direct access
-defined('_HZEXEC_') or die();
+namespace Components\Toolbox\Admin\Helpers;
 
-$this->css('infoTabs');
-$this->css('infoWrapper');
+$toolboxPath = Component::path('com_toolbox');
 
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
+require_once "$toolboxPath/helpers/factory.php";
+require_once "$toolboxPath/models/tool.php";
 
-$links = $tool->links()->rows();
-$page = $toolName;
-Document::setTitle($page);
-?>
+use Components\Toolbox\Helpers\Factory;
+use Components\Toolbox\Models\Tool;
 
-<?php
-	$this->view('_breadcrumbs')
-		->set('current', ['Links' => '/links'])
-		->set('toolId', $toolId)
-		->set('toolName', $toolName)
-		->display();
+class ToolsFactory extends Factory
+{
 
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
+	/*
+	 * Model name
+	 *
+	 * @var string
+	 */
+	protected static $modelName = 'Components\Toolbox\Models\Tool';
 
-<section class="main section">
-	<div class="grid">
-
-	<?php
-		$this->view('_tool_info_combined_header')
-			->set('current', 'Links')
-			->set('tool', $tool)
-			->display();
-	?>
-
-	<div class="col span12 info-wrapper">
-		<?php if ($links->count() > 0): ?>
-			<?php
-				$this->view('_tool_info_links_list')
-					->set('links', $links)
-					->display(); ?>
-		<?php else: ?>
-			<div class="empty-info">
-				<?php echo Lang::txt('COM_TOOLBOX_LINKS_NO_LINKS'); ?>
-			</div>
-		<?php endif; ?>
-	</div>
-
-	<?php
-			$this->view('_edit_link')
-				->set('attribute', 'links')
-				->set('toolId', $toolId)
-				->display();
-	?>
-
-	</div>
-</section>
+}

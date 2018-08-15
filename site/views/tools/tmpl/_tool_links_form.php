@@ -48,7 +48,7 @@ $controller = $this->controller;
 $option = $this->option;
 $tool = $this->tool;
 $toolId = $tool->get('id');
-$links = $tool->links();
+$links = $tool->links()->rows();
 $forwardUrl = Route::url(
 	"index.php?option=$option&controller=$controller&task=editdownloads&id=$toolId"
 );

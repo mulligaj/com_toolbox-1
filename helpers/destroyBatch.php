@@ -94,6 +94,16 @@ class DestroyBatch
 	}
 
 	/*
+	 * Getter for _successfulDestroys
+	 *
+	 * @return   array
+	 */
+	public function getSuccessfulDestroys()
+	{
+		return $this->_successfulDestroys;
+	}
+
+	/*
 	 * Indicates that batch is not a create batch
 	 *
 	 * @return bool
