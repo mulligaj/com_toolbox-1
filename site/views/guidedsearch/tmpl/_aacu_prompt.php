@@ -33,41 +33,22 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$fields = [
-	'self_awareness',
-	'openness',
-	'communication',
-	'empathy',
-	'curiosity',
-	'worldview'
-];
-$query = $this->query;
-?>
+$rubricLocalFilePath = '/site/media/toolbox/aacu_rubric.pdf';
+$rubricFullFilePath = PATH_APP . $rubricLocalFilePath;
+$rubricFileExists = file_exists($rubricFullFilePath);
 
-<div class="grid">
+if ($rubricFileExists)
+{
+	$aacuText = Lang::txt(
+		'COM_TOOLBOX_GUIDED_AACU_PROMPT_LINK',
+		"app$rubricLocalFilePath"
+	);
+}
+else
+{
+	$aacuText = Lang::txt('COM_TOOLBOX_GUIDED_AACU_PROMPT_TEXT');
+}
 
-	<div class="col span12">
-		<span>
-			<?php
-				$this->view('_aacu_prompt')
-					->display();
-			?>
-		</span>
-		<span class="required">
-			<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-		</span>
-		<span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_ONE_NOT_ALL'); ?>">
-			<span class="fontcon">&#xf075;</span>
-		</span>
-	</div>
-
-	<div class="col span11">
-		<?php
-			$this->view('_checkbox_list')
-				->set('fields', $fields)
-				->set('query', $query)
-				->display();
-		?>
-	</div>
-
-</div>
+echo Lang::txt('COM_TOOLBOX_GUIDED_AACU_PROMPT_START');
+echo $aacuText;
+echo Lang::txt('COM_TOOLBOX_GUIDED_AACU_PROMPT_END'); ?>
