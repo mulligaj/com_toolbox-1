@@ -24,3 +24,11 @@ input[type='checkbox'] {
 .fontcon {
 	font-family: 'Fontcons';
 }
+
+.text-tip {
+	color: #2F8DC9;
+}
+
+.bergs-tip {
+	border: 1;
+}

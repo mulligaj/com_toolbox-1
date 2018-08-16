@@ -33,35 +33,24 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$fields = [
-	'self',
-	'other',
-	'emotions',
-	'bridging'
-];
-$query = $this->query;
+$bergsLocalFilePath = '/site/media/toolbox/vande_berg_phase_training_program.jpg';
+$bergsFullFilePath = PATH_APP . $bergsLocalFilePath;
+$bergsFileExists = file_exists($bergsFullFilePath);
+$bergsUrl = Route::url("/app$bergsLocalFilePath");
 ?>
 
-<div class="grid">
+<?php echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROMPT_START'); ?>
 
-	<div class="col span12">
-		<span>
-			<?php $this->view('_bergs_prompt')
-				->display();
-			?>
-		</span>
-		<span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_NONE_DEFAULTS_ALL'); ?>">
-			<span class="fontcon">&#xf075;</span>
-		</span>
-	</div>
+<?php if ($bergsFileExists): ?>
+	<span class="hasTip text-tip"
+		title="<img class=&quot;bergs-tip&quot; src=&quot;<?php echo $bergsUrl; ?>&quot; alt=&quot;Dr. Michael Vande Berg's processes&quot; />">
+<?php endif; ?>
 
-	<div class="col span11">
-		<?php
-			$this->view('_checkbox_list')
-				->set('fields', $fields)
-				->set('query', $query)
-				->display();
-		?>
-	</div>
+<?php echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROMPT_TEXT'); ?>
 
-</div>
+<?php if ($bergsFileExists): ?>
+	</span>
+<?php endif; ?>
+
+<?php echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROMPT_END'); ?>
+
