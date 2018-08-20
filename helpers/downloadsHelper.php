@@ -89,7 +89,7 @@ class DownloadsHelper
 	}
 
 	/*
-	 * Moves file to garbage directory
+	 * Moves file to temporary directory
 	 *
 	 * @param    object   $download   Download instance
 	 * @return   bool
@@ -101,9 +101,9 @@ class DownloadsHelper
 
 		if (Filesystem::exists($path))
 		{
-			$garbagePath = static::_getGarbageDirectory() . $name;
+			$temporaryPath = static::temporaryDirectory() . $name;
 
-			$fileWasDestroyed = Filesystem::move($path, $garbagePath);
+			$fileWasDestroyed = Filesystem::move($path, $temporaryPath);
 		}
 		else
 		{
@@ -114,7 +114,7 @@ class DownloadsHelper
 	}
 
 	/*
-	 * Retrieves a file in the garbage directory
+	 * Retrieves a file in the temporary directory
 	 *
 	 * @param    object   $download   Given Download instance
 	 * @return   bool
@@ -123,11 +123,11 @@ class DownloadsHelper
 	{
 		$destination = $download->destinationPath();
 		$name = $download->get('name');
-		$garbagePath = static::_getGarbageDirectory() . $name;
+		$temporaryPath = static::temporaryDirectory() . $name;
 
-		if (Filesystem::exists($garbagePath))
+		if (Filesystem::exists($temporaryPath))
 		{
-			$recoverResult = Filesystem::move($garbagePath, $destination);
+			$recoverResult = Filesystem::move($temporaryPath, $destination);
 		}
 		else
 		{
@@ -138,15 +138,15 @@ class DownloadsHelper
 	}
 
 	/*
-	 * Returns path to the hub's temporary/ garbage directory
+	 * Returns path to the hub's temporary/ temporary directory
 	 *
 	 * @return   string
 	 */
-	protected static function _getGarbageDirectory()
+	public static function temporaryDirectory()
 	{
-		$garbageDirectory = '/tmp/';
+		$temporaryDirectory = '/tmp/';
 
-		return $garbageDirectory;
+		return $temporaryDirectory;
 	}
 
 	/*
@@ -157,7 +157,7 @@ class DownloadsHelper
 	public static function removeTemp($download)
 	{
 		$name = $download->get('name');
-		$tempPath = static::_getGarbageDirectory() . $name;
+		$tempPath = static::temporaryDirectory() . $name;
 
 		$deleteResult = static::_delete($tempPath);
 
@@ -210,11 +210,11 @@ class DownloadsHelper
 	 */
 	public static function unReplace($download)
 	{
-		$garbageDirectory = static::_getGarbageDirectory();
+		$temporaryDirectory = static::temporaryDirectory();
 		$name = $download->get('name');
 		$newFilePath = $download->destinationPath();
 		$newFileWasReplaced = Filesystem::move(
-			$garbageDirectory . $name, $newFilePath
+			$temporaryDirectory . $name, $newFilePath
 		);
 
 		if (!$newFileWasReplaced)
