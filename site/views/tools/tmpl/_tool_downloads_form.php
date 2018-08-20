@@ -34,6 +34,11 @@
 defined('_HZEXEC_') or die();
 
 $this->css('toolDownloadsForm');
+$this->js('jquery.fileuploader.js', 'system');
+$this->js('notify');
+$this->js('toolDownloadsForm');
+
+Html::behavior('core');
 
 $action = $this->action;
 $controller = $this->controller;
@@ -56,13 +61,13 @@ $originUrl = Route::url(
 			<?php echo Lang::txt('COM_TOOLBOX_NEW_DOWNLOADS_FIELDS'); ?>
 		</legend>
 
-		<div class="grid">
-			<div class="col span5">
-				<div id="file-uploader">
-					<h3>Select file(s) to upload:</h3>
+		<div id="file-uploader" class="grid">
+			<noscript>
+				<div class="col span5">
+					<h5>Select file(s) to upload:</h3>
 					<input type="file" name="downloads[]" multiple>
 				</div>
-			</div>
+			</noscript>
 		</div>
 	</fieldset>
 

@@ -80,13 +80,10 @@ $step = 'downloads';
 			<?php
 				$synchronizedDownloads = $tool->synchronizedDownloads()->rows();
 
-				if ($synchronizedDownloads->count() > 0)
-				{
-					$this->view('_tool_downloads_delete_form')
-						->set('downloads', $synchronizedDownloads)
-						->set('toolId', $toolId)
-						->display();
-				}
+				$this->view('_tool_downloads_delete_form')
+					->set('downloads', $synchronizedDownloads)
+					->set('toolId', $toolId)
+					->display();
 			?>
 		</div>
 

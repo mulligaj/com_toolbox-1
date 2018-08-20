@@ -47,7 +47,7 @@ $editDownloadsUrl = Route::url(
 );
 ?>
 
-<div class="grid">
+<div class="grid" id="delete-form">
 	<h3>Current Downloads:</h3>
 	<form action="<?php echo $formAction; ?>" method="POST">
 		<ul id="downloads">

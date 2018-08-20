@@ -37,14 +37,127 @@ $toolboxPath = Component::path('com_toolbox');
 require_once "$toolboxPath/helpers/authHelper.php";
 require_once "$toolboxPath/helpers/fileUploadHelper.php";
 require_once "$toolboxPath/helpers/downloadsFactory.php";
+require_once "$toolboxPath/helpers/downloadsHelper.php";
 
 use Components\Toolbox\Helpers\AuthHelper;
 use Components\Toolbox\Helpers\FileUploadHelper;
 use Components\Toolbox\Helpers\DownloadsFactory;
+use Components\Toolbox\Helpers\DownloadsHelper;
 use Hubzero\Component\SiteController;
+use Hubzero\Filesystem\Util\MimeType;
 
 class Downloads extends SiteController
 {
+
+	/*
+	 * Uploads file(s) via AJAX
+	 *
+	 * @return  string
+	 */
+	protected function ajaxUploadTask()
+	{
+		// get tool's ID
+		$toolId = Request::getInt('id');
+
+		// ensure tool ID is present
+		if (!$toolId)
+		{
+			echo json_encode(['errors' => Lang::txt('COM_TOOLBOX_DOWNLOAD_UPLOAD_TOOL_ID_MISSING')]);
+			return;
+		}
+
+		// get the file name & size
+		if (isset($_GET['qqfile']) && isset($_SERVER['CONTENT_LENGTH']))
+		{
+			$stream = true;
+			$name = $_GET['qqfile'];
+			$size = (int) $_SERVER['CONTENT_LENGTH'];
+		}
+		else
+		{
+			echo json_encode(['errors' => Lang::txt('COM_TOOLBOX_DOWNLOAD_UPLOAD_FILE_MISSING')]);
+			return;
+		}
+
+		// get file type
+		if (isset($_GET['qqfile']) && isset($_SERVER['CONTENT_TYPE']))
+		{
+			$type = $_SERVER['CONTENT_TYPE'];
+		}
+		else
+		{
+			$matches = [];
+
+			if (preg_match('/(\w+\z)/', $name, $matches))
+			{
+				$extension = $matches[0];
+			}
+
+			$type = MimeType::detectByFileExtension($extension);
+		}
+
+		// max upload size
+		$sizeLimit = $this->config->get('maxAllowed', 10000000);
+
+		// validate file size
+		if ($size == 0)
+		{
+			echo json_encode(['errors' => Lang::txt('COM_TOOLBOX_DOWNLOAD_UPLOAD_FILE_EMPTY')]);
+			return;
+		}
+		if ($size > $sizeLimit)
+		{
+			$max = preg_replace('/<abbr \w+=\\"\w+\\">(\w{1,3})<\\/abbr>/', '$1', Number::formatBytes($sizeLimit));
+			echo json_encode(['errors' => Lang::txt('COM_TOOLBOX_DOWNLOAD_UPLOAD_FILE_TOO_LARGE', $max)]);
+			return;
+		}
+
+		if ($stream)
+		{
+			// move file to expected temporary location
+			$temporaryDirectory = DownloadsHelper::writableTemp();
+			$temporaryLocation = "$temporaryDirectory/$name";
+			$temporaryFile = fopen($temporaryLocation, 'w');
+			$input = fopen('php://input', 'r');
+			$realSize = stream_copy_to_stream($input, $temporaryFile);
+			fclose($input);
+		}
+
+		$downloadData = [
+			'tool_id' => $toolId,
+			'name' => $name,
+			'type' => $type,
+			'size' => $size,
+			'tmp_name' => $temporaryLocation
+		];
+
+		$saveResult = DownloadsFactory::createOrUpdateMany([$downloadData]);
+
+		if ($saveResult->succeeded())
+		{
+			$download = $saveResult->getSuccessfulSaves()[0];
+			$downloadId = $download->get('id');
+			$toolId = $download->get('tool_id');
+
+			$response = json_encode([
+				'id' => $downloadId,
+				'success' => true,
+				'tool_id' => $toolId
+			]);
+		}
+		else
+		{
+			$download = $saveResult->getFailedSaves()[0];
+			$errors = $download->getErrors();
+
+			$response = json_encode([
+				'success' => false,
+				'errors'   => $errors
+			]);
+		}
+
+		echo $response;
+	}
 
 	/*
 	 * Updates download records
@@ -54,6 +167,12 @@ class Downloads extends SiteController
 	public function updateTask()
 	{
 		AuthHelper::redirectUnlessAuthorized('core.edit');
+
+		if (Request::has('qqfile'))
+		{
+			return $this->ajaxUploadTask();
+		}
+
 		Request::checkToken();
 
 		// get posted downloads data

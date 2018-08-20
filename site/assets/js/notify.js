@@ -104,7 +104,7 @@ var NotificationModal = function () {
 		value: function _addCloseButton($element) {
 			var $closeButton = $('<div>');
 
-			$closeButton.html('×');
+			$closeButton.html('&times;');
 			$closeButton.attr('id', 'close-notify');
 			$closeButton.css({
 				cursor: 'pointer',

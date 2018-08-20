@@ -40,7 +40,7 @@ $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');
 
-$links = $tool->links()->rows();
+$links = $tool->links()->rows(); // AF: implement method - filter out broken links
 $page = $toolName;
 Document::setTitle($page);
 ?>

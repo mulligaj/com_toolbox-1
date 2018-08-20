@@ -34,8 +34,10 @@ namespace Components\Toolbox\Api\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
+require_once "$toolboxPath/helpers/authHelper.php";
 require_once "$toolboxPath/models/link.php";
 
+use Components\Toolbox\Helpers\AuthHelper;
 use Components\Toolbox\Models\Link;
 use Hubzero\Component\ApiController;
 use Request;
@@ -65,7 +67,8 @@ class Linksv1_0 extends ApiController
 	 */
 	function destroyTask()
 	{
-		//$this->requiresAuthentication();
+		$this->requiresAuthentication();
+		AuthHelper::redirectUnlessAuthorized('core.edit');
 
 		$linkId = Request::getInt('id');
 		$link = Link::oneOrFail($linkId);

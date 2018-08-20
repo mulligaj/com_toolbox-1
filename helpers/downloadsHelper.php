@@ -225,4 +225,16 @@ class DownloadsHelper
 		return true;
 	}
 
+	/*
+	 * Returns path to a writable temporary directory
+	 *
+	 * @return   string
+	 */
+	public static function writableTemp()
+	{
+		$writableTemp = PATH_ROOT . '/app/tmp';
+
+		return $writableTemp;
+	}
+
 }
