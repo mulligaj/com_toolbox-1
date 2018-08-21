@@ -34,11 +34,11 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
-require_once "$toolboxPath/helpers/authHelper.php";
+require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/helpers/toolsTagsFactory.php";
 require_once "$toolboxPath/models/tool.php";
 
-use Components\Toolbox\Helpers\AuthHelper;
+use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Toolbox\Helpers\ToolsTagsFactory;
 use Components\Toolbox\Models\Tool;
 use Hubzero\Component\SiteController;
@@ -53,12 +53,13 @@ class ToolsTags extends SiteController
 	 */
 	public function updateTask()
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
 		Request::checkToken();
 
 		// get tool record to associate tags with
 		$toolId = Request::getInt('id');
 		$tool = Tool::one($toolId);
+
+		ToolAuthHelper::authorizeEditing($tool);
 
 		// get Tags IDs
 		$selectedTagsIds = Request::getArray('tagsIds');

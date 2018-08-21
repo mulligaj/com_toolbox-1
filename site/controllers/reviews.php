@@ -34,10 +34,10 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
-require_once "$toolboxPath/helpers/authHelper.php";
+require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/models/review.php";
 
-use Components\Toolbox\Helpers\AuthHelper;
+use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Toolbox\Models\Review;
 use Hubzero\Component\SiteController;
 
@@ -51,7 +51,7 @@ class Reviews extends SiteController
 	 */
 	public function saveTask()
 	{
-		AuthHelper::redirectIfGuest();
+		ToolAuthHelper::redirectIfGuest();
 		Request::checkToken();
 
 		// get posted review data

@@ -32,17 +32,11 @@
 
 namespace Components\Toolbox\Helpers;
 
+use App;
 use User;
 
 class AuthHelper
 {
-
-	/*
-	 * Toolbox component name
-	 *
-	 * @var   string
-	 */
-	protected static $_componentName = 'com_toolbox';
 
 	/*
 	 * Current user
@@ -52,12 +46,12 @@ class AuthHelper
 	protected static $_currentUser = null;
 
 	/*
-	 * Redirects user unless the user is in the given access group
+	 * Redirects user unless user has permission to take given action
 	 *
 	 * @param    string   $action   Category of access
 	 * @return   void
 	 */
-	public static function redirectUnlessAuthorized($action)
+	public static function redirectUnlessAuthorized($action, $url = null, $message = null)
 	{
 		static::redirectIfGuest();
 
@@ -66,9 +60,10 @@ class AuthHelper
 
 		if (!$isAuthorized)
 		{
-			$url = Route::url('/toolbox/tools');
+			$message = isset($message) ? $message : static::_getDefaultRedirectMessage();
+			$url = isset($url) ? $url : static::_getdefaultRedirectUrl();
 
-			static::redirect($url, 'COM_TOOLBOX_AUTH_ADMINS_ONLY');
+			static::redirect($url, $message);
 		}
 	}
 
@@ -81,12 +76,12 @@ class AuthHelper
 	public static function redirectIfGuest($url = null)
 	{
 		$currentUser = static::_getCurrentUser();
-		$url = $url ? $url : '/login?' . static::_friendlyForward();
-		$langKey = 'COM_TOOLBOX_AUTH_REQUEST_SIGN_IN';
+		$url = $url ? $url : static::_getDefaultGuestRedirectUrl();
+		$message = static::_getDefaultGuestRedirectMessage();
 
 		if ($currentUser->isGuest())
 		{
-			static::redirect($url, $langKey);
+			static::redirect($url, $message);
 		}
 	}
 
@@ -102,20 +97,6 @@ class AuthHelper
 		$friendlyForwardParam = 'return=' . base64_encode($currentUrl);
 
 		return $friendlyForwardParam;
-	}
-
-	/*
-	 * Determines if current user has the given authorization
-	 *
-	 * @param    string   $action   Category of access
-	 * @return   bool
-	 */
-	public static function currentIsAuthorized($action)
-	{
-		$component = static::$_componentName;
-		$isAuthorized = User::authorize($action, $component);
-
-		return $isAuthorized;
 	}
 
 	/*
@@ -145,7 +126,7 @@ class AuthHelper
 	{
 		$message = Lang::txt($langKey);
 
-		\App::redirect($url, $message, $messageType);
+		App::redirect($url, $message, $messageType);
 	}
 
 }

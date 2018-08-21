@@ -38,7 +38,7 @@ $tagsPath = PATH_CORE . '/components/com_tags';
 require_once "$toolboxPath/models/link.php";
 require_once "$toolboxPath/models/tool.php";
 require_once "$toolboxPath/models/toolType.php";
-require_once "$toolboxPath/helpers/authHelper.php";
+require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/helpers/query.php";
 require_once "$toolboxPath/helpers/toolsTypesFactory.php";
 require_once "$toolboxPath/helpers/toolUpdateHelper.php";
@@ -47,8 +47,8 @@ require_once "$tagsPath/models/tag.php";
 use Components\Toolbox\Models\Link;
 use Components\Toolbox\Models\Tool;
 use Components\Toolbox\Models\ToolType;
-use Components\Toolbox\Helpers\AuthHelper;
 use Components\Toolbox\Helpers\Query;
+use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Toolbox\Helpers\ToolsTypesFactory;
 use Components\Toolbox\Helpers\ToolUpdateHelper;
 use Components\Tags\Models\Tag;
@@ -91,7 +91,7 @@ class Tools extends SiteController
 	 */
 	public function newTask($tool = null, $typeIds = [])
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
+		ToolAuthHelper::redirectUnlessAuthorized('core.create');
 
 		$tool = $tool ? $tool : Tool::blank();
 		$types = ToolType::all()
@@ -112,7 +112,7 @@ class Tools extends SiteController
 	 */
 	public function createTask()
 	{
-		AuthHelper::redirectUnlessAuthorized('core.create');
+		ToolAuthHelper::redirectUnlessAuthorized('core.create');
 		Request::checkToken();
 
 		// instantiate tool
@@ -151,13 +151,13 @@ class Tools extends SiteController
 	 */
 	public function editBasicTask($tool = null, $typeIds = null)
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
-
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);
 		$typeIds = $typeIds ? $typeIds : $tool->typeIds();
 		$types = ToolType::all()
 			->whereEquals('archived', 0);
+
+    ToolAuthHelper::authorizeEditing($tool);
 
 		$this->view
 			->set('tool', $tool)
@@ -175,10 +175,10 @@ class Tools extends SiteController
 	 */
 	public function editFrameworksTask($tool = null)
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
-
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);
+
+    ToolAuthHelper::authorizeEditing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -194,10 +194,10 @@ class Tools extends SiteController
 	 */
 	public function editObjectivesTask($tool = null)
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
-
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);
+
+    ToolAuthHelper::authorizeEditing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -212,10 +212,10 @@ class Tools extends SiteController
 	 */
 	public function editLinksTask()
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
-
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
+
+    ToolAuthHelper::authorizeEditing($tool);
 
 		$blankLink = Link::blank();
 
@@ -233,10 +233,10 @@ class Tools extends SiteController
 	 */
 	public function editDownloadsTask()
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
-
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
+
+    ToolAuthHelper::authorizeEditing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -251,12 +251,12 @@ class Tools extends SiteController
 	 */
 	public function editRelatedTask()
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
-
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
 		$otherTools = Tool::otherTools([$tool])
 			->sort('name');
+
+    ToolAuthHelper::authorizeEditing($tool);
 
 		if (Request::has('selectedToolsIds'))
 		{
@@ -282,11 +282,11 @@ class Tools extends SiteController
 	 */
 	public function editTagsTask()
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
-
 		$id = Request::getInt('id');
 		$tags = Tag::all();
 		$tool = Tool::one($id);
+
+    ToolAuthHelper::authorizeEditing($tool);
 
 		if (Request::has('selectedTagsIds'))
 		{
@@ -312,12 +312,13 @@ class Tools extends SiteController
 	 */
 	public function updateTask()
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
 		Request::checkToken();
 
 		// fetch tool record
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
+
+    ToolAuthHelper::authorizeEditing($tool);
 
 		// get posted tool data
 		$toolData = $this->_getSanitizedToolParams();
@@ -565,13 +566,13 @@ class Tools extends SiteController
 	 */
 	public function downloadsTask()
 	{
-		AuthHelper::redirectIfGuest();
+		ToolAuthHelper::redirectIfGuest();
 
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-		$this->_authorizeViewing($tool);
+    ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -586,13 +587,13 @@ class Tools extends SiteController
 	 */
 	public function linksTask()
 	{
-		AuthHelper::redirectIfGuest();
+		ToolAuthHelper::redirectIfGuest();
 
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-		$this->_authorizeViewing($tool);
+    ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -607,13 +608,13 @@ class Tools extends SiteController
 	 */
 	public function materialsTask()
 	{
-		AuthHelper::redirectIfGuest();
+		ToolAuthHelper::redirectIfGuest();
 
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-		$this->_authorizeViewing($tool);
+    ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -628,13 +629,13 @@ class Tools extends SiteController
 	 */
 	public function notesTask()
 	{
-		AuthHelper::redirectIfGuest();
+		ToolAuthHelper::redirectIfGuest();
 
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-		$this->_authorizeViewing($tool);
+    ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -649,13 +650,13 @@ class Tools extends SiteController
 	 */
 	public function objectivesTask()
 	{
-		AuthHelper::redirectIfGuest();
+		ToolAuthHelper::redirectIfGuest();
 
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-		$this->_authorizeViewing($tool);
+    ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -670,13 +671,13 @@ class Tools extends SiteController
 	 */
 	public function frameworksTask()
 	{
-		AuthHelper::redirectIfGuest();
+		ToolAuthHelper::redirectIfGuest();
 
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-		$this->_authorizeViewing($tool);
+    ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -691,14 +692,14 @@ class Tools extends SiteController
 	 */
 	public function relatedTask()
 	{
-		AuthHelper::redirectIfGuest();
+		ToolAuthHelper::redirectIfGuest();
 
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 		$relatedTools = $tool->relatedTools()->rows();
 
-		$this->_authorizeViewing($tool);
+    ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('relatedTools', $relatedTools)
@@ -714,7 +715,7 @@ class Tools extends SiteController
 	 */
 	public function reviewsTask()
 	{
-		AuthHelper::redirectIfGuest();
+		ToolAuthHelper::redirectIfGuest();
 
 		// retrieve given tool record
 		$toolId = Request::getInt('id');
@@ -724,7 +725,7 @@ class Tools extends SiteController
 			->paginated('limitstart', 'limit')
 			->rows();
 
-		$this->_authorizeViewing($tool);
+    ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('reviews', $reviews)
@@ -762,20 +763,6 @@ class Tools extends SiteController
 			->set('types', $types);
 
 		$this->view->display();
-	}
-
-	/*
-	 * Redirects user if tool is unpublished per authorization
-	 *
-	 * @param    object   $tool   Tool instance
-	 * @return   void
-	 */
-	protected function _authorizeViewing($tool)
-	{
-		if (!$tool->get('published'))
-		{
-			AuthHelper::redirectUnlessAuthorized('core.unpublished');
-		}
 	}
 
 }

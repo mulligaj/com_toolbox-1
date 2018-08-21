@@ -34,11 +34,13 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
-require_once "$toolboxPath/helpers/authHelper.php";
 require_once "$toolboxPath/helpers/linksFactory.php";
+require_once "$toolboxPath/helpers/toolAuthHelper.php";
+require_once "$toolboxPath/models/tool.php";
 
-use Components\Toolbox\Helpers\AuthHelper;
 use Components\Toolbox\Helpers\LinksFactory;
+use Components\Toolbox\Helpers\ToolAuthHelper;
+use Components\Toolbox\Models\Tool;
 use Hubzero\Component\SiteController;
 
 class Links extends SiteController
@@ -51,11 +53,13 @@ class Links extends SiteController
 	 */
 	public function updateTask()
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
 		Request::checkToken();
 
 		// get tool ID
 		$toolId = Request::getInt('id');
+    $tool = Tool::oneOrFail($toolId);
+
+		ToolAuthHelper::authorizeEditing($tool);
 
 		// get posted link(s) data
 		$linksData = Request::getArray('links');

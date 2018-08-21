@@ -100,7 +100,20 @@ class Link extends Relational
 			'Components\Toolbox\Models\Tool', 'tool_id', 'id'
 		)->rows();
 
-		return $this->tool;
+		return $tool;
+	}
+
+	/*
+	 * Returns associated tool's ID
+	 *
+	 * @return   int
+	 */
+	public function toolId()
+	{
+		$tool = $this->tool();
+    $toolId = $tool->get('id');
+
+		return $toolId;
 	}
 
 }

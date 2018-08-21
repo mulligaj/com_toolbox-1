@@ -33,7 +33,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-use Components\Toolbox\Helpers\AuthHelper;
+use Components\Toolbox\Helpers\ToolAuthHelper;
 
 $this->css('toolsList');
 
@@ -81,7 +81,7 @@ $types = $this->types;
 					->display();
 			?>
 
-			<?php if (AuthHelper::currentIsAuthorized('core.create')): ?>
+			<?php if (ToolAuthHelper::currentIsAuthorized('core.create')): ?>
 				<a href="<?php echo Route::url('/toolbox/tools/new'); ?>"
 					class="btn" id="create-tool">
 					<?php echo Lang::txt('COM_TOOLBOX_LIST_CREATE_NEW_TOOL'); ?>

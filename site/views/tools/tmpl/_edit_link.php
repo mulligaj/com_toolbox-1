@@ -33,7 +33,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-use Components\Toolbox\Helpers\AuthHelper;
+use Components\Toolbox\Helpers\ToolAuthHelper;
 
 $this->css('editLink');
 
@@ -48,11 +48,12 @@ $attributeEditMappings = [
 	'frameworks' => 'frameworks'
 ];
 $editStep = $attributeEditMappings[$attribute];
+$tool = $this->tool;
 $toolId = $this->toolId;
 $url = Route::url("/toolbox/tools/$toolId/edit$editStep");
 ?>
 
-<?php if (AuthHelper::currentIsAuthorized('core.edit')): ?>
+<?php if (ToolAuthHelper::authorizeEditing($tool)): ?>
 
 <a href="<?php echo $url; ?>" class="btn" id="edit-link">
 	<?php

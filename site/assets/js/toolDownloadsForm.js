@@ -133,12 +133,16 @@ downloadsForm._notifyUploadResult = function (response, fileName) {
 	if (uploadSucceeded) {
 		Notify.success('Upload(s) succeeded');
 	} else {
-		errorMessage = 'The following errors occurred while attempting to upload ' + fileName + ':<br/><br/>';
+    errorMessage = 'There was an error attempting to upload ' + fileName;
 		errors = response.errors;
 
-		errors.forEach(function (error) {
-			errorMessage += '&bull; ' + error + '<br/>';
-		});
+    if (errors && errors.length > 0) {
+      errorMessage = 'The following errors occurred while attempting to upload ' + fileName + ':<br/><br/>';
+
+      errors.forEach(function (error) {
+        errorMessage += '&bull; ' + error + '<br/>';
+      });
+    }
 
 		Notify.error(errorMessage);
 	}

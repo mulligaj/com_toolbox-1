@@ -505,6 +505,37 @@ class Tool extends Relational
 	}
 
 	/*
+	 * Returns ID of the associated User
+	 *
+	 * @return   int
+	 */
+	public function userId()
+	{
+		$user = $this->user()->rows();
+    $userId = $user->get('id');
+
+		return $userId;
+	}
+
+	/*
+	 * Returns associated User
+	 *
+	 * @return   object
+	 */
+	public function user()
+	{
+		$userModelName = 'Components\Toolbox\Models\ToolType';
+    $foreignKey = 'user_id';
+
+    $user = $this->belongsToOne(
+      $userModelName,
+      $foreignKey
+    );
+
+		return $user;
+	}
+
+	/*
 	 * Returns all associated records in the form of an array with a row object
 	 * per associated type
 	 *

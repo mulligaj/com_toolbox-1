@@ -84,6 +84,7 @@ Document::setTitle($page);
 	<?php
 			$this->view('_edit_link')
 				->set('attribute', 'related')
+				->set('tool', $tool)
 				->set('toolId', $toolId)
 				->display();
 	?>

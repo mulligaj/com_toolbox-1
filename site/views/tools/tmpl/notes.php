@@ -80,6 +80,7 @@ Document::setTitle($page);
 	<?php
 			$this->view('_edit_link')
 				->set('attribute', 'notes')
+				->set('tool', $tool)
 				->set('toolId', $toolId)
 				->display();
 	?>

@@ -34,15 +34,17 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
-require_once "$toolboxPath/helpers/authHelper.php";
+require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/helpers/fileUploadHelper.php";
 require_once "$toolboxPath/helpers/downloadsFactory.php";
 require_once "$toolboxPath/helpers/downloadsHelper.php";
+require_once "$toolboxPath/models/tool.php";
 
-use Components\Toolbox\Helpers\AuthHelper;
 use Components\Toolbox\Helpers\FileUploadHelper;
 use Components\Toolbox\Helpers\DownloadsFactory;
 use Components\Toolbox\Helpers\DownloadsHelper;
+use Components\Toolbox\Helpers\ToolAuthHelper;
+use Components\Toolbox\Models\Tool;
 use Hubzero\Component\SiteController;
 use Hubzero\Filesystem\Util\MimeType;
 
@@ -166,7 +168,10 @@ class Downloads extends SiteController
 	 */
 	public function updateTask()
 	{
-		AuthHelper::redirectUnlessAuthorized('core.edit');
+		// get tool
+		$toolId = Request::getInt('id');
+    $tool = Tool::oneOrFail($toolId);
+		ToolAuthHelper::authorizeEditing($tool);
 
 		if (Request::has('qqfile'))
 		{
@@ -177,9 +182,6 @@ class Downloads extends SiteController
 
 		// get posted downloads data
 		$downloadsData = $_FILES['downloads'];
-
-		// get tool's ID
-		$toolId = Request::getInt('id');
 
 		// collate downloads data
 		$downloadsData = FileUploadHelper::collateFilesData($downloadsData);
