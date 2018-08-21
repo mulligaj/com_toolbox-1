@@ -755,6 +755,7 @@ class Tools extends SiteController
 		$tools = $query->findRecords(Tool::class)
 			->whereEquals('published', 1)
 			->whereEquals('archived', 0)
+      ->order('name', 'asc')
 			->paginated('limitstart', 'limit');
 
 		$this->view

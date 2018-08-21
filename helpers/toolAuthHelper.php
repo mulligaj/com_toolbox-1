@@ -127,16 +127,31 @@ class ToolAuthHelper extends AuthHelper
    */
   public static function authorizeEditing($tool)
   {
+    $userCanEdit = static::userCanEdit($tool);
+
+    if (!$userCanEdit)
+    {
+      ToolAuthHelper::redirectUnlessAuthorized('core.edit');
+    }
+  }
+
+  /*
+   * Determines if user is authorized to edit given tool
+   *
+   * @param    object   $tool   Tool
+   * @return   void
+   */
+  public static function userCanEdit($tool)
+  {
     $canEdit = static::currentIsAuthorized('core.edit');
     $canEditOwn = static::currentIsAuthorized('core.edit.own');
     $ownsTool = $tool->get('user_id') == User::get('id');
 
-    if ($canEdit || ($canEditOwn && $ownsTool)) {
-      return true;
-    }
+    $userCanEdit = $canEdit || ($canEditOwn && $ownsTool);
 
-    ToolAuthHelper::redirectUnlessAuthorized('core.edit');
+    return $userCanEdit;
   }
+
 
   /*
    * Redirects user if not authorized to view given tool
