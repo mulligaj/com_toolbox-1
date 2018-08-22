@@ -33,6 +33,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('toolSearchForm');
 $this->js('toolsList');
 
 Html::behavior('core');
@@ -54,7 +55,12 @@ $resultsUrl = Route::url(
 
 	<div class="row">
 		<h4>
-			<?php echo Lang::txt('COM_TOOLBOX_LIST_SUBGROUP_SIZE'); ?>
+      <span>
+        <?php echo Lang::txt('COM_TOOLBOX_LIST_SUBGROUP_SIZE'); ?>
+        <span class="required">
+          <?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+        </span>
+      </span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
 
@@ -70,7 +76,12 @@ $resultsUrl = Route::url(
 
 	<div class="row">
 		<h4>
-			<?php echo Lang::txt('COM_TOOLBOX_LIST_EXTERNAL_COST'); ?>
+      <span>
+        <?php echo Lang::txt('COM_TOOLBOX_LIST_EXTERNAL_COST'); ?>
+        <span class="required">
+          <?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+        </span>
+      </span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
 
@@ -101,7 +112,12 @@ $resultsUrl = Route::url(
 
 	<div class="row">
 		<h4>
-			<?php echo Lang::txt('COM_TOOLBOX_LIST_DURATION_MINUTES'); ?>
+      <span>
+        <?php echo Lang::txt('COM_TOOLBOX_LIST_DURATION_MINUTES'); ?>
+        <span class="required">
+          <?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+        </span>
+      </span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
 
@@ -121,7 +137,12 @@ $resultsUrl = Route::url(
 
 	<div class="row">
 		<h4>
-			<?php echo Lang::txt('COM_TOOLBOX_LIST_TOOL_TYPE'); ?>
+      <span>
+        <?php echo Lang::txt('COM_TOOLBOX_LIST_TOOL_TYPE'); ?>
+        <span class="required">
+          <?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+        </span>
+      </span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
 
@@ -138,7 +159,12 @@ $resultsUrl = Route::url(
 
 	<div class="row">
 		<h4>
-			<?php echo Lang::txt('COM_TOOLBOX_LIST_KINESTHETIC'); ?>
+      <span>
+        <?php echo Lang::txt('COM_TOOLBOX_LIST_KINESTHETIC'); ?>
+        <span class="required">
+          <?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+        </span>
+      </span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
 
@@ -169,7 +195,15 @@ $resultsUrl = Route::url(
 
 	<div class="row">
 		<h4>
-			<?php echo Lang::txt('COM_TOOLBOX_LIST_AACU'); ?>
+      <span>
+        <?php echo Lang::txt('COM_TOOLBOX_LIST_AACU'); ?>
+        <span class="required">
+          <?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+        </span>
+        <span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_ONE_NOT_ALL'); ?>">
+          <span class="fontcon">&#xf075;</span>
+        </span>
+      </span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
 
@@ -201,7 +235,12 @@ $resultsUrl = Route::url(
 
 	<div class="row">
 		<h4>
-			<?php echo Lang::txt('COM_TOOLBOX_LIST_BERGS'); ?>
+      <span>
+        <?php echo Lang::txt('COM_TOOLBOX_LIST_BERGS'); ?>
+        <span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_NONE_DEFAULTS_ALL'); ?>">
+          <span class="fontcon">&#xf075;</span>
+        </span>
+      </span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
 
@@ -217,7 +256,12 @@ $resultsUrl = Route::url(
 
 	<div class="row">
 		<h4>
-			<?php echo Lang::txt('COM_TOOLBOX_LIST_OTHER'); ?>
+      <span>
+        <?php echo Lang::txt('COM_TOOLBOX_LIST_OTHER'); ?>
+        <span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_NONE_DEFAULTS_ALL'); ?>">
+          <span class="fontcon">&#xf075;</span>
+        </span>
+      </span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
 
