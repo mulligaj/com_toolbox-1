@@ -33,17 +33,20 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-use Hubzero\Utility\Str;
+//use Hubzero\Utility\Str;
+
+$this->css('toolRow');
 
 $maxStringLength = 21;
 $tool = $this->tool;
 $toolId = $tool->get('id');
-$toolName = Str::truncate($tool->get('name'), $maxStringLength, ['exact' => true]);
+//$toolName = Str::truncate($tool->get('name'), $maxStringLength, ['exact' => true]);
+$toolName = $tool->get('name');
 $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 ?>
 
 <li class="tool-row grid">
-	<div class="col span3">
+	<div class="col span3 title">
 		<a href="<?php echo $toolUrl; ?>">
 			<?php echo $toolName; ?>
 		</a>
