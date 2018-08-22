@@ -264,6 +264,27 @@ class Guidedsearch extends SiteController
 		}
 	}
 
+  /*
+   * Clears all current filters
+   *
+   * @return   void
+   */
+  public function clearAllTask()
+  {
+		Request::checkToken();
+
+    $newQuery = new Query();
+
+		if ($newQuery->save())
+		{
+			$this->_successfulUpdate();
+		}
+		else
+		{
+			$this->_failedUpdate($query);
+		}
+  }
+
 	/*
 	 * Process successful update of tool search query
 	 *

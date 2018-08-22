@@ -52,8 +52,12 @@ foreach ($breadcrumbs as $text => $url)
 	Pathway::append($text, $cumulativePath);
 }
 
-$formAction = Route::url(
-	"index.php?option=$this->option&controller=guidedsearch&task=updateAll"
+$guidedSearchUrl = "index.php?option=$this->option&controller=guidedsearch";
+$updateFormAction = Route::url(
+	"$guidedSearchUrl&task=updateAll"
+);
+$clearFormAction = Route::url(
+	"$guidedSearchUrl&task=clearAll"
 );
 $query = $this->query;
 $toolListUrl = Route::url(
@@ -75,15 +79,23 @@ $types = $this->types;
 		<div id="search-form" class="col span2">
 			<?php
 				$this->view('_tool_search_form')
-					->set('action', $formAction)
+					->set('action', $updateFormAction)
 					->set('query', $query)
 					->set('types', $types)
 					->display();
 			?>
 
+      <form action="<?php echo $clearFormAction; ?>" method="post">
+        <input type="submit" class="btn btn-danger clear" id="clear-filters"
+          value="<?php echo Lang::txt('COM_TOOLBOX_LIST_CLEAR_FILTERS'); ?>" />
+        <input type="hidden" name="forward" value="<?php echo $toolListUrl; ?>" />
+        <input type="hidden" name="origin" value="<?php echo $toolListUrl; ?>" />
+        <?php echo Html::input('token'); ?>
+      </form>
+
 			<?php if (ToolAuthHelper::currentIsAuthorized('core.create')): ?>
 				<a href="<?php echo Route::url('/toolbox/tools/new'); ?>"
-					class="btn" id="create-tool">
+					class="btn clear" id="create-tool">
 					<?php echo Lang::txt('COM_TOOLBOX_LIST_CREATE_NEW_TOOL'); ?>
 				</a>
 			<?php endif; ?>

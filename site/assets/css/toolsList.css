@@ -64,9 +64,16 @@ input[type="number"] {
 	padding: 0 0 0 1em;
 }
 
+.btn.clear {
+	margin: 1.25em 0 0 0;
+}
+
+#clear-filters {
+	width: 100%;
+}
+
 #create-tool {
 	background-color: #0069d9;
 	color: #fff;
-	margin: 1.25em 0 0 0;
 	width: 100%;
 }
