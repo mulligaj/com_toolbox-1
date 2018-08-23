@@ -104,6 +104,19 @@ class CreateBatch
 	}
 
 	/*
+	 * Returns number indicating how many records were saved
+	 *
+	 * @return   int
+	 */
+	public function successfulSavesCount()
+	{
+		$successfulSaves = $this->getSuccessfulSaves();
+		$successfulSavesCount = count($successfulSaves);
+
+		return $successfulSavesCount;
+	}
+
+	/*
 	 * Indicates that batch is a create batch
 	 *
 	 * @return bool

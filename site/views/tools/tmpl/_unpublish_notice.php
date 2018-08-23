@@ -33,59 +33,22 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
+require_once Component::path('com_toolbox') . '/helpers/toolAuthHelper.php';
 
-$page = Lang::txt('COM_TOOLBOX_UPDATE_LINKS_HEADER_CONTENT');
-Document::setTitle($page);
+use Components\Toolbox\Helpers\ToolAuthHelper;
 
-$blankLink = $this->blankLink;
-$formAction = Route::url(
-	"index.php?option=$this->option&controller=links&task=update&id=$toolId"
-);
-$step = 'links';
+$this->css('toolUnpublishNotice');
+
+$userIsAdmin = ToolAuthHelper::currentIsAuthorized('core.admin');
+$toolPublished = $this->toolPublished;
+$toolWouldUnpublish = $toolPublished && !$userIsAdmin;
+
 ?>
 
-<?php
-	$this->view('_breadcrumbs')
-		->set('current', ['Edit Links' => 'editlinks'])
-		->set('toolId', $toolId)
-		->set('toolName', $toolName)
-		->display();
+<?php if ($toolWouldUnpublish): ?>
 
-	$this->view('_header')
-		->set('text', $page)
-		->display();
-?>
+<div id="unpublish-notice" class="col span12">
+	<?php echo Lang::txt('COM_TOOLBOX_TIP_WOULD_UNPUBLISH'); ?>
+</div>
 
-<?php
-	$this->view('_unpublish_notice')
-		->set('toolPublished', $tool->get('published'))
-		->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
-		<?php
-			$this->view('_steps_nav')
-				->set('current', 'Links')
-				->set('toolId', $toolId)
-				->display();
-		?>
-
-		<div class="col span10 offset1">
-			<?php
-				$this->view('_tool_links_form')
-					->set('action', $formAction)
-					->set('blankLink', $blankLink)
-					->set('step', $step)
-					->set('tool', $tool)
-					->display();
-			?>
-		</div>
-
-	</div>
-</section>
-
+<?php endif; ?>

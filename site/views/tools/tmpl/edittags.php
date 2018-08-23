@@ -60,6 +60,12 @@ $step = 'tags';
 		->display();
 ?>
 
+<?php
+	$this->view('_unpublish_notice')
+		->set('toolPublished', $tool->get('published'))
+		->display();
+?>
+
 <section class="main section">
 	<div class="grid">
 

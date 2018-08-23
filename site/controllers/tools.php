@@ -157,7 +157,7 @@ class Tools extends SiteController
 		$types = ToolType::all()
 			->whereEquals('archived', 0);
 
-    ToolAuthHelper::authorizeEditing($tool);
+		ToolAuthHelper::authorizeEditing($tool);
 
 		$this->view
 			->set('tool', $tool)
@@ -178,7 +178,7 @@ class Tools extends SiteController
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);
 
-    ToolAuthHelper::authorizeEditing($tool);
+		ToolAuthHelper::authorizeEditing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -197,7 +197,7 @@ class Tools extends SiteController
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);
 
-    ToolAuthHelper::authorizeEditing($tool);
+		ToolAuthHelper::authorizeEditing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -215,7 +215,7 @@ class Tools extends SiteController
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
 
-    ToolAuthHelper::authorizeEditing($tool);
+		ToolAuthHelper::authorizeEditing($tool);
 
 		$blankLink = Link::blank();
 
@@ -236,7 +236,7 @@ class Tools extends SiteController
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
 
-    ToolAuthHelper::authorizeEditing($tool);
+		ToolAuthHelper::authorizeEditing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -256,7 +256,7 @@ class Tools extends SiteController
 		$otherTools = Tool::otherTools([$tool])
 			->sort('name');
 
-    ToolAuthHelper::authorizeEditing($tool);
+		ToolAuthHelper::authorizeEditing($tool);
 
 		if (Request::has('selectedToolsIds'))
 		{
@@ -286,7 +286,7 @@ class Tools extends SiteController
 		$tags = Tag::all();
 		$tool = Tool::one($id);
 
-    ToolAuthHelper::authorizeEditing($tool);
+		ToolAuthHelper::authorizeEditing($tool);
 
 		if (Request::has('selectedTagsIds'))
 		{
@@ -318,7 +318,7 @@ class Tools extends SiteController
 		$id = Request::getInt('id');
 		$tool = Tool::one($id);
 
-    ToolAuthHelper::authorizeEditing($tool);
+		ToolAuthHelper::authorizeEditing($tool);
 
 		// get posted tool data
 		$toolData = $this->_getSanitizedToolParams();
@@ -332,6 +332,12 @@ class Tools extends SiteController
 
 		// get tools type associations
 		$typeIds = Request::has('types') ? Request::getArray('types') : null;
+
+		// unpublish tool if user not an admin
+		if (!ToolAuthHelper::currentIsAuthorized('core.admin'))
+		{
+			$toolData['published'] = 0;
+		}
 
 		// set tool attributes
 		$tool->set($toolData);
@@ -593,7 +599,7 @@ class Tools extends SiteController
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-    ToolAuthHelper::authorizeViewing($tool);
+		ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -614,7 +620,7 @@ class Tools extends SiteController
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-    ToolAuthHelper::authorizeViewing($tool);
+		ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -635,7 +641,7 @@ class Tools extends SiteController
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-    ToolAuthHelper::authorizeViewing($tool);
+		ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -656,7 +662,7 @@ class Tools extends SiteController
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-    ToolAuthHelper::authorizeViewing($tool);
+		ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -677,7 +683,7 @@ class Tools extends SiteController
 		$toolId = Request::getInt('id');
 		$tool = Tool::oneOrFail($toolId);
 
-    ToolAuthHelper::authorizeViewing($tool);
+		ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('tool', $tool);
@@ -699,7 +705,7 @@ class Tools extends SiteController
 		$tool = Tool::oneOrFail($toolId);
 		$relatedTools = $tool->relatedTools()->rows();
 
-    ToolAuthHelper::authorizeViewing($tool);
+		ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('relatedTools', $relatedTools)
@@ -725,7 +731,7 @@ class Tools extends SiteController
 			->paginated('limitstart', 'limit')
 			->rows();
 
-    ToolAuthHelper::authorizeViewing($tool);
+		ToolAuthHelper::authorizeViewing($tool);
 
 		$this->view
 			->set('reviews', $reviews)

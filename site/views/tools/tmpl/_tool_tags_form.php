@@ -82,6 +82,6 @@ $originUrl = Route::url(
 	<input type="hidden" name="forward" value="<?php echo $forwardUrl; ?>">
 
 	<input class="btn btn-success" type="submit"
-		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_REVIEW'); ?>">
+		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_SUBMIT'); ?>">
 
 </form>

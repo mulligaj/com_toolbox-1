@@ -35,6 +35,7 @@ namespace Components\Toolbox\Models;
 $toolboxPath = Component::path('com_toolbox');
 $tagsPath = Component::path('com_tags');
 
+require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$tagsPath/models/tag.php";
 require_once "$tagsPath/models/cloud.php";
 require_once "$toolboxPath/models/download.php";
@@ -43,6 +44,7 @@ require_once "$toolboxPath/models/review.php";
 require_once "$toolboxPath/models/toolsRelationship.php";
 require_once "$toolboxPath/models/toolsType.php";
 
+use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Tags\Models\Cloud;
 use Hubzero\Database\Relational;
 
@@ -512,7 +514,7 @@ class Tool extends Relational
 	public function userId()
 	{
 		$user = $this->user()->rows();
-    $userId = $user->get('id');
+		$userId = $user->get('id');
 
 		return $userId;
 	}
@@ -525,12 +527,12 @@ class Tool extends Relational
 	public function user()
 	{
 		$userModelName = 'Components\Toolbox\Models\ToolType';
-    $foreignKey = 'user_id';
+		$foreignKey = 'user_id';
 
-    $user = $this->belongsToOne(
-      $userModelName,
-      $foreignKey
-    );
+		$user = $this->belongsToOne(
+			$userModelName,
+			$foreignKey
+		);
 
 		return $user;
 	}
@@ -558,6 +560,23 @@ class Tool extends Relational
 		}, $associations);
 
 		return $associations;
+	}
+
+	/*
+	 * Unpublishes the tool if current user is not an admin
+	 *
+	 * @return   void
+	 */
+	public function unpublishIfNotAdmin()
+	{
+		$userIsAdmin = ToolAuthHelper::currentIsAuthorized('core.admin');
+
+		if ($this->get('published') && !$userIsAdmin)
+		{
+			$this->set('published', 0);
+
+			$this->save();
+		}
 	}
 
 }

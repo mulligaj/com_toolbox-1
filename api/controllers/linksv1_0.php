@@ -73,8 +73,8 @@ class Linksv1_0 extends ApiController
 
 		$linkId = Request::getInt('id');
 		$link = Link::oneOrFail($linkId);
-    $toolId = $link->toolId();
-    $tool= Tool::oneOrFail($toolId);
+		$toolId = $link->toolId();
+		$tool= Tool::oneOrFail($toolId);
 
 		ToolAuthHelper::authorizeEditing($tool);
 
@@ -85,6 +85,9 @@ class Linksv1_0 extends ApiController
 
 		if ($link->destroy())
 		{
+			// unpublish tool if user not an admin
+			$tool->unpublishIfNotAdmin();
+
 			$response['status'] = 'success';
 		}
 		else

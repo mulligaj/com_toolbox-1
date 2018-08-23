@@ -65,6 +65,7 @@ $editDownloadsUrl = Route::url(
 		<?php echo Html::input('token'); ?>
 		<input type="hidden" name="origin" value="<?php echo $editDownloadsUrl; ?>">
 		<input type="hidden" name="forward" value="<?php echo $editDownloadsUrl; ?>">
+		<input type="hidden" name="toolId" value="<?php echo $toolId; ?>">
 
 		<input type="submit" value="Delete" class="btn btn-danger">
 	</form>

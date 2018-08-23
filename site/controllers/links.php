@@ -73,6 +73,12 @@ class Links extends SiteController
 		// attempt to associate link(s) with tool
 		$updateResult = LinksFactory::createOrUpdateMany($linksData);
 
+		// unpublish tool if user not an admin
+		if ($updateResult->successfulSavesCount() > 0)
+		{
+			$tool->unpublishIfNotAdmin();
+		}
+
 		if ($updateResult->succeeded())
 		{
 			$this->_successfulUpdate();

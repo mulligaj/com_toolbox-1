@@ -54,12 +54,13 @@ class Downloads extends SiteController
 	/*
 	 * Uploads file(s) via AJAX
 	 *
+   * @param   object   $tool   Tool instance
 	 * @return  string
 	 */
-	protected function ajaxUploadTask()
+	protected function ajaxUploadTask($tool)
 	{
 		// get tool's ID
-		$toolId = Request::getInt('id');
+		$toolId = $tool->get('id');
 
 		// ensure tool ID is present
 		if (!$toolId)
@@ -137,9 +138,11 @@ class Downloads extends SiteController
 
 		if ($saveResult->succeeded())
 		{
+			// unpublish tool if user not an admin
+			$tool->unpublishIfNotAdmin();
+
 			$download = $saveResult->getSuccessfulSaves()[0];
 			$downloadId = $download->get('id');
-			$toolId = $download->get('tool_id');
 
 			$response = json_encode([
 				'id' => $downloadId,
@@ -170,12 +173,13 @@ class Downloads extends SiteController
 	{
 		// get tool
 		$toolId = Request::getInt('id');
-    $tool = Tool::oneOrFail($toolId);
+		$tool = Tool::oneOrFail($toolId);
+
 		ToolAuthHelper::authorizeEditing($tool);
 
 		if (Request::has('qqfile'))
 		{
-			return $this->ajaxUploadTask();
+			return $this->ajaxUploadTask($tool);
 		}
 
 		Request::checkToken();
@@ -197,6 +201,9 @@ class Downloads extends SiteController
 
 		if ($saveResult->succeeded())
 		{
+			// unpublish tool if user not an admin
+			$tool->unpublishIfNotAdmin();
+
 			$this->_successfulUpdate();
 		}
 		else
@@ -247,6 +254,10 @@ class Downloads extends SiteController
 	{
 		Request::checkToken();
 
+		// get tool
+		$toolId = Request::getInt('toolId');
+		$tool = Tool::oneOrFail($toolId);
+
 		// get IDs of download records to be deleted
 		$downloadIds = Request::getArray('downloads');
 
@@ -255,6 +266,9 @@ class Downloads extends SiteController
 
 		if ($destroyResult->succeeded())
 		{
+			// unpublish tool if user not an admin
+			$tool->unpublishIfNotAdmin();
+
 			$this->_successfulDestroy();
 		}
 		else

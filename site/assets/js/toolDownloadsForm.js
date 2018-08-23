@@ -7,6 +7,7 @@ TOOLBOX.downloadsForm = TOOLBOX.downloadsForm || {};
 var downloadsForm = TOOLBOX.downloadsForm;
 
 downloadsForm.ANCHOR_ID = 'uploader-anchor';
+downloadsForm.CONTINUE_BUTTON_CLASS = 'btn-success';
 downloadsForm.DELETE_FORM_ID = 'delete-form';
 downloadsForm.DOWNLOADS_LIST_ID = 'downloads';
 downloadsForm.DROP_AREA_CLASS = 'qq-upload-drop-area';
@@ -27,6 +28,7 @@ downloadsForm.init = function () {
 	downloadsForm.insertUploaderAnchors();
 	downloadsForm.getUploaderAction();
 	downloadsForm.renderUploader();
+	downloadsForm.updateContinueButton();
 };
 
 downloadsForm.hideDeleteForm = function () {
@@ -100,21 +102,31 @@ downloadsForm.addToDeleteList = function (response, fileName) {
 	var downloadId = response.id;
 	var toolId = response.tool_id;
 	var uploadSucceeded = response.success;
-	var $deleteLi = downloadsForm.generateDeleteLi(downloadId, toolId, fileName);
+  var isNoDeleteLi = !downloadsForm.isDeleteLiFor(downloadId)
+	var $deleteLi
 
-	if (uploadSucceeded) {
+	if (uploadSucceeded && isNoDeleteLi) {
 		if (downloadsForm.deleteForm.is(':hidden')) {
 			downloadsForm.deleteForm.show();
 		}
+
+		$deleteLi = downloadsForm.generateDeleteLi(downloadId, toolId, fileName);
 
 		downloadsForm.downloadsList.append($deleteLi).hide().fadeIn(1000);
 	}
 };
 
 downloadsForm.generateDeleteLi = function (downloadId, toolId, fileName) {
-	var $deleteLi = $('\n\t\t<li>\n\t\t\t<input type="checkbox" name="downloads" value="' + downloadId + '">\n\t\t\t<a href="/app/site/toolbox/downloads/' + toolId + '/' + fileName + '" download>\n\t\t\t\t' + fileName + '\n\t\t\t</a>\n\t\t</li>\n\t');
+	var $deleteLi = $('\n\t\t<li>\n\t\t\t<input type="checkbox" name="downloads[]" value="' + downloadId + '">\n\t\t\t<a href="/app/site/toolbox/downloads/' + toolId + '/' + fileName + '" download>\n\t\t\t\t' + fileName + '\n\t\t\t</a>\n\t\t</li>\n\t');
 
 	return $deleteLi;
+};
+
+downloadsForm.isDeleteLiFor = function (downloadId) {
+	var $deleteLi = $(':checkbox[value="' + downloadId + '"]');
+	var isDeleteLi = !!$deleteLi.length;
+
+	return isDeleteLi;
 };
 
 downloadsForm.findUploadLi = function (fileName) {
@@ -136,13 +148,13 @@ downloadsForm._notifyUploadResult = function (response, fileName) {
     errorMessage = 'There was an error attempting to upload ' + fileName;
 		errors = response.errors;
 
-    if (errors && errors.length > 0) {
-      errorMessage = 'The following errors occurred while attempting to upload ' + fileName + ':<br/><br/>';
+		if (errors && errors.length > 0) {
+			errorMessage = 'The following errors occurred while attempting to upload ' + fileName + ':<br/><br/>';
 
-      errors.forEach(function (error) {
-        errorMessage += '&bull; ' + error + '<br/>';
-      });
-    }
+			errors.forEach(function (error) {
+				errorMessage += '&bull; ' + error + '<br/>';
+			});
+		}
 
 		Notify.error(errorMessage);
 	}
@@ -157,6 +169,12 @@ downloadsForm.getUploaderTemplate = function () {
 	var template = '<div class="' + uploaderClass + '">\n\t\t<div class="' + uploadButtonClass + '"><span>Click or drop file(s)</span></div>\n\t\t<div class="' + dropAreaClass + '"><span>Click or drop file(s)</span></div>\n\t\t<ul class="' + listClass + '"></ul>\n\t</div>';
 
 	return template;
+};
+
+downloadsForm.updateContinueButton = function () {
+	var $continueButton = $('.' + downloadsForm.CONTINUE_BUTTON_CLASS)
+
+	$continueButton.val('Continue')
 };
 
 $(document).ready(function () {
