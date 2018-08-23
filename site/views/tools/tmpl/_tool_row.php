@@ -40,12 +40,12 @@ $this->css('toolRow');
 $maxStringLength = 21;
 $tool = $this->tool;
 $toolId = $tool->get('id');
-//$toolName = Str::truncate($tool->get('name'), $maxStringLength, ['exact' => true]);
 $toolName = $tool->get('name');
+$toolPublished = $tool->get('published');
 $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 ?>
 
-<li class="tool-row grid">
+<li class="tool-row grid" data-published="<?php echo !!$toolPublished; ?>">
 	<div class="col span3 title">
 		<a href="<?php echo $toolUrl; ?>">
 			<?php echo $toolName; ?>

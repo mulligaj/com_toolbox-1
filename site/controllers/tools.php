@@ -751,6 +751,7 @@ class Tools extends SiteController
 		$formQuery = $query;
 		$types = ToolType::all()
 			->whereEquals('archived', 0);
+		$userIsAdmin = ToolAuthHelper::currentIsAuthorized('core.admin');
 
 		if (Request::has('query'))
 		{
@@ -759,9 +760,17 @@ class Tools extends SiteController
 		}
 
 		$tools = $query->findRecords(Tool::class)
-			->whereEquals('published', 1)
 			->whereEquals('archived', 0)
-      ->order('name', 'asc')
+			->order('name', 'asc');
+
+		// hide the tool if the user is not authorized to view it
+		if (!$userIsAdmin)
+		{
+			$tools->whereEquals('published', 1)
+				->orWhereEquals('user_id', User::get('id'));
+		}
+
+		$tools = $tools
 			->paginated('limitstart', 'limit');
 
 		$this->view

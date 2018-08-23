@@ -77,3 +77,7 @@ input[type="number"] {
 	color: #fff;
 	width: 100%;
 }
+
+.tool-row[data-published=""] {
+	background-color: #ffe1f0;
+}
