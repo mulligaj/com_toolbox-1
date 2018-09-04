@@ -44,15 +44,11 @@ $fields = [
 $query = $this->query;
 ?>
 
-<div class="grid">
-
-	<div class="col span11">
-		<?php
-			$this->view('_checkbox_list')
-				->set('fields', $fields)
-				->set('query', $query)
-				->display();
-		?>
-	</div>
-
+<div>
+	<?php
+		$this->view('_checkbox_list')
+			->set('fields', $fields)
+			->set('query', $query)
+			->display();
+	?>
 </div>

@@ -2,6 +2,7 @@
 #form-header {
 	display: flex;
 	justify-content: flex-end;
+	width: 100%;
 }
 
 hr {
@@ -11,6 +12,7 @@ hr {
 .row > h4 {
 	display: flex;
 	justify-content: space-between;
+	width: 100%;
 }
 
 .content {
@@ -19,7 +21,7 @@ hr {
 
 .fontcon {
 	display: inline;
-	font-family: "Fontcons";
+	font-family: 'Fontcons';
 }
 
 .fontcon:hover {
@@ -33,6 +35,7 @@ hr {
 #duration-fields {
 	display: flex;
 	justify-content: space-between;
+	max-width: 100%;
 }
 
 #duration-fields > input {
@@ -46,7 +49,8 @@ input[type="number"] {
 .buttons {
 	display: flex;
 	justify-content: space-between;
-	margin: 1em 0 0 0;
+	margin: 1.25em 0 0 0;
+	width: 100%;
 }
 
 #no-results {
@@ -68,7 +72,7 @@ input[type="number"] {
 	margin: 1.25em 0 0 0;
 }
 
-#clear-filters {
+#clear-form, #clear-filters {
 	width: 100%;
 }
 

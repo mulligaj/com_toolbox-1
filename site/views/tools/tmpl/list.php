@@ -85,20 +85,22 @@ $types = $this->types;
 					->display();
 			?>
 
-      <form action="<?php echo $clearFormAction; ?>" method="post">
-        <input type="submit" class="btn btn-danger clear" id="clear-filters"
-          value="<?php echo Lang::txt('COM_TOOLBOX_LIST_CLEAR_FILTERS'); ?>" />
-        <input type="hidden" name="forward" value="<?php echo $toolListUrl; ?>" />
-        <input type="hidden" name="origin" value="<?php echo $toolListUrl; ?>" />
-        <?php echo Html::input('token'); ?>
-      </form>
+			<div class="row">
+				<form action="<?php echo $clearFormAction; ?>" method="post" id="clear-form">
+					<input type="submit" class="btn btn-danger clear" id="clear-filters"
+						value="<?php echo Lang::txt('COM_TOOLBOX_LIST_CLEAR_FILTERS'); ?>" />
+					<input type="hidden" name="forward" value="<?php echo $toolListUrl; ?>" />
+					<input type="hidden" name="origin" value="<?php echo $toolListUrl; ?>" />
+					<?php echo Html::input('token'); ?>
+				</form>
 
-			<?php if (ToolAuthHelper::currentIsAuthorized('core.create')): ?>
-				<a href="<?php echo Route::url('/toolbox/tools/new'); ?>"
-					class="btn clear" id="create-tool">
-					<?php echo Lang::txt('COM_TOOLBOX_LIST_CREATE_NEW_TOOL'); ?>
-				</a>
-			<?php endif; ?>
+				<?php if (ToolAuthHelper::currentIsAuthorized('core.create')): ?>
+					<a href="<?php echo Route::url('/toolbox/tools/new'); ?>"
+						class="btn clear" id="create-tool">
+						<?php echo Lang::txt('COM_TOOLBOX_LIST_CREATE_NEW_TOOL'); ?>
+					</a>
+				<?php endif; ?>
+			</div>
 		</div>
 
 		<div id="results" class="col span9">
