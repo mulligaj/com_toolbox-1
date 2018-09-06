@@ -300,15 +300,6 @@ class Query
 	{
 		$bergsAttributes = $this->_getBergsAttributesList();
 		$bergsData = Arr::filterKeys($data, $bergsAttributes);
-		$isValid = !!array_sum(array_values($bergsData));
-
-		if (!$isValid)
-		{
-			foreach ($bergsData as $attribute => $value)
-			{
-				$bergsData[$attribute] = 1;
-			}
-		}
 
 		$this->set($bergsData);
 	}
@@ -340,15 +331,6 @@ class Query
 	{
 		$otherAttributes = $this->_getOtherAttributesList();
 		$otherData = Arr::filterKeys($data, $otherAttributes);
-		$isValid = !!array_sum(array_values($otherData));
-
-		if (!$isValid)
-		{
-			foreach ($otherData as $attribute => $value)
-			{
-				$otherData[$attribute] = 1;
-			}
-		}
 
 		$this->set($otherData);
 	}
@@ -617,7 +599,10 @@ class Query
 		// filter by one-to-one criteria
 		foreach ($criteria as $attribute => $value)
 		{
-			$records->whereEquals($attribute, $value);
+			if ($value != 0)
+			{
+				$records->whereEquals($attribute, $value);
+			}
 		}
 
 		return $records;
