@@ -97,23 +97,23 @@ $query = $this->query;
 		</h4>
 
 		<div id="duration-fields" class="grid">
-			<div class="col span1">
+			<div>
 				<input type="number" name="query[duration_min]" min="0"
 					value="<?php echo $query->get('duration_min'); ?>"
 					placeholder="min">
 			</div>
 
-			<div class="col span1 text">
+			<div>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_TO'); ?>
 			</div>
 
-			<div class="col span1">
+			<div>
 				<input type="number" name="query[duration_max]" min="0"
 					value="<?php echo $query->get('duration_max'); ?>"
 					placeholder="max">
 			</div>
 
-			<div class="col span1 text">
+			<div>
 				<?php echo Lang::txt('COM_TOOLBOX_COMMON_MINUTES'); ?>
 			</div>
 		</div>
