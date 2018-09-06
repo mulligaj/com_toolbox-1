@@ -35,8 +35,6 @@ defined('_HZEXEC_') or die();
 
 use Components\Toolbox\Helpers\ToolAuthHelper;
 
-$this->css('editLink');
-
 $attribute = $this->attribute;
 $attributeEditMappings = [
 	'downloads' => 'downloads',

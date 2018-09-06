@@ -39,7 +39,7 @@ $tool = $this->tool;
 ?>
 
 <div>
-	<div class="grid">
+	<div id="outer-grid" class="grid">
 
 		<div class="col span5">
 			<div class="grid">
@@ -51,7 +51,7 @@ $tool = $this->tool;
 						<?php echo $tool->subgroupSizeDescription(); ?>
 					</div>
 				</div>
-				<div class="col span4">
+				<div class="col span3">
 					<h3>
 						<?php echo Lang::txt('COM_TOOLBOX_TOOL_INFO_DURATION'); ?>
 					</h3>
@@ -59,7 +59,7 @@ $tool = $this->tool;
 						<?php echo $tool->durationDescription(); ?>
 					</div>
 				</div>
-				<div class="col span3">
+				<div class="col span4">
 					<h3>
 						<?php echo Lang::txt('COM_TOOLBOX_TOOL_EXTERNAL_COST'); ?>
 					</h3>

@@ -1,7 +1,7 @@
 
 .info-wrapper {
 	font-size: 1.5em;
-	padding: 2em 0 4em 0;
+	padding: 2em 0 4em 15px;
 }
 
 .empty-info {
@@ -9,5 +9,5 @@
 }
 
 #edit-link {
-	margin: 5em 0 0 0;
+	margin: 5em 0 0 15px;
 }

@@ -68,36 +68,36 @@ Document::setTitle($page);
 		?>
 
 		<div class="col span12 info-wrapper">
-			<div class="grid">
-				<div class="col span12">
-					<?php
-						$this->view('_tool_info_aacu_rubric')
-							->set('tool', $tool)
-							->display();
-					?>
-				</div>
-				<div class="col span12">
-					<?php
-						$this->view('_tool_info_idc')
-							->set('tool', $tool)
-							->display();
-					?>
-				</div>
-				<div class="col span12">
-					<?php
-						$this->view('_tool_info_bergs')
-							->set('tool', $tool)
-							->display();
-					?>
-				</div>
-				<div class="col span12">
-					<?php
-						$this->view('_tool_info_other')
-							->set('tool', $tool)
-							->display();
-					?>
-				</div>
+			<div>
+				<?php
+					$this->view('_tool_info_aacu_rubric')
+						->set('tool', $tool)
+						->display();
+				?>
 			</div>
+
+			<div>
+				<?php
+					$this->view('_tool_info_idc')
+						->set('tool', $tool)
+						->display();
+				?>
+			</div>
+
+			<div>
+				<?php
+					$this->view('_tool_info_bergs')
+						->set('tool', $tool)
+						->display();
+				?>
+			</div>
+
+			<div>
+				<?php
+					$this->view('_tool_info_other')
+						->set('tool', $tool)
+						->display();
+				?>
 			</div>
 		</div>
 

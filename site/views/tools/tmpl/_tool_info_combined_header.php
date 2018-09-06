@@ -37,13 +37,11 @@ $current = $this->current;
 $tool = $this->tool;
 ?>
 
-<div class="col span12">
 	<?php
 		$this->view('_tool_info_header')
 			->set('tool', $tool)
 			->display();
 	?>
-</div>
 
 <div id="info-tabs-wrapper" class="col span12">
 	<?php
