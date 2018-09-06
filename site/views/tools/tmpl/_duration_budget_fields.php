@@ -56,7 +56,7 @@ $subgroupSizes = $tool->getSubgroupSizes();
 			</label>
 		</div>
 
-		<div class="col span2 offset1">
+		<div class="col span2">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_MINUTES_FIELD'); ?> <span class="required">
 						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
@@ -65,24 +65,26 @@ $subgroupSizes = $tool->getSubgroupSizes();
 			</label>
 		</div>
 
-		<div class="col span2 offset1">
+		<div class="col span3 offset1">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_EXTERNAL_COST_FIELD'); ?> <span class="required">
 						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>
 			</label>
-			<label>
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
+			<div class="inline-radios">
+				<label>
 					<input type="radio" id="external-cost-yes"
 						name="tool[external_cost]" value="1" <?php if ($hasExternalCost) echo 'checked'; ?>>
-			</label>
-			<label>
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
+					<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
+				</label>
+				<label>
 					<input type="radio" id="external-cost-no"
 						name="tool[external_cost]" value="0" <?php if (!$hasExternalCost) echo 'checked'; ?>>
-			</label>
+					<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
+				</label>
+			</div>
 		</div>
 
-		<div class="col span2 offset1">
+		<div class="col span3">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_SUBGROUP_FIELD'); ?> <span class="required">
 						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?></span>

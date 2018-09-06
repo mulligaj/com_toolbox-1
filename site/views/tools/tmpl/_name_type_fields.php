@@ -50,7 +50,7 @@ $toolsTypeIds = $this->toolsTypeIds;
 			</label>
 		</div>
 
-		<div class="col span2 offset1">
+		<div class="col span3">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_TYPE_FIELD'); ?>
 					<select name="types[]" multiple>
@@ -64,21 +64,23 @@ $toolsTypeIds = $this->toolsTypeIds;
 			</label>
 		</div>
 
-		<div class="col span2 offset1">
+		<div class="col span2">
 			<label>
 					<?php echo Lang::txt('COM_TOOLBOX_NEW_KINESTHETIC_FIELD'); ?> <span class="required">
 						<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
 			</label>
-			<label>
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
+			<div class="inline-radios">
+				<label class="inline">
 					<input type="radio" id="kinesthetic-yes"
 						name="tool[kinesthetic]" value="1" <?php if ($isKinesthetic) echo 'checked'; ?>>
-			</label>
-			<label>
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
+					<?php echo Lang::txt('COM_TOOLBOX_COMMON_YES'); ?>
+				</label>
+				<label class="inline">
 					<input type="radio" id="kinesthetic-no"
 						name="tool[kinesthetic]" value="0" <?php if (!$isKinesthetic) echo 'checked'; ?>>
-			</label>
+					<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
+				</label>
+			<span>
 		</div>
 
 	</div>

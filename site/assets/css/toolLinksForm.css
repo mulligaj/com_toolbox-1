@@ -3,3 +3,12 @@
 	max-width: 15%;
 	float: right;
 }
+
+#link-fieldset {
+	padding: 0 0 1.5em 0;
+}
+
+#links-wrapper > .grid {
+	margin: 0 0 0 0;
+}
+

@@ -65,7 +65,7 @@ $originUrl = Route::url(
 			<?php echo Lang::txt('COM_TOOLBOX_LINKS_LEGEND'); ?>
 		</legend>
 
-		<div id="links-wrapper" class="grid">
+		<div id="links-wrapper">
 			<?php
 				$this->view('_tool_links_form_space')
 					->set('blankLink', $blankLink)
@@ -74,9 +74,7 @@ $originUrl = Route::url(
 			?>
 		</div>
 
-		<div class="grid">
-			<div id="add-link-button-wrapper" class="col span1 offset11"></div>
-		</div>
+		<div id="add-link-button-wrapper" class="grid"></div>
 	</fieldset>
 
 	<?php echo Html::input('token'); ?>

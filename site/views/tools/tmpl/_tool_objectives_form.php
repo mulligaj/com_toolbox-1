@@ -47,7 +47,7 @@ $tool = $this->tool;
 			<?php echo Lang::txt('COM_TOOLBOX_TOOLS_LEARNING_OBJECTIVES'); ?>
 		</legend>
 		<div class="grid">
-			<div class="col span12">
+			<div class="col span12 editor-wrapper">
 				<?php
 					echo $this->editor('tool[learning_objectives]', $tool->get('learning_objectives'), 50, 5);
 				?>
@@ -60,7 +60,7 @@ $tool = $this->tool;
 			<?php echo Lang::txt('COM_TOOLBOX_TOOLS_MATERIALS'); ?>
 		</legend>
 		<div class="grid">
-			<div class="col span12">
+			<div class="col span12 editor-wrapper">
 				<?php
 					echo $this->editor('tool[materials]', $tool->get('materials'), 50, 5);
 				?>
@@ -73,7 +73,7 @@ $tool = $this->tool;
 			<?php echo Lang::txt('COM_TOOLBOX_TOOLS_NOTES'); ?>
 		</legend>
 		<div class="grid">
-			<div class="col span12">
+			<div class="col span12 editor-wrapper">
 				<?php
 					echo $this->editor('tool[notes]', $tool->get('notes'), 50, 5);
 				?>

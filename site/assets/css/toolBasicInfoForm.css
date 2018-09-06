@@ -3,3 +3,26 @@
 	max-width: 15%;
 	float: right;
 }
+
+.inline {
+	display: inline !important;
+}
+
+.inline-radios {
+	display: flex;
+}
+
+.inline-radios > label {
+	margin: 0 15px 0 0;
+}
+
+#external-cost-no,
+#external-cost-yes,
+#kinesthetic-no,
+#kinesthetic-yes {
+	width: auto !important;
+}
+
+.editor-wrapper {
+	padding: .5em 0 1.5em 0;
+}

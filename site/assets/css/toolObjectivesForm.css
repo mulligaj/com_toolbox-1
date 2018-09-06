@@ -3,3 +3,7 @@
 	max-width: 15%;
 	float: right;
 }
+
+.editor-wrapper {
+	padding: .5em 0 1.5em 0;
+}

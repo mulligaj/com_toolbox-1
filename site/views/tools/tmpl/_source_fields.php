@@ -37,15 +37,16 @@ $tool = $this->tool;
 ?>
 
 <fieldset>
-	<legend><?php echo Lang::txt('COM_TOOLBOX_NEW_SOURCE_FIELDS'); ?></legend>
+
+	<legend>
+		<?php echo Lang::txt('COM_TOOLBOX_NEW_SOURCE_FIELDS'); ?>
+		 <span class="required"><?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
+	</legend>
 
 	<div class="grid">
-
-		<div class="col span12">
+		<div class="col span12 editor-wrapper">
 			<?php echo $this->editor('tool[source]', $tool->get('source'), 50, 5); ?>
 		</div>
-
-	 <span class="required"><?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-
 	</div>
+
 </fieldset>
