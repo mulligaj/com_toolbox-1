@@ -220,64 +220,6 @@ $resultsUrl = Route::url(
 	</div>
 
 	<div class="row">
-		<h4>
-			<?php echo Lang::txt('COM_TOOLBOX_LIST_IDC'); ?>
-			<span class="caret fontcon">&#x2303;</span>
-		</h4>
-
-		<div class="content">
-			<?php
-				$this->view('_list_idc_fields')
-					->set('query', $query)
-					->display();
-			?>
-		</div>
-		<hr>
-	</div>
-
-	<div class="row">
-		<h4>
-			<span>
-				<?php echo Lang::txt('COM_TOOLBOX_LIST_BERGS'); ?>
-				<span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_NONE_DEFAULTS_ALL'); ?>">
-					<span class="fontcon">&#xf075;</span>
-				</span>
-			</span>
-			<span class="caret fontcon">&#x2303;</span>
-		</h4>
-
-		<div class="content">
-			<?php
-				$this->view('_list_bergs_fields')
-					->set('query', $query)
-					->display();
-			?>
-		</div>
-		<hr>
-	</div>
-
-	<div class="row">
-		<h4>
-			<span>
-				<?php echo Lang::txt('COM_TOOLBOX_LIST_OTHER'); ?>
-				<span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_NONE_DEFAULTS_ALL'); ?>">
-					<span class="fontcon">&#xf075;</span>
-				</span>
-			</span>
-			<span class="caret fontcon">&#x2303;</span>
-		</h4>
-
-		<div class="content">
-			<?php
-				$this->view('_list_other_fields')
-					->set('query', $query)
-					->display();
-			?>
-		</div>
-		<hr>
-	</div>
-
-	<div class="row">
 		<span class="buttons">
 			<input class="btn btn-success" type="submit"
 				value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SEARCH'); ?>">
