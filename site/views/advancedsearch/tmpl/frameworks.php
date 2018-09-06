@@ -33,11 +33,13 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('guidedFrameworks');
+
 $breadcrumbs = [
 	'Toolbox' => '/toolbox',
 	'Tools' => '/tools',
-	'Guided Search' => '/guidedsearch',
-	'Context' => '/context'
+	'Advanced Search' => '/advancedsearch',
+	'Theoretical Frameworks' => '/frameworks'
 ];
 
 $cumulativePath = '';
@@ -52,10 +54,10 @@ foreach ($breadcrumbs as $text => $url)
 Document::setTitle($page);
 
 $formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=updateContext"
+	"index.php?option=$this->option&controller=$this->controller&task=updateFrameworks"
 );
 $query = $this->query;
-$step = 'Context';
+$step = 'Theoretical Frameworks';
 ?>
 
 <?php
@@ -75,7 +77,7 @@ $step = 'Context';
 
 		<div class="col span10 offset1">
 			<?php
-				$this->view('_tool_context_form')
+				$this->view('_tool_frameworks_form')
 					->set('action', $formAction)
 					->set('query', $query)
 					->display();

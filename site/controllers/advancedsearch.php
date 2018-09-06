@@ -45,7 +45,7 @@ use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Toolbox\Helpers\UrlHelper;
 use Hubzero\Component\SiteController;
 
-class Guidedsearch extends SiteController
+class Advancedsearch extends SiteController
 {
 
 	/*
@@ -70,7 +70,7 @@ class Guidedsearch extends SiteController
 	}
 
 	/*
-	 * Returns the tool type page of the guided search process
+	 * Returns the tool type page of the advanced search process
 	 *
 	 * @return   void
 	 */
@@ -95,7 +95,7 @@ class Guidedsearch extends SiteController
 	}
 
 	/*
-	 * Returns the frameworks page of the guided search process
+	 * Returns the frameworks page of the advanced search process
 	 *
 	 * @return   void
 	 */
@@ -117,7 +117,7 @@ class Guidedsearch extends SiteController
 	}
 
 	/*
-	 * Returns the context page of the guided search process
+	 * Returns the context page of the advanced search process
 	 *
 	 * @return   void
 	 */

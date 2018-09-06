@@ -52,12 +52,12 @@ foreach ($breadcrumbs as $text => $url)
 	Pathway::append($text, $cumulativePath);
 }
 
-$guidedSearchUrl = "index.php?option=$this->option&controller=guidedsearch";
+$advancedSearchUrl = "index.php?option=$this->option&controller=advancedsearch";
 $updateFormAction = Route::url(
-	"$guidedSearchUrl&task=updateAll"
+	"$advancedSearchUrl&task=updateAll"
 );
 $clearFormAction = Route::url(
-	"$guidedSearchUrl&task=clearAll"
+	"$advancedSearchUrl&task=clearAll"
 );
 $query = $this->query;
 $toolListUrl = Route::url(

@@ -68,7 +68,7 @@ $resultsUrl = Route::url(
 
 		<div class="content">
 			<?php
-				$this->view('_subgroup_select', 'guidedsearch')
+				$this->view('_subgroup_select', 'advancedsearch')
 					->set('query', $query)
 					->display();
 			?>
@@ -150,7 +150,7 @@ $resultsUrl = Route::url(
 
 		<div class="content">
 			<?php
-				$this->view('_type_select', 'guidedsearch')
+				$this->view('_type_select', 'advancedsearch')
 					->set('query', $query)
 					->set('types', $this->types)
 					->display();
@@ -224,7 +224,7 @@ $resultsUrl = Route::url(
 			<input class="btn btn-success" type="submit"
 				value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SEARCH'); ?>">
 
-			<a href="<?php echo Route::url('/toolbox/guidedsearch'); ?>" class="btn">
+			<a href="<?php echo Route::url('/toolbox/advancedsearch'); ?>" class="btn">
 				<?php echo Lang::txt('COM_TOOLBOX_LIST_GUIDED_SEARCH'); ?>
 			</a>
 		</span>

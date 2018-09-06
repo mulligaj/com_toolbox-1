@@ -33,26 +33,59 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('stepsNavWrapper');
+$this->css('guidedType');
 
-$current = $this->current;
-
-$steps = [
-	'Tool Type' => Route::url('/toolbox/guidedsearch/type'),
-	'Theoretical Frameworks' => Route::url('/toolbox/guidedsearch/frameworks'),
-	'Context' => Route::url('/toolbox/guidedsearch/context')
+$breadcrumbs = [
+	'Toolbox' => '/toolbox',
+	'Tools' => '/tools',
+	'Advanced Search' => '/advancedsearch',
+	'Tool Type' => '/type'
 ];
+
+$cumulativePath = '';
+$page = Lang::txt('COM_TOOLBOX_GUIDED_SEARCH');
+
+foreach ($breadcrumbs as $text => $url)
+{
+	$cumulativePath .= $url;
+	Pathway::append($text, $cumulativePath);
+}
+
+Document::setTitle($page);
+
+$formAction = Route::url(
+	"index.php?option=$this->option&controller=$this->controller&task=updateType"
+);
+$query = $this->query;
+$step = 'Tool Type';
+$types = $this->types;
 ?>
 
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
+<?php
+	$this->view('_header', 'tools')
+		->set('text', $page)
+		->display();
+?>
+
+<section class="main section">
+	<div class="grid">
+
+		<?php
+			$this->view('_steps_nav')
+				->set('current', $step)
+				->display();
+		?>
+
+		<div class="col span10 offset1">
+			<?php
+				$this->view('_tool_type_form')
+					->set('action', $formAction)
+					->set('query', $query)
+					->set('types', $types)
+					->display();
+			?>
+		</div>
+
+	</div>
+</section>
 

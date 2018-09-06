@@ -33,57 +33,26 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('guidedFrameworks');
+$this->css('stepsNavWrapper');
 
-$breadcrumbs = [
-	'Toolbox' => '/toolbox',
-	'Tools' => '/tools',
-	'Guided Search' => '/guidedsearch',
-	'Theoretical Frameworks' => '/frameworks'
+$current = $this->current;
+
+$steps = [
+	'Tool Type' => Route::url('/toolbox/advancedsearch/type'),
+	'Theoretical Frameworks' => Route::url('/toolbox/advancedsearch/frameworks'),
+	'Context' => Route::url('/toolbox/advancedsearch/context')
 ];
-
-$cumulativePath = '';
-$page = Lang::txt('COM_TOOLBOX_GUIDED_SEARCH');
-
-foreach ($breadcrumbs as $text => $url)
-{
-	$cumulativePath .= $url;
-	Pathway::append($text, $cumulativePath);
-}
-
-Document::setTitle($page);
-
-$formAction = Route::url(
-	"index.php?option=$this->option&controller=$this->controller&task=updateFrameworks"
-);
-$query = $this->query;
-$step = 'Theoretical Frameworks';
 ?>
 
-<?php
-	$this->view('_header', 'tools')
-		->set('text', $page)
-		->display();
-?>
-
-<section class="main section">
-	<div class="grid">
-
-		<?php
-			$this->view('_steps_nav')
-				->set('current', $step)
-				->display();
-		?>
-
-		<div class="col span10 offset1">
-			<?php
-				$this->view('_tool_frameworks_form')
-					->set('action', $formAction)
-					->set('query', $query)
-					->display();
-			?>
-		</div>
-
-	</div>
-</section>
+<div id="steps-nav-wrapper" class="col span12">
+	<ul id="steps-nav">
+		<?php foreach ($steps as $text => $url): ?>
+			<li <?php if ($current == $text) echo 'class="current"'; ?>>
+				<a href="<?php echo $url; ?>">
+					<?php echo $text; ?>
+				</a>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+</div>
 
