@@ -49,8 +49,21 @@ input[type="number"] {
 .buttons {
 	display: flex;
 	justify-content: space-between;
-	margin: 1.25em 0 0 0;
+	margin: 1em 0 0 0;
 	width: 100%;
+	flex-wrap: wrap;
+}
+
+.buttons .btn {
+	width: 100%;
+	max-width: 400px;
+	margin-top: 0.5rem;
+}
+
+.buttons > a {
+	width: 100%;
+	text-align: center;
+	margin-top: 0.5rem;
 }
 
 #no-results {
@@ -61,8 +74,8 @@ input[type="number"] {
 }
 
 .tool-row {
-	border: 2px solid #575757;
-	box-shadow: 2px 2px 2px #858585;
+	border: 1px solid #d6d6d6;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.09);
 	font-size: 1.5em;
 	line-height: 3em;
 	padding: 0 0 0 1em;
@@ -74,12 +87,23 @@ input[type="number"] {
 
 #clear-form, #clear-filters {
 	width: 100%;
+	max-width: 400px;
 }
 
+/*
 #create-tool {
 	background-color: #0069d9;
 	color: #fff;
 	width: 100%;
+}
+*/
+
+.extra {
+	width: 100%;
+	text-align: center;
+	border-top: 1px solid #e5e5e5;
+	margin-top: 2rem;
+	padding-top: 1rem;
 }
 
 .tool-row[data-published=""] {

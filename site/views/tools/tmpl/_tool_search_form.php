@@ -221,10 +221,10 @@ $resultsUrl = Route::url(
 
 	<div class="row">
 		<span class="buttons">
-			<input class="btn btn-success" type="submit"
+			<input class="btn" type="submit"
 				value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SEARCH'); ?>">
 
-			<a href="<?php echo Route::url('/toolbox/advancedsearch'); ?>" class="btn">
+			<a href="<?php echo Route::url('/toolbox/advancedsearch'); ?>">
 				<?php echo Lang::txt('COM_TOOLBOX_LIST_GUIDED_SEARCH'); ?>
 			</a>
 		</span>
