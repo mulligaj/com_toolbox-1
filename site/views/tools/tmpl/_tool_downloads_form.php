@@ -61,14 +61,14 @@ $originUrl = Route::url(
 			<?php echo Lang::txt('COM_TOOLBOX_NEW_DOWNLOADS_FIELDS'); ?>
 		</legend>
 
-		<div id="file-uploader" class="grid">
-			<noscript>
-				<div class="col span5">
+		<div class="grid">
+			<div id="file-uploader" class="col span12">
+				<noscript>
 					<h5>Select file(s) to upload:</h3>
 					<input type="file" name="downloads[]" multiple>
 				</div>
-			</noscript>
-		</div>
+			</div>
+		</noscript>
 	</fieldset>
 
 	<?php echo Html::input('token'); ?>
