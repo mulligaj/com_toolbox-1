@@ -37,7 +37,6 @@ defined('_HZEXEC_') or die();
 
 $this->css('toolRow');
 
-$maxStringLength = 21;
 $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');

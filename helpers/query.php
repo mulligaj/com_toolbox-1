@@ -587,11 +587,17 @@ class Query
 		$criteria = $this->toArray();
 		$durationMax = Arr::pluck($criteria, 'duration_max');
 		$durationMin = Arr::pluck($criteria ,'duration_min');
+		$externalCost = Arr::pluck($criteria, 'external_cost');
+		$kinesthetic = Arr::pluck($criteria, 'kinesthetic');
 		$typesIds = Arr::pluck($criteria, 'typesIds');
 
 		// filter by duration
 		$records->where('duration', '>=', $durationMin);
 		$records->where('duration', '<=', $durationMax);
+
+		// filter by meta attributes
+		$records->whereEquals('external_cost', $externalCost);
+		$records->whereEquals('kinesthetic', $kinesthetic);
 
 		// filter by Type ID
 		$this->_filterByAssociationIds($records, $typesIds);
@@ -622,7 +628,6 @@ class Query
 		$toolsTable = $this->_getToolsTable();
 
 		$records->join($toolsTypesTable, "$toolsTable.id", "$toolsTypesTable.tool_id", 'left');
-		$records->join($toolTypesTable, "$toolsTypesTable.type_id", "$toolTypesTable.id", 'left');
 		$records->whereIn("$toolsTypesTable.type_id", $associationsIds);
 	}
 
