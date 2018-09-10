@@ -44,8 +44,7 @@ class FileUploadHelper
 	public static function collateFilesData($filesData)
 	{
 		$files = [];
-		$fileCount = count($filesData['name']);
-		$fileCount = empty($filesData['name'][0]) ? 0 : $fileCount;
+		$fileCount = empty($filesData['name'][0]) ? 0 : count($filesData['name']);
 		$fileKeys = array_keys($filesData);
 
 		for ($i = 0; $i < $fileCount; $i++) {

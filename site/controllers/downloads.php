@@ -185,7 +185,7 @@ class Downloads extends SiteController
 		Request::checkToken();
 
 		// get posted downloads data
-		$downloadsData = $_FILES['downloads'];
+		$downloadsData = isset($_FILES['downloads']) ? $_FILES['downloads']: [];
 
 		// collate downloads data
 		$downloadsData = FileUploadHelper::collateFilesData($downloadsData);
