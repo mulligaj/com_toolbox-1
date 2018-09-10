@@ -59,6 +59,7 @@ $originUrl = Route::url(
 			<div class="col span12 select-field-wrapper">
 
 				<select name="tagsIds[]" size="20" multiple="multiple">
+					<option value <?php if (empty($selectedTagsIds)) echo 'selected'?>>None</option>
 					<?php
 					foreach ($tags as $tag):
 					$tagId = $tag->get('id')

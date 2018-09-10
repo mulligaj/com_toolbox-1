@@ -71,6 +71,10 @@ class ToolsTagsFactory extends Factory
 	 */
 	public static function update($tool, $updateTagsIds)
 	{
+		if (!$updateTagsIds[0])
+		{
+			$updateTagsIds = [];
+		}
 		$toolId = $tool->get('id');
 		$difference = AssociationHelper::updateDelta($tool->tagsIds(), $updateTagsIds);
 

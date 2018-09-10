@@ -59,6 +59,7 @@ $originUrl = Route::url(
 			<div id="related-field-wrapper" class="col span12">
 
 				<select name="toolIds[]" size="20" multiple="multiple">
+					<option value="" <?php if (empty($selectedToolsIds)) echo 'selected'?>>None</option>
 					<?php
 					foreach ($otherTools as $otherTool):
 					$otherToolId = $otherTool->get('id')
