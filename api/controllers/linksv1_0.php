@@ -69,8 +69,6 @@ class Linksv1_0 extends ApiController
 	 */
 	function destroyTask()
 	{
-		$this->requiresAuthentication();
-
 		$linkId = Request::getInt('id');
 		$link = Link::oneOrFail($linkId);
 		$toolId = $link->toolId();
