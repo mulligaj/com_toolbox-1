@@ -364,7 +364,7 @@ class Tool extends Relational
 	public function durationDescription()
 	{
 		$minutes = $this->get('duration');
-		$hours = round($minutes / 60);
+		$hours = floor($minutes / 60);
 		$remainingMinutes = $minutes - ($hours * 60);
 		$durationDescription = "";
 
