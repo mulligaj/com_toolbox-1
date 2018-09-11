@@ -37,7 +37,7 @@ $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');
 
-$page = Lang::txt('COM_TOOLBOX_UPDATE_BASIC_HEADER_CONTENT');
+$page = Lang::txt('COM_TOOLBOX_UPDATE_BASIC_HEADER_CONTENT', $toolName);
 Document::setTitle($page);
 
 $formAction = Route::url(

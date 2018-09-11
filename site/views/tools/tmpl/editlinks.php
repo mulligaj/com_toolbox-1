@@ -37,7 +37,7 @@ $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');
 
-$page = Lang::txt('COM_TOOLBOX_UPDATE_LINKS_HEADER_CONTENT');
+$page = Lang::txt('COM_TOOLBOX_UPDATE_LINKS_HEADER_CONTENT', $toolName);
 Document::setTitle($page);
 
 $blankLink = $this->blankLink;
