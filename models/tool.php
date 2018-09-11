@@ -569,7 +569,7 @@ class Tool extends Relational
 	 */
 	public function unpublishIfNotAdmin()
 	{
-		$userIsAdmin = ToolAuthHelper::currentIsAuthorized('core.admin');
+		$userIsAdmin = ToolAuthHelper::currentIsAuthorized('core.manage');
 
 		if ($this->get('published') && !$userIsAdmin)
 		{

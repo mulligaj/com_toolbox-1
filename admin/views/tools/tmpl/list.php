@@ -55,7 +55,7 @@ if ($permissions->get('core.manage'))
 	Toolbar::archiveList('archive');
 }
 
-if ($permissions->get('core.admin'))
+if ($permissions->get('core.manage'))
 {
 	Toolbar::spacer();
 	Toolbar::preferences($component, '550');

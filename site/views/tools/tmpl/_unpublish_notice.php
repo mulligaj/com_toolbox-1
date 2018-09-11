@@ -39,10 +39,9 @@ use Components\Toolbox\Helpers\ToolAuthHelper;
 
 $this->css('toolUnpublishNotice');
 
-$userIsAdmin = ToolAuthHelper::currentIsAuthorized('core.admin');
+$userIsAdmin = ToolAuthHelper::currentIsAuthorized('core.manage');
 $toolPublished = $this->toolPublished;
 $toolWouldUnpublish = $toolPublished && !$userIsAdmin;
-
 ?>
 
 <?php if ($toolWouldUnpublish): ?>

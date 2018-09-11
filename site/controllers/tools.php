@@ -334,7 +334,7 @@ class Tools extends SiteController
 		$typeIds = Request::has('types') ? Request::getArray('types') : null;
 
 		// unpublish tool if user not an admin
-		if (!ToolAuthHelper::currentIsAuthorized('core.admin'))
+		if (!ToolAuthHelper::currentIsAuthorized('core.manage'))
 		{
 			$toolData['published'] = 0;
 		}
@@ -751,7 +751,7 @@ class Tools extends SiteController
 		$formQuery = $query;
 		$types = ToolType::all()
 			->whereEquals('archived', 0);
-		$userIsAdmin = ToolAuthHelper::currentIsAuthorized('core.admin');
+		$userIsAdmin = ToolAuthHelper::currentIsAuthorized('core.manage');
 
 		if (Request::has('query'))
 		{
