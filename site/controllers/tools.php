@@ -121,6 +121,9 @@ class Tools extends SiteController
 		// get posted tool data
 		$toolData = Request::getArray('tool');
 
+		// add user ID to tool data
+		$toolData['user_id'] = User::get('id');
+
 		// calculate duration as minutes
 		$toolData['duration'] = $toolData['duration'] + $toolData['duration_hours'] * 60;
 		unset($toolData['duration_hours']);

@@ -115,6 +115,7 @@ class Tool extends Relational
 
 		$otherTools = self::all()
 			->whereNotIn('id', $toolIds)
+			->whereEquals('published', 1)
 			->rows();
 
 		return $otherTools;
