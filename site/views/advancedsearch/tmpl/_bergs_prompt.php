@@ -33,6 +33,8 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
+$this->css('bergsPrompt');
+
 $bergsLocalFilePath = '/site/media/toolbox/vande_berg_phase_training_program.jpg';
 $bergsFullFilePath = PATH_APP . $bergsLocalFilePath;
 $bergsFileExists = file_exists($bergsFullFilePath);
