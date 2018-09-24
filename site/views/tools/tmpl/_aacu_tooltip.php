@@ -33,45 +33,22 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$tool = $this->tool;
+$this->css('aacuImageTip');
+
+$localFilePath = '/site/media/toolbox/aacu_rubric.jpg';
+$fullFilePath = PATH_APP . $localFilePath;
+$fileExists = file_exists($fullFilePath);
+$url = Route::url("/app$localFilePath");
 ?>
 
+<?php if ($fileExists): ?>
+	<span class="hasTip image-tip"
+		title="<img src=&quot;<?php echo $url; ?>&quot; alt=&quot;AAC&U Rubric&quot; />">
+<?php endif; ?>
 
-<h4>
-	<?php
-		$this->view('_aacu_tooltip')
-			->display();
-	?>
-</h4>
+<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC'); ?>
 
-<div class="grid">
-	<div class="col span5">
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('self_awareness')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_SELF_AWARENESS'); ?>
-		</div>
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('openness')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_OPENNESS'); ?>
-		</div>
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('communication')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_COMMUNICATION'); ?>
-		</div>
-	</div>
-
-	<div class="col span5">
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('empathy')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_EMPATHY'); ?>
-		</div>
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('curiosity')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_CURIOSITY'); ?>
-		</div>
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('worldview')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC_WORLDVIEW'); ?>
-		</div>
-</div>
+<?php if ($fileExists): ?>
+	</span>
+<?php endif; ?>
 

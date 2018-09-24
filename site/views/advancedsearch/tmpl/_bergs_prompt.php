@@ -33,7 +33,7 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('bergsPrompt');
+$this->css('imageTip');
 
 $bergsLocalFilePath = '/site/media/toolbox/vande_berg_phase_training_program.jpg';
 $bergsFullFilePath = PATH_APP . $bergsLocalFilePath;
@@ -45,7 +45,7 @@ $bergsUrl = Route::url("/app$bergsLocalFilePath");
 
 <?php if ($bergsFileExists): ?>
 	<span class="hasTip text-tip"
-		title="<img class=&quot;bergs-tip&quot; src=&quot;<?php echo $bergsUrl; ?>&quot; alt=&quot;Dr. Michael Vande Berg's processes&quot; />">
+		title="<img class=&quot;image-tip&quot; src=&quot;<?php echo $bergsUrl; ?>&quot; alt=&quot;Dr. Michael Vande Berg's processes&quot; />">
 <?php endif; ?>
 
 <?php echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROMPT_TEXT'); ?>

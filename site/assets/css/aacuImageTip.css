@@ -1,0 +1,9 @@
+
+.tooltip {
+	max-width: none;
+}
+
+.ui-tooltip-content > img {
+	width: 82em !important;
+	max-width: 83em !important;
+}

@@ -37,7 +37,12 @@ $tool = $this->tool;
 ?>
 
 <fieldset>
-	<legend><?php echo Lang::txt('COM_TOOLBOX_AACU_RUBRIC'); ?></legend>
+	<legend>
+		<?php
+			$this->view('_aacu_tooltip')
+				->display();
+		?>
+	</legend>
 	<div class="grid">
 
 		<div class="col span5">

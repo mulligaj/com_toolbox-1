@@ -198,7 +198,11 @@ $resultsUrl = Route::url(
 	<div class="row">
 		<h4>
 			<span>
-				<?php echo Lang::txt('COM_TOOLBOX_LIST_AACU'); ?>
+				<?php
+					$this->view('_aacu_tooltip')
+						->display();
+					echo Lang::txt('COM_TOOLBOX_LIST_AACU_OUTCOMES');
+				?>
 				<span class="required">
 					<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
 				</span>
