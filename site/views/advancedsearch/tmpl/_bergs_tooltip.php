@@ -33,38 +33,19 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$tool = $this->tool;
+$bergsLocalFilePath = '/site/media/toolbox/vande_bergs_phases.jpg';
+$bergsFullFilePath = PATH_APP . $bergsLocalFilePath;
+$bergsFileExists = file_exists($bergsFullFilePath);
+$bergsUrl = Route::url("/app$bergsLocalFilePath");
 ?>
 
+<?php if ($bergsFileExists): ?>
+	<span class="hasTip text-tip"
+		title="<img class=&quot;image-tip&quot; src=&quot;<?php echo $bergsUrl; ?>&quot; alt=&quot;Dr. Michael Vande Berg's processes&quot; />">
+<?php endif; ?>
 
-<h4>
-	<?php
-		$this->view('_bergs_tooltip', 'advancedsearch')
-			->display();
-	?>
-</h4>
+<?php echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROCESSES'); ?>
 
-<div class="grid">
-	<div class="col span5">
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('self')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_BERGS_SELF'); ?>
-		</div>
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('other')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_BERGS_OTHER'); ?>
-		</div>
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('emotions')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_BERGS_EMOTIONS'); ?>
-		</div>
-	</div>
-
-	<div class="col span5">
-		<div class="checkbox-wrapper">
-			<input type="checkbox" <?php if ($tool->get('bridging')) echo 'checked'; ?> disabled>
-			<?php echo Lang::txt('COM_TOOLBOX_BERGS_BRIDGING'); ?>
-		</div>
-	</div>
-</div>
-
+<?php if ($bergsFileExists): ?>
+	</span>
+<?php endif; ?>

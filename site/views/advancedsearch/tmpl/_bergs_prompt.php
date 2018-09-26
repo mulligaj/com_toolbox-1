@@ -35,24 +35,18 @@ defined('_HZEXEC_') or die();
 
 $this->css('imageTip');
 
-$bergsLocalFilePath = '/site/media/toolbox/vande_berg_phase_training_program.jpg';
+$bergsLocalFilePath = '/site/media/toolbox/vande_bergs_phases.jpg';
 $bergsFullFilePath = PATH_APP . $bergsLocalFilePath;
 $bergsFileExists = file_exists($bergsFullFilePath);
 $bergsUrl = Route::url("/app$bergsLocalFilePath");
 ?>
 
-<?php echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROMPT_START'); ?>
+<?php
+	echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROMPT_START');
 
-<?php if ($bergsFileExists): ?>
-	<span class="hasTip text-tip"
-		title="<img class=&quot;image-tip&quot; src=&quot;<?php echo $bergsUrl; ?>&quot; alt=&quot;Dr. Michael Vande Berg's processes&quot; />">
-<?php endif; ?>
+	$this->view('_bergs_tooltip')
+		->display();
 
-<?php echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROMPT_TEXT'); ?>
-
-<?php if ($bergsFileExists): ?>
-	</span>
-<?php endif; ?>
-
-<?php echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROMPT_END'); ?>
+	echo Lang::txt('COM_TOOLBOX_GUIDED_BERGS_PROMPT_END');
+	?>
 
