@@ -286,7 +286,8 @@ class Tools extends SiteController
 	public function editTagsTask()
 	{
 		$id = Request::getInt('id');
-		$tags = Tag::all();
+		$tags = Tag::all()
+			->order('tag', 'asc');
 		$tool = Tool::one($id);
 
 		ToolAuthHelper::authorizeEditing($tool);
