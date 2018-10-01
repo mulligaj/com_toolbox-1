@@ -100,6 +100,18 @@ $types = $this->types;
 							id="create-tool">
 							<?php echo Lang::txt('COM_TOOLBOX_LIST_CREATE_NEW_TOOL'); ?>
 						</a>
+						<br/>
+						<a href="<?php echo Route::url('/kb/tools/how-to-use-the-toolbox'); ?>">
+							<?php echo Lang::txt('COM_TOOLBOX_LIST_USING_TOOLBOX'); ?>
+						</a>
+						<br/>
+						<a href="<?php echo Route::url('/kb/tools/how-to-submit-to-the-toolbox-'); ?>">
+							<?php echo Lang::txt('COM_TOOLBOX_LIST_SUBMITTING_TOOLBOX'); ?>
+						</a>
+						<br/>
+						<a href="<?php echo Route::url('/kb/tools/toolbox-faqs'); ?>">
+							<?php echo Lang::txt('COM_TOOLBOX_LIST_TOOLBOX_FAQS'); ?>
+						</a>
 					</div>
 				<?php endif; ?>
 			</div>
@@ -121,7 +133,6 @@ $types = $this->types;
 				</div>
 			<?php endif;	?>
 		</div>
-
 
 	</div>
 </section>
