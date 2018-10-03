@@ -605,7 +605,7 @@ class Query
 		// filter by one-to-one criteria
 		foreach ($criteria as $attribute => $value)
 		{
-			if ($value != 0)
+			if (!!$value)
 			{
 				$records->whereEquals($attribute, $value);
 			}
