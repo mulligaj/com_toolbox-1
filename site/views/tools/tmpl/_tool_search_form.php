@@ -221,6 +221,20 @@ $resultsUrl = Route::url(
 			?>
 		</div>
 		<hr>
+		<div class="hidden">
+			<?php
+				$blankQuery = new Components\Toolbox\Helpers\Query();
+				$this->view('_list_bergs_fields')
+					->set('query', $blankQuery)
+					->display();
+				$this->view('_list_idc_fields')
+					->set('query', $blankQuery)
+					->display();
+				$this->view('_list_other_fields')
+					->set('query', $blankQuery)
+					->display();
+			?>
+		</div>
 	</div>
 
 	<div class="row">

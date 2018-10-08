@@ -8,3 +8,7 @@
   font-size: x-small;
   text-transform: uppercase;
 }
+
+.hidden {
+	display: none;
+}
