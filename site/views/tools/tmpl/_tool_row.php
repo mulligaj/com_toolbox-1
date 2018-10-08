@@ -41,7 +41,7 @@ $tool = $this->tool;
 $toolId = $tool->get('id');
 $toolName = $tool->get('name');
 $toolPublished = $tool->get('published');
-$toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
+$toolUrl = Route::url("/toolbox/tools/$toolId/objectives");
 ?>
 
 <li class="tool-row grid" data-published="<?php echo !!$toolPublished; ?>">

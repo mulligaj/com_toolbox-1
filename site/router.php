@@ -69,7 +69,7 @@ class Router extends Base
 
 				if (!isset($segments[2]))
 				{
-					$vars['task'] = 'downloads';
+					$vars['task'] = 'objectives';
 				}
 			}
 			else
