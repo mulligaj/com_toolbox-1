@@ -39,9 +39,9 @@ $attribute = $this->attribute;
 $attributeEditMappings = [
 	'downloads' => 'downloads',
 	'links' => 'links',
-	'materials' => 'objectives',
-	'notes' => 'objectives',
-	'objectives' => 'objectives',
+	'materials' => 'materials',
+	'notes' => 'materials',
+	'objectives' => 'basic',
 	'related' => 'related',
 	'frameworks' => 'frameworks'
 ];

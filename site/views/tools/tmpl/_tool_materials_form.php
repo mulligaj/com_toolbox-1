@@ -33,31 +33,46 @@
 // No direct access
 defined('_HZEXEC_') or die();
 
-$this->css('stepsNavWrapper');
+$this->css('toolMaterialsForm');
 
-$current = $this->current;
-$toolId = $this->toolId;
-
-$steps = [
-	'Basic Info' => "/toolbox/tools/$toolId/editbasic",
-	'Frameworks' => "/toolbox/tools/$toolId/editframeworks",
-	'Materials & Notes' => "/toolbox/tools/$toolId/editmaterials",
-	'Links' => "/toolbox/tools/$toolId/editlinks",
-	'Downloads' => "/toolbox/tools/$toolId/editdownloads",
-	'Related Tools' => "/toolbox/tools/$toolId/editrelated",
-	'Tags' => "/toolbox/tools/$toolId/edittags"
-];
+$action = $this->action;
+$step = $this->step;
+$tool = $this->tool;
 ?>
 
-<div id="steps-nav-wrapper" class="col span12">
-	<ul id="steps-nav">
-		<?php foreach ($steps as $text => $url): ?>
-			<li <?php if ($current == $text) echo 'class="current"'; ?>>
-				<a href="<?php echo $url; ?>">
-					<?php echo $text; ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
+<form id="hubForm" class="full" method="post" action="<?php echo $action; ?>">
 
+	<fieldset>
+		<legend>
+			<?php echo Lang::txt('COM_TOOLBOX_TOOLS_MATERIALS'); ?>
+		</legend>
+		<div class="grid">
+			<div class="col span12 editor-wrapper">
+				<?php
+					echo $this->editor('tool[materials]', $tool->get('materials'), 50, 5);
+				?>
+			</div>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>
+			<?php echo Lang::txt('COM_TOOLBOX_TOOLS_NOTES'); ?>
+		</legend>
+		<div class="grid">
+			<div class="col span12 editor-wrapper">
+				<?php
+					echo $this->editor('tool[notes]', $tool->get('notes'), 50, 5);
+				?>
+			</div>
+		</div>
+	</fieldset>
+
+	<input type="hidden" name="step" value="<?php echo $step; ?>" />
+
+	<?php echo Html::input('token'); ?>
+
+	<input class="btn btn-success" type="submit"
+		value="<?php echo Lang::txt('COM_TOOLBOX_COMMON_SAVE_CONTINUE'); ?>">
+
+</form>

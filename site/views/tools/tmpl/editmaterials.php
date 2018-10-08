@@ -43,12 +43,12 @@ Document::setTitle($page);
 $formAction = Route::url(
 	"index.php?option=$this->option&controller=$this->controller&task=update&id=$toolId"
 );
-$step = 'objectives';
+$step = 'materials';
 ?>
 
 <?php
 	$this->view('_breadcrumbs')
-		->set('current', ['Edit Learning Objectives' => 'editobjectives'])
+		->set('current', ['Edit Materials' => 'editmaterials'])
 		->set('toolId', $toolId)
 		->set('toolName', $toolName)
 		->display();
@@ -69,14 +69,14 @@ $step = 'objectives';
 
 		<?php
 			$this->view('_steps_nav')
-				->set('current', 'Objectives, Materials, & Notes')
+				->set('current', 'Materials & Notes')
 				->set('toolId', $toolId)
 				->display();
 		?>
 
 		<div class="col span10 offset1">
 			<?php
-				$this->view('_tool_objectives_form')
+				$this->view('_tool_materials_form')
 					->set('action', $formAction)
 					->set('step', $step)
 					->set('tool', $tool)

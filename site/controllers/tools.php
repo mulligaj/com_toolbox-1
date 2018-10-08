@@ -78,8 +78,7 @@ class Tools extends SiteController
 	 * @var  array
 	 */
 	protected $_taskMap = [
-		'__default' => 'list',
-		'editObjectivesTask' => 'editObjectives'
+		'__default' => 'list'
 	];
 
 	/*
@@ -190,12 +189,12 @@ class Tools extends SiteController
 	}
 
 	/*
-	 * Renders the objectives page of the tool update process
+	 * Renders the materials page of the tool update process
 	 *
 	 * @param   Hubzero\Relational  $tool     Tool instance
 	 * @return void
 	 */
-	public function editObjectivesTask($tool = null)
+	public function editMaterialsTask($tool = null)
 	{
 		$id = Request::getInt('id');
 		$tool = $tool ? $tool : Tool::one($id);

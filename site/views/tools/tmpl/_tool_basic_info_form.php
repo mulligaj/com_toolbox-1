@@ -50,16 +50,16 @@ $toolsTypeIds = isset($this->toolsTypeIds) ? $this->toolsTypeIds : [];
 			->set('types', $types)
 			->set('toolsTypeIds', $toolsTypeIds)
 			->display();
-	;?>
 
-	<?php
 		$this->view('_duration_budget_fields')
 			->set('tool', $tool)
 			->display();
-	;?>
 
-	<?php
 		$this->view('_source_fields')
+			->set('tool', $tool)
+			->display();
+
+		$this->view('_objective_fields')
 			->set('tool', $tool)
 			->display();
 	;?>
