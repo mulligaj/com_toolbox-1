@@ -53,6 +53,7 @@ use Components\Toolbox\Helpers\ToolsTypesFactory;
 use Components\Toolbox\Helpers\ToolUpdateHelper;
 use Components\Tags\Models\Tag;
 use Hubzero\Component\SiteController;
+use Hubzero\Database\Value\Raw as RawSql;
 
 class Tools extends SiteController
 {
@@ -763,9 +764,10 @@ class Tools extends SiteController
 			$formQuery = new Query($queryData);
 		}
 
+		$orderSql = new RawSql('IF(name LIKE "The %", substr(name, 5), name)');
 		$tools = $query->findRecords(Tool::class)
 			->whereEquals('archived', 0)
-			->order('name', 'asc');
+			->order($orderSql, 'asc');
 
 		// hide the tool if the user is not authorized to view it
 		if (!$userIsAdmin)
