@@ -232,7 +232,7 @@ class DownloadsHelper
 	 */
 	public static function writableTemp()
 	{
-		$writableTemp = PATH_ROOT . '/app/tmp';
+		$writableTemp = PATH_ROOT . '/app/site/toolbox/downloads/tmp';
 
 		return $writableTemp;
 	}
