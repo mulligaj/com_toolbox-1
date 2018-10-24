@@ -46,7 +46,7 @@ $toolUrl = Route::url("/toolbox/tools/$toolId/objectives");
 
 <li class="tool-row grid" data-published="<?php echo !!$toolPublished; ?>">
 	<div class="col span3 title">
-		<a href="<?php echo $toolUrl; ?>">
+		<a href="<?php echo $toolUrl; ?>" target="_blank">
 			<?php echo $toolName; ?>
 		</a>
 	</div>
