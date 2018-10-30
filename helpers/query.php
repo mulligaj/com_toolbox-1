@@ -511,7 +511,6 @@ class Query
 	{
 		$attributesList = self::_getAttributesWhitelist();
 		$queryData = [];
-
 		foreach ($attributesList as $attribute)
 		{
 			$queryData[$attribute] = $this->$attribute;
@@ -549,6 +548,8 @@ class Query
 	public function findRecords($recordClass)
 	{
 		$records = $recordClass::all();
+		$toolsTable = $this->_getToolsTable();
+		$records->select("$toolsTable.*");
 
 		if (!$this->isEmpty())
 		{
