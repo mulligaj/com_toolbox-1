@@ -34,6 +34,7 @@
 defined('_HZEXEC_') or die();
 
 $this->css('selectForm');
+$this->css('editTags');
 
 $action = $this->action;
 $controller = $this->controller;
