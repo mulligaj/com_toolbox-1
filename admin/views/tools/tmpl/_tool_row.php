@@ -39,8 +39,9 @@ $i = $this->i;
 $k = $this->k;
 $showPublished = isset($this->showPublished) ? $this->showPublished : true;
 $tool = $this->tool;
-$toolDuration = $this->escape($tool->durationDescription());
-$toolExternalCost = $tool->get('external_cost');
+$toolAuthor = $tool->user()->row();
+$toolCreatedDate = strtotime($tool->get('created'));
+$toolCreatedDate = $this->escape(date('F d, Y @ H:i', $toolCreatedDate));
 $toolId = $tool->get('id');
 $toolName = $this->escape($tool->get('name'));
 $toolPublished = $tool->get('published');
@@ -68,19 +69,15 @@ $unpublishUrl = Route::url("index.php?option=$component&controller=$controller&t
 	</td>
 
 	<td>
-		<?php echo $toolDuration; ?>
+		<?php echo $toolCreatedDate; ?>
 	</td>
 
 	<td>
-		<?php if ($toolExternalCost): ?>
-			<span class="state publish">
-				<span><?php echo Lang::txt('UNPUBLISH'); ?></span>
-			</span>
-		<?php else: ?>
-			<span class="state unpublish">
-				<span><?php echo Lang::txt('PUBLISH'); ?></span>
-			</span>
-		<?php endif; ?>
+		<a href="<?php echo $toolAuthor->link(); ?>">
+			<?php
+				echo $toolAuthor->get('username');
+			?>
+		</a>
 	</td>
 
 	<?php if ($showPublished): ?>

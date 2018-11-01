@@ -527,7 +527,7 @@ class Tool extends Relational
 	 */
 	public function user()
 	{
-		$userModelName = 'Components\Toolbox\Models\ToolType';
+		$userModelName = 'Hubzero\User\User';
 		$foreignKey = 'user_id';
 
 		$user = $this->belongsToOne(

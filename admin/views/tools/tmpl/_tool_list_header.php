@@ -48,10 +48,10 @@ $sortDirection = $this->sortDirection;
 			<?php echo Html::grid('sort', 'NAME', 'name', $sortDirection, $sortCriteria); ?>
 		</th>
 		<th scope="col">
-			<?php echo Html::grid('sort', 'DURATION', 'duration', $sortDirection, $sortCriteria); ?>
+			<?php echo Html::grid('sort', 'CREATED', 'created', $sortDirection, $sortCriteria); ?>
 		</th>
 		<th scope="col">
-			<?php echo Html::grid('sort', 'EXTERNAL COST', 'external_cost', $sortDirection, $sortCriteria); ?>
+			<?php echo 'AUTHOR'; ?>
 		</th>
 		<?php if ($showPublished): ?>
 			<th scope="col">
