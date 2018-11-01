@@ -83,8 +83,8 @@ class Linksv1_0 extends ApiController
 
 		if ($link->destroy())
 		{
-			// unpublish tool if user not an admin
-			$tool->unpublishIfNotAdmin();
+			// trigger on update event
+			Event::trigger('toolbox.onUpdate', [$tool]);
 
 			$response['status'] = 'success';
 		}

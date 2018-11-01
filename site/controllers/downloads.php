@@ -138,8 +138,8 @@ class Downloads extends SiteController
 
 		if ($saveResult->succeeded())
 		{
-			// unpublish tool if user not an admin
-			$tool->unpublishIfNotAdmin();
+			// trigger on update event
+			Event::trigger('toolbox.onUpdate', [$tool]);
 
 			$download = $saveResult->getSuccessfulSaves()[0];
 			$downloadId = $download->get('id');
@@ -201,8 +201,8 @@ class Downloads extends SiteController
 
 		if ($saveResult->succeeded())
 		{
-			// unpublish tool if user not an admin
-			$tool->unpublishIfNotAdmin();
+			// trigger on update event
+			Event::trigger('toolbox.onUpdate', [$tool]);
 
 			$this->_successfulUpdate();
 		}
@@ -266,8 +266,8 @@ class Downloads extends SiteController
 
 		if ($destroyResult->succeeded())
 		{
-			// unpublish tool if user not an admin
-			$tool->unpublishIfNotAdmin();
+			// trigger on update event
+			Event::trigger('toolbox.onUpdate', [$tool]);
 
 			$this->_successfulDestroy();
 		}

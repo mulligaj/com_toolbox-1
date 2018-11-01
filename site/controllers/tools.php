@@ -53,6 +53,7 @@ use Components\Toolbox\Helpers\ToolsTypesFactory;
 use Components\Toolbox\Helpers\ToolUpdateHelper;
 use Components\Tags\Models\Tag;
 use Hubzero\Component\SiteController;
+use Hubzero\Event;
 
 class Tools extends SiteController
 {
@@ -336,11 +337,8 @@ class Tools extends SiteController
 		// get tools type associations
 		$typeIds = Request::has('types') ? Request::getArray('types') : null;
 
-		// unpublish tool if user not an admin
-		if (!ToolAuthHelper::currentIsAuthorized('core.manage'))
-		{
-			$tool->unpublishIfNotAdmin();
-		}
+		// trigger on update event
+		Event::trigger('toolbox.onUpdate', [$tool]);
 
 		// set tool attributes
 		$tool->set($toolData);

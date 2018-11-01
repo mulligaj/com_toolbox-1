@@ -69,8 +69,8 @@ class ToolsTags extends SiteController
 
 		if ($updateResult->succeeded())
 		{
-			// unpublish tool if user not an admin
-			$tool->unpublishIfNotAdmin();
+			// trigger on update event
+			Event::trigger('toolbox.onUpdate', [$tool]);
 
 			$this->_successfulUpdate();
 		}
