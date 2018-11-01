@@ -339,7 +339,7 @@ class Tools extends SiteController
 		// unpublish tool if user not an admin
 		if (!ToolAuthHelper::currentIsAuthorized('core.manage'))
 		{
-			$toolData['published'] = 0;
+			$tool->unpublishIfNotAdmin();
 		}
 
 		// set tool attributes
