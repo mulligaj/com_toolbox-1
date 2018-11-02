@@ -34,16 +34,18 @@ namespace Components\Toolbox\Admin\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
+require_once "$toolboxPath/helpers/eventHelper.php";
 require_once "$toolboxPath/admin/helpers/filterHelper.php";
 require_once "$toolboxPath/admin/helpers/redirectHelper.php";
 require_once "$toolboxPath/admin/helpers/toolsFactory.php";
 require_once "$toolboxPath/models/tool.php";
 
-use \Components\Toolbox\Admin\Helpers\FilterHelper;
-use \Components\Toolbox\Admin\Helpers\Permissions;
-use \Components\Toolbox\Admin\Helpers\RedirectHelper;
-use \Components\Toolbox\Admin\Helpers\ToolsFactory;
-use \Components\Toolbox\Models\Tool;
+use Components\Toolbox\Helpers\EventHelper;
+use Components\Toolbox\Admin\Helpers\FilterHelper;
+use Components\Toolbox\Admin\Helpers\Permissions;
+use Components\Toolbox\Admin\Helpers\RedirectHelper;
+use Components\Toolbox\Admin\Helpers\ToolsFactory;
+use Components\Toolbox\Models\Tool;
 use Hubzero\Component\AdminController;
 use Hubzero\Database\Query;
 
@@ -178,6 +180,9 @@ class Tools extends AdminController
 
 		if ($tool->save())
 		{
+			// trigger on update event
+			EventHelper::onToolUpdate($tool, 'published the tool');
+
 			$this->_successfulPublishUpdate();
 		}
 		else
@@ -200,6 +205,9 @@ class Tools extends AdminController
 
 		if ($tool->save())
 		{
+			// trigger on update event
+			EventHelper::onToolUpdate($tool, 'unpublished the tool');
+
 			$this->_successfulPublishUpdate();
 		}
 		else
