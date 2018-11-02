@@ -34,10 +34,12 @@ namespace Components\Toolbox\Api\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
+require_once "$toolboxPath/helpers/eventHelper.php";
 require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/models/link.php";
 require_once "$toolboxPath/models/tool.php";
 
+use Components\Toolbox\Helpers\EventHelper;
 use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Toolbox\Models\Link;
 use Components\Toolbox\Models\Tool;
@@ -50,7 +52,7 @@ class Linksv1_0 extends ApiController
 	/**
 	 * Controller version
 	 *
-	 * @var   string
+	 * @var  string
 	 */
 	protected static $version = '1.0';
 
@@ -84,7 +86,7 @@ class Linksv1_0 extends ApiController
 		if ($link->destroy())
 		{
 			// trigger on update event
-			Event::trigger('toolbox.onUpdate', [$tool]);
+			EventHelper::onToolUpdate($tool, 'deleted a link');
 
 			$response['status'] = 'success';
 		}

@@ -34,10 +34,12 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
+require_once "$toolboxPath/helpers/eventHelper.php";
 require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/helpers/toolsTagsFactory.php";
 require_once "$toolboxPath/models/tool.php";
 
+use Components\Toolbox\Helpers\EventHelper;
 use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Toolbox\Helpers\ToolsTagsFactory;
 use Components\Toolbox\Models\Tool;
@@ -70,7 +72,7 @@ class ToolsTags extends SiteController
 		if ($updateResult->succeeded())
 		{
 			// trigger on update event
-			Event::trigger('toolbox.onUpdate', [$tool]);
+			EventHelper::onToolUpdate($tool, 'updated tag(s)');
 
 			$this->_successfulUpdate();
 		}

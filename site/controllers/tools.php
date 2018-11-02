@@ -38,8 +38,9 @@ $tagsPath = PATH_CORE . '/components/com_tags';
 require_once "$toolboxPath/models/link.php";
 require_once "$toolboxPath/models/tool.php";
 require_once "$toolboxPath/models/toolType.php";
-require_once "$toolboxPath/helpers/toolAuthHelper.php";
+require_once "$toolboxPath/helpers/eventHelper.php";
 require_once "$toolboxPath/helpers/query.php";
+require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/helpers/toolsTypesFactory.php";
 require_once "$toolboxPath/helpers/toolUpdateHelper.php";
 require_once "$tagsPath/models/tag.php";
@@ -47,13 +48,13 @@ require_once "$tagsPath/models/tag.php";
 use Components\Toolbox\Models\Link;
 use Components\Toolbox\Models\Tool;
 use Components\Toolbox\Models\ToolType;
+use Components\Toolbox\Helpers\EventHelper;
 use Components\Toolbox\Helpers\Query;
 use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Toolbox\Helpers\ToolsTypesFactory;
 use Components\Toolbox\Helpers\ToolUpdateHelper;
 use Components\Tags\Models\Tag;
 use Hubzero\Component\SiteController;
-use Hubzero\Event;
 
 class Tools extends SiteController
 {
@@ -338,7 +339,7 @@ class Tools extends SiteController
 		$typeIds = Request::has('types') ? Request::getArray('types') : null;
 
 		// trigger on update event
-		Event::trigger('toolbox.onUpdate', [$tool]);
+		EventHelper::onToolUpdate($tool, 'updated tool data');
 
 		// set tool attributes
 		$tool->set($toolData);

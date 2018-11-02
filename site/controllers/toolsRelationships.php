@@ -34,11 +34,13 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
+require_once "$toolboxPath/helpers/eventHelper.php";
 require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/helpers/toolsRelationshipsFactory.php";
 require_once "$toolboxPath/models/toolsRelationship.php";
 require_once "$toolboxPath/models/tool.php";
 
+use Components\Toolbox\Helpers\EventHelper;
 use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Toolbox\Helpers\ToolsRelationshipsFactory;
 use Components\Toolbox\Models\ToolsRelationship;
@@ -78,7 +80,7 @@ class ToolsRelationships extends SiteController
 		if ($updateResult->succeeded())
 		{
 			// trigger on update event
-			Event::trigger('toolbox.onUpdate', [$tool]);
+			EventHelper::onToolUpdate($tool, 'updated related tools');
 
 			$this->_successfulUpdate();
 		}

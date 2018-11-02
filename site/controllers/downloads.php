@@ -34,12 +34,14 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
+require_once "$toolboxPath/helpers/eventHelper.php";
 require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/helpers/fileUploadHelper.php";
 require_once "$toolboxPath/helpers/downloadsFactory.php";
 require_once "$toolboxPath/helpers/downloadsHelper.php";
 require_once "$toolboxPath/models/tool.php";
 
+use Components\Toolbox\Helpers\EventHelper;
 use Components\Toolbox\Helpers\FileUploadHelper;
 use Components\Toolbox\Helpers\DownloadsFactory;
 use Components\Toolbox\Helpers\DownloadsHelper;
@@ -139,7 +141,7 @@ class Downloads extends SiteController
 		if ($saveResult->succeeded())
 		{
 			// trigger on update event
-			Event::trigger('toolbox.onUpdate', [$tool]);
+			EventHelper::onToolUpdate($tool, 'updated download(s)');
 
 			$download = $saveResult->getSuccessfulSaves()[0];
 			$downloadId = $download->get('id');
@@ -202,7 +204,7 @@ class Downloads extends SiteController
 		if ($saveResult->succeeded())
 		{
 			// trigger on update event
-			Event::trigger('toolbox.onUpdate', [$tool]);
+			EventHelper::onToolUpdate($tool, 'updated download(s)');
 
 			$this->_successfulUpdate();
 		}
@@ -267,7 +269,7 @@ class Downloads extends SiteController
 		if ($destroyResult->succeeded())
 		{
 			// trigger on update event
-			Event::trigger('toolbox.onUpdate', [$tool]);
+			EventHelper::onToolUpdate($tool, 'deleted download(s)');
 
 			$this->_successfulDestroy();
 		}

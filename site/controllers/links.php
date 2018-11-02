@@ -34,10 +34,12 @@ namespace Components\Toolbox\Site\Controllers;
 
 $toolboxPath = Component::path('com_toolbox');
 
+require_once "$toolboxPath/helpers/eventHelper.php";
 require_once "$toolboxPath/helpers/linksFactory.php";
 require_once "$toolboxPath/helpers/toolAuthHelper.php";
 require_once "$toolboxPath/models/tool.php";
 
+use Components\Toolbox\Helpers\EventHelper;
 use Components\Toolbox\Helpers\LinksFactory;
 use Components\Toolbox\Helpers\ToolAuthHelper;
 use Components\Toolbox\Models\Tool;
@@ -76,7 +78,7 @@ class Links extends SiteController
 		if ($updateResult->successfulSavesCount() > 0)
 		{
 			// trigger on update event
-			Event::trigger('toolbox.onUpdate', [$tool]);
+			EventHelper::onToolUpdate($tool, 'updated link(s)');
 		}
 
 		if ($updateResult->succeeded())
