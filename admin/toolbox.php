@@ -71,7 +71,8 @@ $controllerClassNameMap = [
 	'downloads' => 'Downloads',
 	'reviews' => 'Reviews',
 	'tools' => 'Tools',
-	'tooltypes' => 'ToolTypes'
+	'tooltypes' => 'ToolTypes',
+	'toolupdates' => 'ToolUpdates'
 ];
 
 $controllerClassName = __NAMESPACE__ . "\\Controllers\\" . $controllerClassNameMap[$controllerName];

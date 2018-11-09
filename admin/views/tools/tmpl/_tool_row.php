@@ -45,10 +45,17 @@ $toolCreatedDate = $this->escape(date('F d, Y @ H:i', $toolCreatedDate));
 $toolId = $tool->get('id');
 $toolName = $this->escape($tool->get('name'));
 $toolPublished = $tool->get('published');
+$toolUpdatesListUrl = Route::url(
+	"index.php?option=$component&controller=toolupdates&task=list&id=$toolId"
+);
 $toolUrl = Route::url("/toolbox/tools/$toolId/downloads");
 
-$publishUrl = Route::url("index.php?option=$component&controller=$controller&task=publish&id=$toolId");
-$unpublishUrl = Route::url("index.php?option=$component&controller=$controller&task=unpublish&id=$toolId");
+$publishUrl = Route::url(
+	"index.php?option=$component&controller=$controller&task=publish&id=$toolId"
+);
+$unpublishUrl = Route::url(
+	"index.php?option=$component&controller=$controller&task=unpublish&id=$toolId"
+);
 ?>
 
 <tr class="<?php echo "row$k"; ?>">
@@ -65,7 +72,9 @@ $unpublishUrl = Route::url("index.php?option=$component&controller=$controller&t
 	</td>
 
 	<td>
-		<?php echo $toolName; ?>
+		<a href="<?php echo $toolUpdatesListUrl; ?>">
+			<?php echo $toolName; ?>
+		</a>
 	</td>
 
 	<td>
