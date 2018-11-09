@@ -84,13 +84,11 @@ class Tools extends AdminController
 		$tools = Tool::all()
 			->whereEquals('archived', 0);
 
-		// filter tools by name
 		if (!empty($filters['search']))
 		{
 			$tools->where('name', ' like ', "%{$filters['search']}%");
 		}
 
-		// sort tools based on given criteria
 		$tools = $tools->order($filters['sort'], $filters['sort_Dir'])
 			->paginated('limitstart', 'limit');
 
