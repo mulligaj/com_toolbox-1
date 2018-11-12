@@ -32,57 +32,33 @@
 
 namespace Components\Toolbox\Helpers;
 
-class EventHelper
+use Hubzero\Activity\Log;
+
+class ToolActivityHelper
 {
 
 	/**
-	 * Toolbox plugin scope
+	 * Activity scope
 	 *
-	 * @var  string
+	 * @var string
 	 */
-	const TOOLBOX_SCOPE = 'toolbox';
+	const ACTIVITY_SCOPE = 'toolbox.tools';
 
 	/**
-	 * Triggers the tool update event
+	 * Retrieves activity logs for tool with given ID
 	 *
-	 * @param    object   $tool          Tool object being udpated
-	 * @param    string   $description   Update description
-	 * @return   void
+	 * @param    int     $toolId   Given tool's ID
+	 * @return   object
 	 */
-	public static function onToolUpdate($tool, $description)
+	public static function getUpdates($toolId)
 	{
-		$eventName = self::_generateEventName('onUpdate');
-		$updateReport = [
-			$tool,
-			$description
-		];
+		$activityScope = self::ACTIVITY_SCOPE;
 
-		self::_triggerEvent($eventName, $updateReport);
-	}
+		$toolUpdates = Log::all()
+			->whereEquals('scope', $activityScope)
+			->whereEquals('scope_id', $toolId);
 
-	/**
-	 * Generates event name based on action taken
-	 *
-	 * @param    string   $action   Action taken
-	 * @return   string
-	 */
-	protected static function _generateEventName($action)
-	{
-		$eventName = self::TOOLBOX_SCOPE . ".$action";
-
-		return $eventName;
-	}
-
-	/**
-	 * Triggers given event with the given data
-	 *
-	 * @param    string   $eventName   Name of the event
-	 * @param    array    $eventData   Arguments to the event handler
-	 * @return   void
-	 */
-	protected static function _triggerEvent($eventName, $eventData = [])
-	{
-		Event::trigger($eventName, $eventData);
+		return $toolUpdates;
 	}
 
 }

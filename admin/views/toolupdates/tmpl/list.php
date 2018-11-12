@@ -30,59 +30,50 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Toolbox\Helpers;
+// No direct access
+defined('_HZEXEC_') or die();
 
-class EventHelper
-{
+$this->js('adminForm');
 
-	/**
-	 * Toolbox plugin scope
-	 *
-	 * @var  string
-	 */
-	const TOOLBOX_SCOPE = 'toolbox';
+$component = $this->option;
+$controller = $this->controller;
+$filters = $this->filters;
+$permissions = $this->permissions;
+$sortCriteria = $filters['sort'];
+$sortDirection = $filters['sort_Dir'];
+$toolbarTitle = $this->title;
+$toolId = $this->toolId;
+$toolUpdates = $this->toolUpdates;
 
-	/**
-	 * Triggers the tool update event
-	 *
-	 * @param    object   $tool          Tool object being udpated
-	 * @param    string   $description   Update description
-	 * @return   void
-	 */
-	public static function onToolUpdate($tool, $description)
-	{
-		$eventName = self::_generateEventName('onUpdate');
-		$updateReport = [
-			$tool,
-			$description
-		];
+$listUrl = Route::url(
+	"/administrator/index.php?option=$component&controller=$controller"
+);
 
-		self::_triggerEvent($eventName, $updateReport);
-	}
+Toolbar::title($toolbarTitle);
 
-	/**
-	 * Generates event name based on action taken
-	 *
-	 * @param    string   $action   Action taken
-	 * @return   string
-	 */
-	protected static function _generateEventName($action)
-	{
-		$eventName = self::TOOLBOX_SCOPE . ".$action";
+?>
 
-		return $eventName;
-	}
+<form action="<?php echo $listUrl; ?>" method="post" name="adminForm">
 
-	/**
-	 * Triggers given event with the given data
-	 *
-	 * @param    string   $eventName   Name of the event
-	 * @param    array    $eventData   Arguments to the event handler
-	 * @return   void
-	 */
-	protected static function _triggerEvent($eventName, $eventData = [])
-	{
-		Event::trigger($eventName, $eventData);
-	}
+	<?php
+		$this->view('_updates_list')
+			->set('sortCriteria', $sortCriteria)
+			->set('sortDirection', $sortDirection)
+			->set('toolUpdates', $toolUpdates)
+			->display();
+	?>
 
-}
+	<?php echo Html::input('token'); ?>
+
+	<!-- Filtering dependencies -->
+	<input type="hidden" name="filter_order" value="<?php echo $sortCriteria; ?>" />
+	<input type="hidden" name="filter_order_Dir" value="<?php echo $sortDirection; ?>" />
+
+	<!-- Toolbar dependencies -->
+	<input type="hidden" name="controller" value="<?php echo $controller; ?>" />
+	<input type="hidden" name="option" value="<?php echo $component ?>" />
+	<input type="hidden" name="boxchecked" value="0" />
+	<input type="hidden" name="id" value="<?php echo $toolId; ?>" />
+	<input type="hidden" name="task" />
+
+</form>

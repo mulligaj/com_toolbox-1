@@ -30,59 +30,32 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Toolbox\Helpers;
+// No direct access
+defined('_HZEXEC_') or die();
 
-class EventHelper
-{
+$showPublished = isset($this->showPublished) ? $this->showPublished : true;
+$sortCriteria = $this->sortCriteria;
+$sortDirection = $this->sortDirection;
+?>
 
-	/**
-	 * Toolbox plugin scope
-	 *
-	 * @var  string
-	 */
-	const TOOLBOX_SCOPE = 'toolbox';
+<thead>
+	<tr>
 
-	/**
-	 * Triggers the tool update event
-	 *
-	 * @param    object   $tool          Tool object being udpated
-	 * @param    string   $description   Update description
-	 * @return   void
-	 */
-	public static function onToolUpdate($tool, $description)
-	{
-		$eventName = self::_generateEventName('onUpdate');
-		$updateReport = [
-			$tool,
-			$description
-		];
+		<th scope="col" class="priority-5">
+			<?php echo Html::grid('sort', 'ID', 'id', $sortDirection, $sortCriteria); ?>
+		</th>
 
-		self::_triggerEvent($eventName, $updateReport);
-	}
+		<th scope="col">
+			<?php echo 'AUTHOR'; ?>
+		</th>
 
-	/**
-	 * Generates event name based on action taken
-	 *
-	 * @param    string   $action   Action taken
-	 * @return   string
-	 */
-	protected static function _generateEventName($action)
-	{
-		$eventName = self::TOOLBOX_SCOPE . ".$action";
+		<th scope="col">
+			<?php echo 'DESCRIPTION'; ?>
+		</th>
 
-		return $eventName;
-	}
+		<th scope="col">
+			<?php echo Html::grid('sort', 'DATE', 'created', $sortDirection, $sortCriteria); ?>
+		</th>
 
-	/**
-	 * Triggers given event with the given data
-	 *
-	 * @param    string   $eventName   Name of the event
-	 * @param    array    $eventData   Arguments to the event handler
-	 * @return   void
-	 */
-	protected static function _triggerEvent($eventName, $eventData = [])
-	{
-		Event::trigger($eventName, $eventData);
-	}
-
-}
+	</tr>
+</thead>

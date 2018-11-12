@@ -30,59 +30,33 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Toolbox\Helpers;
+// No direct access
+defined('_HZEXEC_') or die();
 
-class EventHelper
-{
+$component = $this->option;
+$controller = $this->controller;
+$k = $this->k;
+$update = $this->update;
+$userId = $update->get('created_by');
+$user = User::one($userId);
+?>
 
-	/**
-	 * Toolbox plugin scope
-	 *
-	 * @var  string
-	 */
-	const TOOLBOX_SCOPE = 'toolbox';
+<tr class="<?php echo "row$k"; ?>">
 
-	/**
-	 * Triggers the tool update event
-	 *
-	 * @param    object   $tool          Tool object being udpated
-	 * @param    string   $description   Update description
-	 * @return   void
-	 */
-	public static function onToolUpdate($tool, $description)
-	{
-		$eventName = self::_generateEventName('onUpdate');
-		$updateReport = [
-			$tool,
-			$description
-		];
+	<td>
+		<?php echo $update->get('id'); ?>
+	</td>
 
-		self::_triggerEvent($eventName, $updateReport);
-	}
+	<td>
+		<?php echo $user->get('username'); ?>
+	</td>
 
-	/**
-	 * Generates event name based on action taken
-	 *
-	 * @param    string   $action   Action taken
-	 * @return   string
-	 */
-	protected static function _generateEventName($action)
-	{
-		$eventName = self::TOOLBOX_SCOPE . ".$action";
+	<td>
+		<?php echo $update->get('description'); ?>
+	</td>
 
-		return $eventName;
-	}
+	<td>
+		<?php echo $update->get('created'); ?>
+	</td>
 
-	/**
-	 * Triggers given event with the given data
-	 *
-	 * @param    string   $eventName   Name of the event
-	 * @param    array    $eventData   Arguments to the event handler
-	 * @return   void
-	 */
-	protected static function _triggerEvent($eventName, $eventData = [])
-	{
-		Event::trigger($eventName, $eventData);
-	}
-
-}
+</tr>

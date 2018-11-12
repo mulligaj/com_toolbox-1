@@ -30,59 +30,43 @@
  * @license   http://opensource.org/licenses/MIT MIT
  */
 
-namespace Components\Toolbox\Helpers;
+// No direct access
+defined('_HZEXEC_') or die();
 
-class EventHelper
-{
+$sortCriteria = $this->sortCriteria;
+$sortDirection = $this->sortDirection;
+$toolUpdates = $this->toolUpdates;
+?>
 
-	/**
-	 * Toolbox plugin scope
-	 *
-	 * @var  string
-	 */
-	const TOOLBOX_SCOPE = 'toolbox';
+<table class="adminlist">
+	<?php
+		$this->view('_update_list_header')
+			->set('sortCriteria', $sortCriteria)
+			->set('sortDirection', $sortDirection)
+			->display();
+	?>
 
-	/**
-	 * Triggers the tool update event
-	 *
-	 * @param    object   $tool          Tool object being udpated
-	 * @param    string   $description   Update description
-	 * @return   void
-	 */
-	public static function onToolUpdate($tool, $description)
-	{
-		$eventName = self::_generateEventName('onUpdate');
-		$updateReport = [
-			$tool,
-			$description
-		];
+	<tfoot>
+		<tr>
+			<td colspan="7"><?php echo $toolUpdates->pagination; ?></td>
+		</tr>
+	</tfoot>
 
-		self::_triggerEvent($eventName, $updateReport);
-	}
+	<tbody>
+		<?php
+			$k = 0;
+			$i = 0;
+			foreach ($toolUpdates as $update):
 
-	/**
-	 * Generates event name based on action taken
-	 *
-	 * @param    string   $action   Action taken
-	 * @return   string
-	 */
-	protected static function _generateEventName($action)
-	{
-		$eventName = self::TOOLBOX_SCOPE . ".$action";
+				$this->view('_update_row')
+					->set('i', $i)
+					->set('k', $k)
+					->set('update', $update)
+					->display();
 
-		return $eventName;
-	}
-
-	/**
-	 * Triggers given event with the given data
-	 *
-	 * @param    string   $eventName   Name of the event
-	 * @param    array    $eventData   Arguments to the event handler
-	 * @return   void
-	 */
-	protected static function _triggerEvent($eventName, $eventData = [])
-	{
-		Event::trigger($eventName, $eventData);
-	}
-
-}
+				$i++;
+				$k = 1 - $k;
+			endforeach;
+		?>
+	</tbody>
+</table>
