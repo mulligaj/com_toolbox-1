@@ -241,7 +241,7 @@ class Advancedsearch extends SiteController
 		$queryData = Request::getArray('query');
 
 		// get current query
-		$query = Query::getCurrent();
+		$query = new Query();
 
 		// update query
 		$query->setType($queryData);

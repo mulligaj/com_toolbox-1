@@ -36,12 +36,12 @@ defined('_HZEXEC_') or die();
 $this->css('graySelect');
 
 $query = $this->query;
-$selectedTypesIds = $query->get('typesIds');
+$selectedTypesIds = $query->get('typesIds') ? $query->get('typesIds') : [];
 $size = isset($this->size) ? $this->size : 1;
 $types = $this->types;
 ?>
 
-<select name="query[typesIds][]" size="<?php echo $size; ?>" class="gray-select" required>
+<select name="query[typesIds][]" size="<?php echo $size; ?>" class="gray-select">
 	<option value="" selected disabled hidden>Select a tool type...</option>
 	<?php
 	foreach ($types as $type):

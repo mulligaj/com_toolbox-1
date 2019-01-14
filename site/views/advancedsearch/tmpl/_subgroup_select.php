@@ -44,7 +44,7 @@ $subgroupSizes = [
 ];
 ?>
 
-<select id="subgroup-select" name="query[subgroup_size]" class="gray-select" required>
+<select id="subgroup-select" name="query[subgroup_size]" class="gray-select">
 	<option value="" selected disabled hidden>Select a subgroup size...</option>
 	<?php foreach ($subgroupSizes as $size): ?>
 		<option value="<?php echo $size; ?>"

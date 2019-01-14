@@ -143,11 +143,14 @@ class Query
 	 */
 	public function __construct($args = [])
 	{
-		$attributesWhitelist = self::_getAttributesWhitelist(false);
+		$attributesWhitelist = self::_getAttributesWhitelist();
 
-		foreach ($attributesWhitelist as $attribute => $default)
+		foreach ($attributesWhitelist as $attribute)
 		{
-			$this->$attribute = Arr::getValue($args, $attribute, $default);
+			if (isset($args[$attribute]))
+			{
+				$this->$attribute = $args[$attribute];
+			}
 		}
 
 		$this->errors = [];
@@ -180,17 +183,11 @@ class Query
 	{
 		$key = 'typesIds';
 
-		if (!isset($data[$key]) || empty($data[$key]))
+		if (isset($data[$key]) && !empty($data[$key]))
 		{
-			$this->_addError('COM_TOOLBOX_GUIDED_QUERY_TYPE_REQUIRED');
-			$typesIds = [];
-		}
-		else
-		{
-			$typesIds = $data[$key];
+			$this->set([$key => $data[$key]]);
 		}
 
-		$this->set([$key => $typesIds]);
 	}
 
 	/*
@@ -203,17 +200,10 @@ class Query
 	{
 		$key = 'kinesthetic';
 
-		if (!isset($data[$key]))
+		if (isset($data[$key]))
 		{
-			$this->_addError('COM_TOOLBOX_GUIDED_QUERY_KINESTHETIC_REQUIRED');
-			$kinesthetic = 0;
+			$this->set([$key => $data[$key]]);
 		}
-		else
-		{
-			$kinesthetic = $data[$key];
-		}
-
-		$this->set([$key => $kinesthetic]);
 	}
 
 	/*
@@ -228,16 +218,14 @@ class Query
 		$aacuData = Arr::filterKeys($data, $aacuAttributes);
 		$selectedSum = array_sum(array_values($aacuData));
 
-		if ($selectedSum <= 0)
+		if ($selectedSum >= 0)
 		{
-			$this->_addError('COM_TOOLBOX_GUIDED_QUERY_AACU_REQUIRED_ERROR');
+			$this->set($aacuData);
 		}
 		elseif ($selectedSum >= count($aacuAttributes))
 		{
 			$this->_addError('COM_TOOLBOX_GUIDED_QUERY_AACU_NOT_ALL');
 		}
-
-		$this->set($aacuData);
 	}
 
 	/*
@@ -363,11 +351,7 @@ class Query
 	{
 		$key = 'subgroup_size';
 
-		if (!isset($data[$key]) || empty($data[$key]))
-		{
-			$this->_addError('COM_TOOLBOX_GUIDED_QUERY_SUBGROUP_SIZE_REQUIRED');
-		}
-		else
+		if (isset($data[$key]) && !empty($data[$key]))
 		{
 			$subgroupSize = $data[$key];
 			$this->set([$key => $subgroupSize]);
@@ -384,58 +368,31 @@ class Query
 	{
 		$key = 'external_cost';
 
-		if (!isset($data[$key]))
+		if (isset($data[$key]))
 		{
-			$this->_addError('COM_TOOLBOX_GUIDED_QUERY_EXTERNAL_COST_REQUIRED');
-		}
-		else
-		{
-			$externalCost = $data[$key];
-			$this->set([$key => $externalCost]);
+			$this->set([$key => $data[$key]]);
 		}
 	}
 
 	/*
 	 * Updates query instance's duration attributes after validation
 	 *
-	 * @param    array   $data   Data to update the query with
+	 * @param    array   $durations   Durations to update the query with
 	 * @return   void
 	 */
-	public function setDuration($data)
+	public function setDuration($durations)
 	{
-		$isValid = true;
-		$keysSet = true;
-		$minKey = 'duration_min';
 		$maxKey = 'duration_max';
+		$minKey = 'duration_min';
+		$durationMax = Arr::getValue($durations, $maxKey, '');
+		$durationMin = Arr::getValue($durations, $minKey, '');
 
-		if (!isset($data[$maxKey]) || $data[$maxKey] === '')
+		$this->set([$maxKey => $durationMax]);
+		$this->set([$minKey => $durationMin]);
+
+		if (!!$durationMax && !!$durationMin && ($durationMin > $durationMax))
 		{
-			$this->_addError('COM_TOOLBOX_GUIDED_QUERY_DURATION_MAX_REQUIRED');
-			$isValid = false;
-			$keysSet = false;
-		}
-
-		if (!isset($data[$minKey]) || $data[$minKey] === '')
-		{
-			$this->_addError('COM_TOOLBOX_GUIDED_QUERY_DURATION_MIN_REQUIRED');
-			$isValid = false;
-			$keysSet = false;
-		}
-
-		if ($keysSet)
-		{
-			$durationMin = $data[$minKey];
-			$durationMax = $data[$maxKey];
-
-			if ($durationMin >= $durationMax)
-			{
-				$this->_addError('COM_TOOLBOX_GUIDED_QUERY_DURATION_MIN_GREATER_MAX');
-			}
-
-			$this->set([
-				$minKey => $durationMin,
-				$maxKey => $durationMax
-			]);
+			$this->_addError('COM_TOOLBOX_GUIDED_QUERY_DURATION_MIN_GREATER_MAX');
 		}
 	}
 
@@ -511,9 +468,13 @@ class Query
 	{
 		$attributesList = self::_getAttributesWhitelist();
 		$queryData = [];
+
 		foreach ($attributesList as $attribute)
 		{
-			$queryData[$attribute] = $this->$attribute;
+			if (isset($this->$attribute))
+			{
+				$queryData[$attribute] = $this->$attribute;
+			}
 		}
 
 		return $queryData;
@@ -567,14 +528,8 @@ class Query
 	public function isEmpty()
 	{
 		$criteria = $this->toArray();
-		$criteriaSum = array_sum(array_values($criteria));
-		$durationMax = Arr::pluck($criteria, 'duration_max');
-		$durationMin = Arr::pluck($criteria ,'duration_min');
-		$typesIds = Arr::pluck($criteria, 'typesIds');
 
-		$isEmpty = !$criteriaSum && !$durationMax && !$durationMin && empty($typesIds);
-
-		return $isEmpty;
+		return empty($criteria);
 	}
 
 	/*
@@ -586,19 +541,16 @@ class Query
 	protected function _filterRecords($records)
 	{
 		$criteria = $this->toArray();
-		$durationMax = Arr::pluck($criteria, 'duration_max');
-		$durationMin = Arr::pluck($criteria ,'duration_min');
 		$externalCost = Arr::pluck($criteria, 'external_cost');
 		$kinesthetic = Arr::pluck($criteria, 'kinesthetic');
 		$typesIds = Arr::pluck($criteria, 'typesIds');
 
 		// filter by duration
-		$records->where('duration', '>=', $durationMin);
-		$records->where('duration', '<=', $durationMax);
+		$this->_filterByDuration($criteria, $records);
 
 		// filter by meta attributes
-		$records->whereEquals('external_cost', $externalCost);
-		$records->whereEquals('kinesthetic', $kinesthetic);
+		$this->_addWhereEqualsIfValue($records, 'external_cost', $externalCost);
+		$this->_addWhereEqualsIfValue($records, 'kinesthetic', $kinesthetic);
 
 		// filter by Type ID
 		$this->_filterByAssociationIds($records, $typesIds);
@@ -606,13 +558,46 @@ class Query
 		// filter by one-to-one criteria
 		foreach ($criteria as $attribute => $value)
 		{
-			if (!!$value)
-			{
-				$records->whereEquals($attribute, $value);
-			}
+			$this->_addWhereEqualsIfValue($records, $attribute, $value);
 		}
 
 		return $records;
+	}
+
+	/*
+	 * Adds duration filters to records query
+	 *
+	 * @param    array    $criteria   Criteria to filter by
+	 * @param    object   $sqlQuery   Relational SQL query
+	 * @return   void
+	 */
+	protected function _filterByDuration(&$criteria, $sqlQuery)
+	{
+		$durationMax = Arr::pluck($criteria, 'duration_max');
+		$durationMin = Arr::pluck($criteria ,'duration_min');
+
+		if (!!$durationMax)
+		{
+			$sqlQuery->where('duration', '<=', $durationMax);
+		}
+
+		if (!!$durationMin)
+		{
+			$sqlQuery->where('duration', '>=', $durationMin);
+		}
+	}
+
+	/*
+	 *
+	 *
+	 *
+	 */
+	protected function _addWhereEqualsIfValue($sqlQuery, $column, $value)
+	{
+		if ($value !== null)
+		{
+			$sqlQuery->whereEquals($column, $value);
+		}
 	}
 
 	/*
@@ -624,6 +609,8 @@ class Query
 	 */
 	protected function _filterByAssociationIds($records, $associationsIds)
 	{
+		if ($associationsIds === null) return;
+
 		$toolsTypesTable = $this->_getToolsTypesTable();
 		$toolTypesTable = $this->_getToolTypesTable();
 		$toolsTable = $this->_getToolsTable();

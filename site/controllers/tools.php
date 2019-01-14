@@ -772,8 +772,7 @@ class Tools extends SiteController
 				->orWhereEquals('user_id', User::get('id'));
 		}
 
-		$tools = $tools
-			->paginated('limitstart', 'limit');
+		$tools = $tools->paginated('limitstart', 'limit');
 
 		$this->view
 			->set('query', $formQuery)

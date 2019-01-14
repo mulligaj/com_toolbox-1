@@ -59,9 +59,6 @@ $resultsUrl = Route::url(
 		<h4>
 			<span>
 				<?php echo Lang::txt('COM_TOOLBOX_LIST_SUBGROUP_SIZE'); ?>
-				<span class="required">
-					<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-				</span>
 			</span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
@@ -80,9 +77,6 @@ $resultsUrl = Route::url(
 		<h4>
 			<span>
 				<?php echo Lang::txt('COM_TOOLBOX_LIST_EXTERNAL_COST'); ?>
-				<span class="required">
-					<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-				</span>
 			</span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
@@ -116,9 +110,6 @@ $resultsUrl = Route::url(
 		<h4>
 			<span>
 				<?php echo Lang::txt('COM_TOOLBOX_LIST_DURATION_MINUTES'); ?>
-				<span class="required">
-					<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-				</span>
 			</span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
@@ -141,9 +132,6 @@ $resultsUrl = Route::url(
 		<h4>
 			<span>
 				<?php echo Lang::txt('COM_TOOLBOX_LIST_TOOL_TYPE'); ?>
-				<span class="required">
-					<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-				</span>
 			</span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
@@ -163,9 +151,6 @@ $resultsUrl = Route::url(
 		<h4>
 			<span>
 				<?php echo Lang::txt('COM_TOOLBOX_LIST_KINESTHETIC'); ?>
-				<span class="required">
-					<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-				</span>
 			</span>
 			<span class="caret fontcon">&#x2303;</span>
 		</h4>
@@ -203,9 +188,6 @@ $resultsUrl = Route::url(
 						->display();
 					echo Lang::txt('COM_TOOLBOX_LIST_AACU_OUTCOMES');
 				?>
-				<span class="required">
-					<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-				</span>
 				<span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_ONE_NOT_ALL'); ?>">
 					<span class="fontcon">&#xf075;</span>
 				</span>
