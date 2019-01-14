@@ -420,25 +420,6 @@ class Tool extends Relational
 	}
 
 	/*
-	 * Translates external cost boolean into descriptive phrase
-	 *
-	 * @return   string
-	 */
-	public function costDescription()
-	{
-		if ($this->get('external_cost'))
-		{
-			$costDescription = Lang::txt('COM_TOOLBOX_TOOL_EXTERNAL_COST');
-		}
-		else
-		{
-			$costDescription = '';
-		}
-
-		return $costDescription;
-	}
-
-	/*
 	 * Translates subgroup size into descriptive phrase
 	 *
 	 * @return   array

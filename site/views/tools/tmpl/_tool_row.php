@@ -38,25 +38,31 @@ defined('_HZEXEC_') or die();
 $this->css('toolRow');
 
 $tool = $this->tool;
-$toolId = $tool->get('id');
-$toolName = $tool->get('name');
-$toolPublished = $tool->get('published');
-$toolUrl = Route::url("/toolbox/tools/$toolId/objectives");
+$hasCost = $tool->get('external_cost');
+$hasCostTip = Lang::txt('COM_TOOLBOX_TIP_HAS_COST');
+$id = $tool->get('id');
+$name = $tool->get('name');
+$published = $tool->get('published');
+$url = Route::url("/toolbox/tools/$id/objectives");
 ?>
 
-<li class="tool-row grid" data-published="<?php echo !!$toolPublished; ?>">
-	<div class="col span3 title">
-		<a href="<?php echo $toolUrl; ?>" target="_blank">
-			<?php echo $toolName; ?>
+<li class="tool-row grid" data-published="<?php echo !!$published; ?>">
+	<div class="col span5 title">
+		<a href="<?php echo $url; ?>" target="_blank">
+			<?php echo $name; ?>
 		</a>
 	</div>
-	<div class="col span3">
+	<div class="col span2">
 		<?php echo $tool->subgroupSizeDescription(); ?>
 	</div>
 	<div class="col span3">
 		<?php echo $tool->durationDescription(); ?>
 	</div>
-	<div class="col span2">
-		<?php echo $tool->costDescription(); ?>
+	<div class="col span1">
+		<?php if ($hasCost): ?>
+			<span class="hasTip" title="<?php echo $hasCostTip; ?>">
+				$
+			</span>
+		<?php endif; ?>
 	</div>
 </li>

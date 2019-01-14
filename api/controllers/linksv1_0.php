@@ -74,7 +74,7 @@ class Linksv1_0 extends ApiController
 		$linkId = Request::getInt('id');
 		$link = Link::oneOrFail($linkId);
 		$toolId = $link->toolId();
-		$tool= Tool::oneOrFail($toolId);
+		$tool = Tool::oneOrFail($toolId);
 
 		ToolAuthHelper::authorizeEditing($tool);
 
