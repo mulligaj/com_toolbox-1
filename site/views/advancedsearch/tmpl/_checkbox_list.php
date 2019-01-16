@@ -42,9 +42,8 @@ $query = $this->query;
 	$uppercaseField = strtoupper($field);
 ?>
 	<div class="checkbox-wrapper">
-		<input type="hidden" name="query[<?php echo $field; ?>]" value="0">
 		<input type="checkbox" name="query[<?php echo $field; ?>]" value="1"
-			<?php if ($query->$field) echo 'checked'; ?>>
+			<?php if (isset($query->$field) && !!$query->$field) echo 'checked'; ?>>
 		<?php echo Lang::txt('COM_TOOLBOX_GUIDED_FRAMEWORKS_' . $uppercaseField); ?>
 	</div>
 <?php endforeach; ?>

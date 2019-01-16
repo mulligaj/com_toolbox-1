@@ -51,9 +51,6 @@ $types = $this->types;
 	<fieldset>
 		<legend>
 			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_TOOL_TYPE'); ?>
-			<span class="required">
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-			</span>
 		</legend>
 
 		<div class="grid">
@@ -70,9 +67,6 @@ $types = $this->types;
 	<fieldset>
 		<legend>
 			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_KINESTHETIC'); ?>
-			<span class="required">
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-			</span>
 			<span class="hasTip" title="<?php echo Lang::txt('COM_TOOLBOX_TIP_KINESTHETIC'); ?>">
 				<span class="fontcon">&#xf075;</span>
 			</span>

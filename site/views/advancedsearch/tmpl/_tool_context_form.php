@@ -52,9 +52,6 @@ $query = $this->query;
 	<div class="fieldset-wrapper">
 		<h4>
 			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_SUBGROUP_SIZE'); ?>
-			<span class="required">
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-			</span>
 		</h4>
 
 		<div class="grid">
@@ -71,9 +68,6 @@ $query = $this->query;
 	<div class="fieldset-wrapper">
 		<h4>
 			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_EXTERNAL_COST'); ?>
-			<span class="required">
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-			</span>
 		</h4>
 
 		<span class="inline-radio">
@@ -83,7 +77,7 @@ $query = $this->query;
 		</span>
 		<span class="inline-radio">
 			<input type="radio" name="query[external_cost]" value="0"
-				<?php if (!$query->get('external_cost')) echo 'checked'; ?>>
+				<?php if ($query->get('external_cost') != null && !$query->get('external_cost')) echo 'checked'; ?>>
 			<?php echo Lang::txt('COM_TOOLBOX_COMMON_NO'); ?>
 		</span>
 	</div>
@@ -91,9 +85,6 @@ $query = $this->query;
 	<div class="fieldset-wrapper">
 		<h4>
 			<?php echo Lang::txt('COM_TOOLBOX_GUIDED_CONTEXT_DURATION'); ?>
-			<span class="required">
-				<?php echo Lang::txt('COM_TOOLBOX_COMMON_REQUIRED'); ?>
-			</span>
 		</h4>
 
 		<div id="duration-fields" class="grid">
