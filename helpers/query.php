@@ -557,24 +557,12 @@ class Query
 	protected function _filterRecords($records)
 	{
 		$criteria = $this->toArray();
-		$externalCost = Arr::pluck($criteria, 'external_cost');
-		$kinesthetic = Arr::pluck($criteria, 'kinesthetic');
 		$typesIds = Arr::pluck($criteria, 'typesIds');
 
-		// filter by duration
 		$this->_filterByDuration($criteria, $records);
-
-		// filter by name
 		$this->_filterByName($criteria, $records);
-
-		// filter by meta attributes
-		$this->_addWhereEqualsIfValue($records, 'external_cost', $externalCost);
-		$this->_addWhereEqualsIfValue($records, 'kinesthetic', $kinesthetic);
-
-		// filter by Type ID
 		$this->_filterByAssociationIds($records, $typesIds);
 
-		// filter by one-to-one criteria
 		foreach ($criteria as $attribute => $value)
 		{
 			$this->_addWhereEqualsIfValue($records, $attribute, $value);
