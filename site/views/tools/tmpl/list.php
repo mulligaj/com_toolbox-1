@@ -36,6 +36,7 @@ defined('_HZEXEC_') or die();
 use Components\Toolbox\Helpers\ToolAuthHelper;
 
 $this->css('toolsList');
+$this->js('toolsList');
 
 $breadcrumbs = [
 	'Toolbox' => '/toolbox',
@@ -76,7 +77,7 @@ $types = $this->types;
 <section class="main section">
 	<div class="grid">
 
-		<div id="search-form" class="col span2">
+		<div class="col span2">
 			<?php
 				$this->view('_tool_search_form')
 					->set('action', $updateFormAction)
@@ -118,6 +119,9 @@ $types = $this->types;
 		</div>
 
 		<div id="results" class="col span9">
+			<?php $toolSearchName = isset($query->name) ? $query->name : ''; ?>
+			<span type="hidden" data-query-name="<?php echo $toolSearchName; ?>" />
+
 			<?php
 				if ($tools->count() > 0):
 					$this->view('_tool_list')

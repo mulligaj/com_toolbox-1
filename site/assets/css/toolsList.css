@@ -109,3 +109,9 @@ input[type="number"] {
 .tool-row[data-published=""] {
 	background-color: #ffe1f0;
 }
+
+input[name='query[name]'] {
+	width: 100%;
+	font-size: 1.5em;
+	margin: 0 0 1em 0;
+}

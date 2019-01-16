@@ -1,109 +1,114 @@
 'use strict';
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var enterKeyCode = 13;
 
-var TOOLBOX = TOOLBOX || {};
+var toolSearchFormId = 'search-form';
+var searchResultsContainerId = 'results';
 
-TOOLBOX.toolSearchForm = TOOLBOX.toolSearchForm || {};
+var $nameInput = void 0,
+    $toolSearchForm = void 0;
 
-var toolSearchForm = TOOLBOX.toolSearchForm;
-
-toolSearchForm.CARET_CLASS = 'caret';
-toolSearchForm.CONTENT_CLASS = 'content';
-toolSearchForm.MASTER_CARET_ID = 'master-caret';
-toolSearchForm.ROW_CLASS = 'row';
-
-toolSearchForm.init = function () {
-	// Collect row content wrappers
-	toolSearchForm.rowContentWrappers = $('.' + toolSearchForm.CONTENT_CLASS);
-
-	// Collect carets
-	toolSearchForm.carets = $('.' + toolSearchForm.CARET_CLASS);
-
-	// Collect master caret
-	toolSearchForm.masterCaret = $('#' + toolSearchForm.MASTER_CARET_ID);
-};
-
-toolSearchForm.caretHandler = function (e) {
-	var $caret = $(e.target);
-	var $rowContent = toolSearchForm.findCaretRowContent($caret);
-
-	if ($rowContent.is(':visible')) {
-		$rowContent.slideUp(null, function () {
-			toolSearchForm.toggleCaretDirection($caret, $rowContent);
-		});
-	} else if ($rowContent.is(':hidden')) {
-		$rowContent.slideDown(null, function () {
-			toolSearchForm.toggleCaretDirection($caret, $rowContent);
-		});
-	}
-};
-
-toolSearchForm.toggleCaretDirection = function ($caret) {
-	var $rowContent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-	if (!$rowContent) {
-		$rowContent = toolSearchForm.findCaretRowContent($caret);
-	}
-	var html = void 0;
-
-	if ($rowContent.is(':visible')) {
-		html = '&#x2303;';
-	} else if ($rowContent.is(':hidden')) {
-		html = '&#x2304;';
-	}
-
-	$caret.html(html);
-};
-
-toolSearchForm.findCaretRowContent = function ($caret) {
-	var $row = $caret.closest('.' + toolSearchForm.ROW_CLASS);
-	var $rowContent = $row.find('.' + toolSearchForm.CONTENT_CLASS);
-
-	return $rowContent;
-};
-
-toolSearchForm.masterCaretHandler = function (e) {
-	var $masterCaret = toolSearchForm.masterCaret;
-	var $rowContentWrappers = toolSearchForm.rowContentWrappers;
-	var visibleKey = 'visible';
-	var rowsVisible = !!$masterCaret.data(visibleKey);
-
-	if (rowsVisible) {
-		$rowContentWrappers.slideUp(null, function () {
-			toolSearchForm.toggleAllCarets('&#xf0d7;', _defineProperty({}, visibleKey, false));
-		});
-	} else if (!rowsVisible) {
-		$rowContentWrappers.slideDown(null, function () {
-			toolSearchForm.toggleAllCarets('&#xf0d8;', _defineProperty({}, visibleKey, true));
-		});
-	}
-};
-
-toolSearchForm.toggleAllCarets = function (html, data) {
-	var $masterCaret = toolSearchForm.masterCaret;
-
-	$masterCaret.html(html);
-	$masterCaret.data(data);
-	toolSearchForm.toggleAllCaretDirections();
-};
-
-toolSearchForm.toggleAllCaretDirections = function () {
-	var $carets = toolSearchForm.carets;
-
-	$.each($carets, function (_, caret) {
-		toolSearchForm.toggleCaretDirection($(caret));
-	});
+var nameInputAttributes = {
+	name: 'query[name]',
+	placeholder: 'Search by name...',
+	type: 'text'
 };
 
 $(document).ready(function () {
 
-	// initialize search form
-	toolSearchForm.init();
-
-	// add click handler to carets
-	toolSearchForm.carets.click(toolSearchForm.caretHandler);
-
-	// add click handler to master caret
-	toolSearchForm.masterCaret.click(toolSearchForm.masterCaretHandler);
+	getToolSearchForm();
+	prependNameInput();
+	setNameInputValue();
+	registerNameInputEventHandlers();
+	registerSearchFormEventHandlers();
 });
+
+var getToolSearchForm = function getToolSearchForm() {
+	$toolSearchForm = $('#' + toolSearchFormId);
+
+	return $toolSearchForm;
+};
+
+var prependNameInput = function prependNameInput() {
+	var $searchResultsContainer = getSearchResultsContainer();
+	$nameInput = generateNameInput();
+
+	$searchResultsContainer.prepend($nameInput);
+};
+
+var getSearchResultsContainer = function getSearchResultsContainer() {
+	var $searchResultsContainer = $('#' + searchResultsContainerId);
+
+	return $searchResultsContainer;
+};
+
+var generateNameInput = function generateNameInput() {
+	var $nameInput = $('<input>');
+
+	addNameInputAttributes($nameInput);
+
+	return $nameInput;
+};
+
+var addNameInputAttributes = function addNameInputAttributes($nameInput) {
+	for (var attr in nameInputAttributes) {
+		$nameInput.attr(attr, nameInputAttributes[attr]);
+	}
+};
+
+var setNameInputValue = function setNameInputValue() {
+	var value = sourceNameInputValue();
+
+	$nameInput.val(value);
+};
+
+var sourceNameInputValue = function sourceNameInputValue() {
+	var $valueContainer = $('[data-query-name]');
+	var value = $valueContainer.data('query-name');
+
+	return value;
+};
+
+var registerNameInputEventHandlers = function registerNameInputEventHandlers() {
+	$nameInput.on('keypress', submitToolSearchFormOnEnter);
+};
+
+var submitToolSearchFormOnEnter = function submitToolSearchFormOnEnter(e) {
+	if (e.which == enterKeyCode) {
+		submitToolSearchFormIncludingName();
+	}
+};
+
+var registerSearchFormEventHandlers = function registerSearchFormEventHandlers() {
+	$toolSearchForm.on('click', submitToolSearchFormOnClick);
+};
+
+var submitToolSearchFormOnClick = function submitToolSearchFormOnClick(e) {
+	e.preventDefault();
+	var targetType = $(e.target).attr('type');
+
+	if (targetType === 'submit') {
+		submitToolSearchFormIncludingName();
+	}
+};
+
+var submitToolSearchFormIncludingName = function submitToolSearchFormIncludingName(e) {
+	appendHiddenNameInput($toolSearchForm);
+	$toolSearchForm.submit();
+};
+
+var appendHiddenNameInput = function appendHiddenNameInput($element) {
+	var $hiddenNameInput = generateHiddenNameInput();
+
+	$element.append($hiddenNameInput);
+};
+
+var generateHiddenNameInput = function generateHiddenNameInput() {
+	var $hiddenNameInput = generateNameInput();
+	var value = $nameInput.val();
+
+	$hiddenNameInput.attr('type', 'hidden');
+	$hiddenNameInput.val(value);
+
+	return $hiddenNameInput;
+};

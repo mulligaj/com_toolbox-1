@@ -34,7 +34,7 @@
 defined('_HZEXEC_') or die();
 
 $this->css('toolSearchForm');
-$this->js('toolsList');
+$this->js('toolSearchForm');
 
 Html::behavior('core');
 
@@ -45,7 +45,7 @@ $resultsUrl = Route::url(
 );
 ?>
 
-<form method="post" action="<?php echo $action; ?>">
+<form id="search-form" method="post" action="<?php echo $action; ?>">
 
 	<div class="row">
 		<span id="form-header">

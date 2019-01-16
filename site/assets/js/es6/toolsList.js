@@ -1,106 +1,114 @@
 
-var TOOLBOX = TOOLBOX || {}
+const enterKeyCode = 13
 
-TOOLBOX.toolSearchForm = TOOLBOX.toolSearchForm || {}
+const toolSearchFormId = 'search-form'
+const searchResultsContainerId = 'results'
 
-toolSearchForm = TOOLBOX.toolSearchForm
+let $nameInput, $toolSearchForm
 
-toolSearchForm.CARET_CLASS = 'caret'
-toolSearchForm.CONTENT_CLASS = 'content'
-toolSearchForm.MASTER_CARET_ID = 'master-caret'
-toolSearchForm.ROW_CLASS = 'row'
-
-toolSearchForm.init = () => {
-	// Collect row content wrappers
-	toolSearchForm.rowContentWrappers = $(`.${toolSearchForm.CONTENT_CLASS}`)
-
-	// Collect carets
-	toolSearchForm.carets = $(`.${toolSearchForm.CARET_CLASS}`)
-
-	// Collect master caret
-	toolSearchForm.masterCaret = $(`#${toolSearchForm.MASTER_CARET_ID}`)
-}
-
-toolSearchForm.caretHandler = (e) => {
-	const $caret = $(e.target)
-	const $rowContent = toolSearchForm.findCaretRowContent($caret)
-
-	if ($rowContent.is(':visible')) {
-		$rowContent.slideUp(null, () => {
-			toolSearchForm.toggleCaretDirection($caret, $rowContent)
-		})
-	} else if ($rowContent.is(':hidden')) {
-		$rowContent.slideDown(null, () => {
-			toolSearchForm.toggleCaretDirection($caret, $rowContent)
-		})
-	}
-}
-
-toolSearchForm.toggleCaretDirection = ($caret, $rowContent = null) => {
-	if (!$rowContent) {
-		$rowContent =	toolSearchForm.findCaretRowContent($caret)
-	}
-	let html
-
-	if ($rowContent.is(':visible')) {
-		html = '&#x2303;'
-	} else if ($rowContent.is(':hidden')) {
-		html = '&#x2304;'
-	}
-
-	$caret.html(html)
-}
-
-toolSearchForm.findCaretRowContent = ($caret) => {
-	const $row = $caret.closest(`.${toolSearchForm.ROW_CLASS}`)
-	const $rowContent = $row.find(`.${toolSearchForm.CONTENT_CLASS}`)
-
-	return $rowContent
-}
-
-toolSearchForm.masterCaretHandler = (e) => {
-	const $masterCaret = toolSearchForm.masterCaret
-	const $rowContentWrappers = toolSearchForm.rowContentWrappers
-	const visibleKey = 'visible'
-	const rowsVisible = !!$masterCaret.data(visibleKey)
-
-	if (rowsVisible) {
-		$rowContentWrappers.slideUp(null, () => {
-			toolSearchForm.toggleAllCarets('&#xf0d7;', {[visibleKey]: false})
-		})
-	} else if (!rowsVisible) {
-		$rowContentWrappers.slideDown(null, () => {
-			toolSearchForm.toggleAllCarets('&#xf0d8;', {[visibleKey]: true})
-		})
-	}
-}
-
-toolSearchForm.toggleAllCarets = (html, data) => {
-	const $masterCaret = toolSearchForm.masterCaret
-
-	$masterCaret.html(html)
-	$masterCaret.data(data)
-	toolSearchForm.toggleAllCaretDirections()
-}
-
-toolSearchForm.toggleAllCaretDirections = () => {
-	const $carets = toolSearchForm.carets
-
-	$.each($carets, (_, caret) => {
-		toolSearchForm.toggleCaretDirection($(caret))
-	})
+const nameInputAttributes = {
+	name: 'query[name]',
+	placeholder: 'Search by name...',
+	type: 'text'
 }
 
 $(document).ready(() => {
 
-	// initialize search form
-	toolSearchForm.init()
-
-	// add click handler to carets
-	toolSearchForm.carets.click(toolSearchForm.caretHandler)
-
-	// add click handler to master caret
-	toolSearchForm.masterCaret.click(toolSearchForm.masterCaretHandler)
+	getToolSearchForm()
+	prependNameInput()
+	setNameInputValue()
+	registerNameInputEventHandlers()
+	registerSearchFormEventHandlers()
 
 })
+
+const getToolSearchForm = () => {
+	$toolSearchForm = $(`#${toolSearchFormId }`)
+
+	return $toolSearchForm
+}
+
+const prependNameInput = () => {
+	const $searchResultsContainer = getSearchResultsContainer()
+	$nameInput = generateNameInput()
+
+	$searchResultsContainer.prepend($nameInput)
+}
+
+const getSearchResultsContainer = () => {
+	const $searchResultsContainer = $(`#${searchResultsContainerId}`)
+
+	return $searchResultsContainer
+}
+
+const generateNameInput = () => {
+	const $nameInput = $('<input>')
+
+	addNameInputAttributes($nameInput)
+
+	return $nameInput
+}
+
+const addNameInputAttributes = ($nameInput) => {
+	for (const attr in nameInputAttributes) {
+		$nameInput.attr(attr, nameInputAttributes[attr])
+	}
+}
+
+const setNameInputValue = () => {
+	const value = sourceNameInputValue()
+
+	$nameInput.val(value)
+}
+
+const sourceNameInputValue = () => {
+	const $valueContainer = $('[data-query-name]')
+	const value = $valueContainer.data('query-name')
+
+	return value
+}
+
+const registerNameInputEventHandlers = () => {
+	$nameInput.on('keypress', submitToolSearchFormOnEnter)
+}
+
+const submitToolSearchFormOnEnter = (e) => {
+	if (e.which == enterKeyCode) {
+		submitToolSearchFormIncludingName()
+	}
+}
+
+const registerSearchFormEventHandlers = () => {
+	$toolSearchForm.on('click', submitToolSearchFormOnClick)
+}
+
+const submitToolSearchFormOnClick = (e) => {
+	e.preventDefault()
+	const targetType = $(e.target).attr('type')
+
+	if (targetType === 'submit') {
+		submitToolSearchFormIncludingName()
+	}
+}
+
+const submitToolSearchFormIncludingName = (e) => {
+	appendHiddenNameInput($toolSearchForm)
+	$toolSearchForm.submit()
+}
+
+const appendHiddenNameInput = ($element) => {
+	const $hiddenNameInput = generateHiddenNameInput()
+
+	$element.append($hiddenNameInput)
+}
+
+const generateHiddenNameInput = () => {
+	const $hiddenNameInput = generateNameInput()
+	const value = $nameInput.val()
+
+	$hiddenNameInput.attr('type', 'hidden')
+	$hiddenNameInput.val(value)
+
+	return $hiddenNameInput
+}
 
