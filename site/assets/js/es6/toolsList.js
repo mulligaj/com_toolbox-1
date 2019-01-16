@@ -79,7 +79,7 @@ const submitToolSearchFormOnEnter = (e) => {
 }
 
 const registerSearchFormEventHandlers = () => {
-	$toolSearchForm.on('click', submitToolSearchFormOnClick)
+	$toolSearchForm.on('click', '[type="submit"]', submitToolSearchFormOnClick)
 }
 
 const submitToolSearchFormOnClick = (e) => {

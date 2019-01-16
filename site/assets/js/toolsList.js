@@ -80,7 +80,7 @@ var submitToolSearchFormOnEnter = function submitToolSearchFormOnEnter(e) {
 };
 
 var registerSearchFormEventHandlers = function registerSearchFormEventHandlers() {
-	$toolSearchForm.on('click', submitToolSearchFormOnClick);
+	$toolSearchForm.on('click', '[type="submit"]', submitToolSearchFormOnClick);
 };
 
 var submitToolSearchFormOnClick = function submitToolSearchFormOnClick(e) {
