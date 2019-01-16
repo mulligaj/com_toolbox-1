@@ -63,6 +63,7 @@ class Query
 	 * @var   string
 	 */
 	protected static $_attributesWhitelist = [
+		'name' => '',
 		'self_awareness' => 0,
 		'openness' => 0,
 		'communication' => 0,
@@ -174,6 +175,22 @@ class Query
 	}
 
 	/*
+	 * Updates query instance's name attribute after validation
+	 *
+	 * @param    array   $data   Data to update the query with
+	 * @return   void
+	 */
+	public function setName($data)
+	{
+		$key = 'name';
+
+		if (isset($data[$key]) && !empty($data[$key]))
+		{
+			$this->set([$key => $data[$key]]);
+		}
+	}
+
+	/*
 	 * Updates query instance's typesIds attribute after validation
 	 *
 	 * @param    array   $data   Data to update the query with
@@ -187,7 +204,6 @@ class Query
 		{
 			$this->set([$key => $data[$key]]);
 		}
-
 	}
 
 	/*
@@ -548,6 +564,9 @@ class Query
 		// filter by duration
 		$this->_filterByDuration($criteria, $records);
 
+		// filter by name
+		$this->_filterByName($criteria, $records);
+
 		// filter by meta attributes
 		$this->_addWhereEqualsIfValue($records, 'external_cost', $externalCost);
 		$this->_addWhereEqualsIfValue($records, 'kinesthetic', $kinesthetic);
@@ -588,9 +607,30 @@ class Query
 	}
 
 	/*
+	 * Adds name filter to records query
 	 *
+	 * @param    array    $criteria   Criteria to filter by
+	 * @param    object   $sqlQuery   Relational SQL query
+	 * @return   void
+	 */
+	protected function _filterByName(&$criteria, $sqlQuery)
+	{
+		$nameColumn = 'name';
+		$name = Arr::pluck($criteria, $nameColumn);
+
+		if (!!$name)
+		{
+			$sqlQuery->whereLike($nameColumn, $name);
+		}
+	}
+
+	/*
+	 * Adds where equals statement if value is not null
 	 *
-	 *
+	 * @param   object   $sqlQuery   SQL query object
+	 * @param   string   $column     Name of column
+	 * @param   mixed    $value      Value to match
+	 * @return   void
 	 */
 	protected function _addWhereEqualsIfValue($sqlQuery, $column, $value)
 	{

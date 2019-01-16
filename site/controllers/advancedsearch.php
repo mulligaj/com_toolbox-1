@@ -244,6 +244,7 @@ class Advancedsearch extends SiteController
 		$query = new Query();
 
 		// update query
+		$query->setName($queryData);
 		$query->setType($queryData);
 		$query->setKinesthetic($queryData);
 		$query->setAacu($queryData);

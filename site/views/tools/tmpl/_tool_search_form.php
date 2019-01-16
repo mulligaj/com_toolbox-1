@@ -55,6 +55,26 @@ $resultsUrl = Route::url(
 		</span>
 	</div>
 
+	<noscript>
+		<div class="row">
+			<h4>
+				<span>
+					<?php echo Lang::txt('COM_TOOLBOX_LIST_NAME'); ?>
+				</span>
+				<span class="caret fontcon">&#x2303;</span>
+			</h4>
+
+			<div class="content">
+				<?php
+					$this->view('_name_input')
+						->set('query', $query)
+						->display();
+				?>
+			</div>
+			<hr>
+		</div>
+	</noscript>
+
 	<div class="row">
 		<h4>
 			<span>
@@ -203,20 +223,6 @@ $resultsUrl = Route::url(
 			?>
 		</div>
 		<hr>
-		<div class="hidden">
-			<?php
-				$blankQuery = new Components\Toolbox\Helpers\Query();
-				$this->view('_list_bergs_fields')
-					->set('query', $blankQuery)
-					->display();
-				$this->view('_list_idc_fields')
-					->set('query', $blankQuery)
-					->display();
-				$this->view('_list_other_fields')
-					->set('query', $blankQuery)
-					->display();
-			?>
-		</div>
 	</div>
 
 	<div class="row">
